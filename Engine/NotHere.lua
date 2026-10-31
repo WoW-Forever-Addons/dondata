@@ -93,8 +93,12 @@ function ns.NoteNotOffered(questID, npcID, level)
   stats.auto = stats.auto + 1
   if Count(e.lv) == LEVELS and not e.man then
     stats.hiddenAuto = stats.hiddenAuto + 1
-    ns.Print(L["%s is hidden: the quest giver did not offer it at %d different levels. Undo: /qd nothere undo"]:format(
-      ns.QuestTitle(questID), LEVELS))
+    -- (31.10.2026) the line names /qd nothere undo: only with Questdon (ns.HOST); without it (Leveldon alone) there is
+    -- no /qd, the quest is hidden quietly and Questdon's /qd nothere list shows it once Questdon is there
+    if ns.HOST then
+      ns.Print(L["%s is hidden: the quest giver did not offer it at %d different levels. Undo: /qd nothere undo"]:format(
+        ns.QuestTitle(questID), LEVELS))
+    end
     last = { questID }
     Refresh()
   end

@@ -13,7 +13,9 @@ local addonName, ns = ...
 --                    a shell on it, so both addons share one namespace (DONCORE_PLAN.md "DonData Lese-Engine")
 --   1: the first set
 --   2: DonData.ns
+--   3: (31.10.2026) the dungeons' data part in the engine (Engine/Dungeons.lua: QuestDungeon, DungeonName, the level
+--      range); Questdon's Dungeons.lua reads it from there
 ---------------------------------------------------------------------------
-local VERSION = 2
+local VERSION = 3
 local meta = ns.ATT_META or {}
 DonData = { version = VERSION, era = meta.era == true, meta = meta, tables = ns, ns = ns }

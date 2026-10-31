@@ -9,10 +9,16 @@ local _, ns = ...
 --      QuestNpcWalks, IsQuestComplete, CreatureName, QuestExists, QuestStart, BreadcrumbTargets, ObjectivePoints,
 --      QuestPOI, ObjectiveHint, ItemName, TurnInPoint, DistanceTo, PlayerPosition, ObjectiveCreatures, TurnInNpc,
 --      Ready (true once the engine started: with Questdon's settings or, without Questdon, at login)
--- The dungeon functions (QuestDungeon, DungeonLevelRange, Dungeons, DungeonsForLevel) and everything about the
--- arrow, the compass and Questdon's windows stay QuestdonAPI's. The arrow without Questdon: DonMapAPI.
+--   2: (31.10.2026) QuestDungeon, DungeonName, DungeonLevelRange (Engine/Dungeons.lua): a dungeon's name in the
+--      client's language and its level range without Questdon (Leveldon, Geardon)
+--   3: (31.10.2026) GearValue, GearCompare, GearWeights (Engine/Gear.lua): one judgement of gear for the player's
+--      class and talent tree (stats, armor, weapon DPS, item level last), shared by Geardon and Questdon
+--   4: (31.10.2026, Leistungsrunde 6) RegisterCallback, UnregisterCallback, GearVersion: DonData says when its answers
+--      may have changed, so a caller can keep its own results until then (Geardon's judgement per item)
+-- The dungeon list (Dungeons, DungeonsForLevel: entrances are Questdon's) and everything about the arrow, the
+-- compass and Questdon's windows stay QuestdonAPI's. The arrow without Questdon: DonMapAPI.
 ---------------------------------------------------------------------------
-local VERSION = 1
+local VERSION = 4
 
 ---------------------------------------------------------------------------
 -- (moved from Questdon's Arrow.lua with the API) the state a quest's places depend on
@@ -284,6 +290,142 @@ function API.TurnInNpc(questID)
   return id, name or (learned and learned.finish and learned.finish.npc) or nil
 end
 function API.Ready() return ns.Started and ns.Started() or false end
+
+-- (2) Dungeon of a quest: instanceID (ATT), name in the client's language, uiMapID of the dungeon, minimum level of
+-- the dungeon; nil when the quest is no dungeon quest (the same answer as QuestdonAPI.QuestDungeon)
+function API.QuestDungeon(questID)
+  local inst = ns.QuestDungeon(questID)
+  if not inst then return nil end
+  local d = ns.ATT_DUNGEONS and ns.ATT_DUNGEONS[inst] or {}
+  return inst, ns.DungeonName(inst), d[2], d[6]
+end
+-- (2) A dungeon's name (ATT instance ID): the client's name of its map, else the English one
+function API.DungeonName(inst) return ns.DungeonName(inst) end
+-- (2) Level range of a dungeon (ATT instance ID): min, max, source ("game" = the client's Group Finder, "data" =
+-- DonData's table); nil when unknown (the same answer as QuestdonAPI.DungeonLevelRange)
+function API.DungeonLevelRange(inst)
+  local lo, hi, source = ns.DungeonLevelRange(inst)
+  if not lo then return nil end
+  return lo, hi or lo, source
+end
+
+-- (3) Value of an item (link) for the player's class and tree: total, stats (with attack power), armor, DPS, in
+-- points of the stat weights; nil while the item or the class is unknown
+---------------------------------------------------------------------------
+-- (4) Notices for callers that keep results: fn(what) with what =
+--   "ready"   the engine started (settings and learned data are there),
+--   "learned" learned quest data changed (checked after the quest events and the batched quest log refresh),
+--   "gear"    GearValue and GearCompare may answer differently: the player's weights or the worth of armor changed
+--             (level, talents, gear, health, armor), or an item they could not read yet has arrived.
+-- Nothing is checked while no callback is registered. A callback's error does not reach DonData.
+---------------------------------------------------------------------------
+local callbacks = {}
+local gearVersion = 0
+local function Notify(what)
+  if what == "gear" then gearVersion = gearVersion + 1 end
+  for i = 1, #callbacks do pcall(callbacks[i], what) end
+end
+ns.ApiNotify = Notify
+function API.RegisterCallback(fn)
+  if type(fn) ~= "function" then return false end
+  for i = 1, #callbacks do if callbacks[i] == fn then return true end end
+  callbacks[#callbacks + 1] = fn
+  return true
+end
+function API.UnregisterCallback(fn)
+  for i = #callbacks, 1, -1 do if callbacks[i] == fn then table.remove(callbacks, i) end end
+end
+-- (4) goes up with every "gear" notice: a caller may keep gear answers while it stays the same
+function API.GearVersion() return gearVersion end
+
+ns.OnInit(function() if #callbacks > 0 then Notify("ready") end end)
+
+-- learned data: the version of Learn.lua, compared after the events that learn (their listeners ran before these: the
+-- engine's files load before API.lua) and after the batched refresh part "learn"
+local lastLearn
+local function CheckLearned()
+  if #callbacks == 0 or not ns.LearnVersion then return end
+  local v = ns.LearnVersion()
+  if lastLearn ~= nil and v ~= lastLearn then lastLearn = v Notify("learned") return end
+  lastLearn = v
+end
+for _, e in ipairs({ "QUEST_DETAIL", "GOSSIP_SHOW", "QUEST_GREETING", "QUEST_ACCEPTED", "QUEST_PROGRESS", "QUEST_COMPLETE",
+    "QUEST_TURNED_IN", "LOOT_READY", "PLAYER_ENTERING_WORLD" }) do
+  ns.On(e, CheckLearned)
+end
+if ns.RegisterRefresh then
+  ns.RegisterRefresh("api", CheckLearned) -- after "learn" (Learn.lua registers first)
+  ns.On("QUEST_LOG_UPDATE", function() if #callbacks > 0 then ns.QueueRefresh("api") end end)
+end
+
+-- gear: what the player's answers rest on (weights, class, worth of a point of armor), taken at the first question;
+-- compared again after the events on which Gear.lua forgets them (its listeners ran first)
+local snapW, snapClass, snapArmor
+local function Snap()
+  local w, class = ns.GearWeights()
+  return w, class, w and ns.GearArmorStamina() or nil
+end
+local function CheckGear(_, unit)
+  if #callbacks == 0 or snapW == nil or (unit ~= nil and unit ~= "player") then return end
+  local w, class, armor = Snap()
+  if w ~= snapW or class ~= snapClass or (armor and snapArmor and math.abs(armor - snapArmor) > 1e-9) or (armor == nil) ~= (snapArmor == nil) then
+    snapW, snapClass, snapArmor = w, class, armor
+    Notify("gear")
+  end
+end
+for _, e in ipairs({ "PLAYER_LEVEL_UP", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "PLAYER_EQUIPMENT_CHANGED",
+    "UNIT_MAXHEALTH", "UNIT_RESISTANCES", "PLAYER_ENTERING_WORLD" }) do
+  ns.On(e, CheckGear)
+end
+-- items a gear question could not read yet (not loaded): their arrival is a "gear" notice
+local missed, missedN = {}, 0
+local function Missed(x)
+  if type(x) == "string" then
+    local id = tonumber(x:match("item:(%d+)"))
+    if id and not missed[id] then
+      if missedN >= 200 then missed, missedN = {}, 0 end
+      missed[id], missedN = true, missedN + 1
+    end
+  elseif type(x) == "table" then
+    for _, l in ipairs(x) do Missed(l) end
+  end
+end
+ns.On("GET_ITEM_INFO_RECEIVED", function(_, itemID)
+  local id = ns.Num(itemID)
+  if id and missed[id] then
+    missed[id], missedN = nil, missedN - 1
+    if #callbacks > 0 then Notify("gear") end
+  end
+end)
+local function Asked()
+  if snapW == nil and #callbacks > 0 then snapW, snapClass, snapArmor = Snap() end
+end
+
+function API.GearValue(link)
+  local v, a, b, c = ns.GearValue(link)
+  if #callbacks > 0 then
+    Asked()
+    if v == nil then Missed(link) end
+  end
+  return v, a, b, c
+end
+-- (3) Is a better than b for the player? a, b: an item link, a list of links (a two-hand weapon against both hands)
+-- or nil (an empty slot). 1, -1 or 0, then the value gain a - b; nil while unknown. Wearing (armor type, level, class)
+-- is the caller's question.
+function API.GearCompare(a, b)
+  local sign, gain = ns.GearCompare(a, b)
+  if #callbacks > 0 then
+    Asked()
+    if sign == nil then Missed(a) Missed(b) end
+  end
+  return sign, gain
+end
+-- (3) The stat weights for the player (strength, agility, stamina, intellect, spirit; a copy) and the class ID
+function API.GearWeights()
+  local w, class = ns.GearWeights()
+  if not w then return nil end
+  return { w[1], w[2], w[3], w[4], w[5] }, class
+end
 
 -- every API function in a scope of its own (Core.lua ns.ScopeCall)
 for k, f in pairs(API) do

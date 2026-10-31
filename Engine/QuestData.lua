@@ -739,6 +739,9 @@ end
 -- (1.3.4) What to do (Data/Quest_Texts.lua):
 -- { o = objective sentence, r = { "Kobold Digger slain (4)", ... }, s = quest giver, e = turn-in NPC }
 -- in the game's language where the data has it, else English. nil if unknown.
+-- (31.10.2026, C11) Quest_Texts.lua keeps each language as one string until it is first needed: the first T.enUS here
+-- reads it (about 5 ms, then about 1 MB more), every later call finds the table. A locale without a string costs one
+-- metatable lookup. Same tables as before for everyone who reads ns.QUEST_TEXTS directly.
 function ns.QuestText(questID)
   local T = ns.QUEST_TEXTS
   if type(T) ~= "table" then return nil end
@@ -750,6 +753,34 @@ function ns.QuestText(questID)
     return { o = mine.o or en.o, r = mine.r or en.r, s = mine.s or en.s, e = mine.e or en.e }
   end
   return type(mine) == "table" and mine or (type(en) == "table" and en) or nil
+end
+
+-- (31.10.2026, C11) The English name of a quest's turn-in NPC where the data has no other: the NPC that ns.QUEST_ENDS
+-- names by ID but ns.ATT_CREATURES does not, or the quest without NPC ID there. From ns.ENDER_NAMES (Data/Quest_Texts.lua,
+-- outside the texts' string, lines "n<npcID>=name" and "q<questID>=name"), so Questdon's tracker names a finished
+-- quest at login without reading the texts. Each quest looked up once (also when there is none). nil if unknown.
+local enderNames = {}
+local function EnderLine(S, key) -- plain find: about ten times quicker than a pattern over the 34 KB
+  local a = S:find(key, 1, true)
+  if not a then return nil end
+  local b = S:find("\n", a + #key, true)
+  local v = S:sub(a + #key, (b or 0) - 1)
+  return v ~= "" and v or nil
+end
+function ns.QuestEnderName(questID)
+  questID = ns.Num(questID)
+  if not questID then return nil end
+  local c = enderNames[questID]
+  if c ~= nil then return c or nil end
+  local S, name = ns.ENDER_NAMES, nil
+  if type(S) == "string" then
+    local fin = ns.QUEST_ENDS and ns.QUEST_ENDS[questID]
+    local npc = type(fin) == "table" and ns.Num(fin[4])
+    if npc then name = EnderLine(S, "\nn" .. npc .. "=") end
+    name = name or EnderLine(S, "\nq" .. questID .. "=")
+  end
+  enderNames[questID] = name or false
+  return name
 end
 
 -- (20.10.) A hint for a quest whose way is hard to see (Data/Quest_Hints.lua), in the game's language where there is
@@ -2289,13 +2320,80 @@ local function LearnedNames()
   return ns.db.npcNames[loc]
 end
 
+-- (31.10.2026, Leistungsprüfung C13) npcNames grew without end (every creature targeted or under the mouse). Now at
+-- most NPC_NAMES_MAX names per language: the order they were first seen is kept in DonDataDB.npcNamesOrder[locale]
+-- (ids, oldest first); above the limit the oldest names go down to NPC_NAMES_KEEP, those of creatures that give or
+-- take no quest (ns.IsQuestNpc) first. npcNames keeps its form ([locale][id] = name): old files read as before, their
+-- names (no order yet) count as oldest, in id order. An order that lost its names (deleted) is made fresh.
+local NPC_NAMES_MAX, NPC_NAMES_KEEP = 3000, 2700
+ns.NPC_NAMES_MAX, ns.NPC_NAMES_KEEP = NPC_NAMES_MAX, NPC_NAMES_KEEP
+local nameCount = setmetatable({}, { __mode = "k" }) -- [names table] = number of names (counted once per session)
+
+local function NameOrder()
+  local db = ns.db
+  if type(db.npcNamesOrder) ~= "table" then db.npcNamesOrder = {} end
+  local loc = ns.Locale and ns.Locale() or "enUS"
+  local order = db.npcNamesOrder[loc]
+  if type(order) ~= "table" then order = {} db.npcNamesOrder[loc] = order end
+  return order
+end
+
+-- the names down to NPC_NAMES_KEEP: oldest first, other creatures before quest NPCs; the order rewritten without gaps
+local function TrimNames(t, order)
+  local seen, ids = {}, {}
+  for _, id in ipairs(order) do
+    if t[id] ~= nil and not seen[id] then seen[id] = true ids[#ids + 1] = id end
+  end
+  local rest = {}
+  for id in pairs(t) do if not seen[id] then rest[#rest + 1] = id end end
+  table.sort(rest, function(a, b)
+    if type(a) == type(b) then return a < b end
+    return type(a) == "number"
+  end)
+  -- names without a place in the order (an older file) are the oldest
+  for i = #rest, 1, -1 do table.insert(ids, 1, rest[i]) end
+  local n, drop = #ids, {}
+  local over = n - NPC_NAMES_KEEP
+  if over > 0 then
+    for pass = 1, 2 do
+      for _, id in ipairs(ids) do
+        if over <= 0 then break end
+        if not drop[id] and (pass == 2 or not (ns.IsQuestNpc and ns.IsQuestNpc(id))) then
+          drop[id] = true over = over - 1
+        end
+      end
+    end
+  end
+  for i = #order, 1, -1 do order[i] = nil end
+  local kept = 0
+  for _, id in ipairs(ids) do
+    if drop[id] then t[id] = nil else kept = kept + 1 order[kept] = id end
+  end
+  nameCount[t] = kept
+end
+
 -- The name the game showed for a creature (quest dialog, target, mouse over).
 function ns.NoteNpcName(creatureID, name)
   creatureID = ns.Num(creatureID)
   if not creatureID or creatureID <= 0 or type(name) ~= "string" or name == "" or #name > 80 then return end
   if name:find("[%c|]") then return end
   local t = LearnedNames()
-  if t and t[creatureID] ~= name then t[creatureID] = name end
+  if not t or t[creatureID] == name then return end
+  local new = t[creatureID] == nil
+  t[creatureID] = name
+  if not new then return end
+  local order = NameOrder()
+  order[#order + 1] = creatureID
+  local n = nameCount[t]
+  if not n then
+    n = 0
+    for _ in pairs(t) do n = n + 1 end
+  else
+    n = n + 1
+  end
+  nameCount[t] = n
+  -- the order grows past the names when they were deleted: made fresh as well
+  if n > NPC_NAMES_MAX or #order > NPC_NAMES_MAX + 500 then TrimNames(t, order) end
 end
 
 -- Name of a creature in the game language, or nil. source: "learned", "game", "shipped", "data".
