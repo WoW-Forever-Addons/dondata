@@ -1,0 +1,34 @@
+## Interface: 11509
+## Title: |cff3fa9f5Don|rData
+## Notes: Quest database for the Don addons on WoW Classic Era (Questdon, Leveldon): quests, givers and turn-ins, objectives and their spawn points, quest texts, patrol routes, dungeons, inns and flight masters. Needed by Questdon, loads by itself.
+## Notes-deDE: Questdatenbank der Don-Addons für WoW Classic Era (Questdon, Leveldon): Quests, Questgeber und Abgaben, Questziele mit ihren Fundorten, Questtexte, Laufwege, Dungeons, Gasthäuser und Flugmeister. Wird von Questdon gebraucht und lädt von selbst.
+## Author: DonCoohd
+## Version: 1.0.0
+## X-Curse-Project-ID: 1774402
+## SavedVariables: DonDataDB
+## SavedVariablesPerCharacter: DonDataCharDB
+## Category: Quests
+## IconTexture: Interface\Icons\INV_Misc_Book_11
+## X-License: DonData.lua, Store.lua and Engine/ (the reading engine, from Questdon) by DonCoohd (MIT). DataEra: CMaNGOS classic-db data (positions on Classic Era's maps via All The Things, MIT), GPL v3 (see DataEra/Walks-LICENSE-GPLv3.txt).
+
+DataEra\Era_Quests.lua
+DataEra\Quest_Texts.lua
+DataEra\Spawns.lua
+DataEra\Walks.lua
+DataEra\Dungeon_Levels.lua
+DataEra\Dungeon_Entrances.lua
+DataEra\Services.lua
+DataEra\Paths.lua
+Store.lua
+Engine\Locale.lua
+Engine\Classic.lua
+Engine\Core.lua
+Engine\Geo.lua
+Engine\Exists.lua
+Engine\Learn.lua
+Engine\Offers.lua
+Engine\NotHere.lua
+Engine\QuestData.lua
+Engine\POI.lua
+Engine\API.lua
+DonData.lua

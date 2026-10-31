@@ -1,0 +1,8 @@
+package-as: DonData
+
+ignore:
+  - .github
+  - .gitignore
+  - .pkgmeta
+
+enable-nolib-creation: no
