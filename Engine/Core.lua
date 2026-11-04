@@ -77,7 +77,7 @@ ns.defaults = {
   -- 1.4
   arrowScale = 1.15,
   objectivePinSize = 12,
-  mapPinScale = 1, minimapPinScale = 1, -- (Daniel 26.10.) size of all Questdon pins on the world map and the minimap
+  mapPinScale = 0.6, minimapPinScale = 0.85, -- (Daniel 26.10.) size of all Questdon pins on the world map and the minimap; (04.11.2026, Era-Test) 60 % and 85 %
   thinObjectives = true, -- (1.3.5) many objective dots: fewer, bundled markers (minimap and world map)
   objectiveIcons = true, -- (17.10.) symbols instead of dots (mob, loot, named mob, object, place, item), groups as one
   objectiveAreas = true, -- (17.10.) the area of a group of spots in the quest's colour (world map)

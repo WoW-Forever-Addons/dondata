@@ -3,12 +3,12 @@
 ## Notes: Quest database for the Don addons on WoW Forever (Questdon, Leveldon): quests, givers and turn-ins, objectives and their spawn points, quest texts, patrol routes, dungeons, inns and flight masters. Needed by Questdon and Leveldon, loads by itself.
 ## Notes-deDE: Questdatenbank der Don-Addons für WoW Forever (Questdon, Leveldon): Quests, Questgeber und Abgaben, Questziele mit ihren Fundorten, Questtexte, Laufwege, Dungeons, Gasthäuser und Flugmeister. Wird von Questdon und Leveldon gebraucht und lädt von selbst.
 ## Author: DonCoohd
-## Version: 1.1.0
+## Version: 1.2.0
 ## X-Curse-Project-ID: 1774402
 ## SavedVariables: DonDataDB
 ## SavedVariablesPerCharacter: DonDataCharDB
 ## Category: Quests
-## IconTexture: Interface\Icons\INV_Misc_Book_11
+## IconTexture: Interface\AddOns\DonData\Media\minimap
 ## X-License: DonData.lua, Store.lua and Engine/ (the reading engine, from Questdon) by DonCoohd (MIT). Data/ATT_Quests.lua is derived from All The Things (MIT License, see that file). Data/Extra_Quests.lua, Spawns.lua, Quest_Texts.lua, Walks.lua, Services.lua: CMaNGOS classic-db and ForeverDB data, GPL v3 (see Data/Walks-LICENSE-GPLv3.txt).
 
 Data\ATT_Quests.lua
@@ -22,6 +22,7 @@ Data\Dungeon_Entrances.lua
 Data\Services.lua
 Data\Paths.lua
 Data\Client_Quests.lua
+Data\Known_Facts.lua
 Store.lua
 Engine\Locale.lua
 Engine\Core.lua

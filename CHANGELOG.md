@@ -1,5 +1,12 @@
 # Changes
 
+## 1.2.0
+
+- **Less to share:** a list of what the data already knows (Forever only) lets Questdon leave out of sharing and `/qd export` what everybody has anyway. Shared data is far smaller.
+- **Quest data:** updated from the current All The Things files for WoW Forever.
+- **Pin sizes:** new defaults 60 % on the world map and 85 % on the minimap (together with Questdon 1.5.0).
+- **Addon list:** the addon has its own logo in the game's addon list.
+
 ## 1.1.0
 
 - **First full release.** DonData is the quest database of the Don addons, for WoW Forever and WoW Classic Era in one download. **Questdon** and **Leveldon** need it; the CurseForge app installs it with them. If you install by hand, put the `DonData` folder next to them in `Interface\AddOns`. It has no window and nothing to set up.
