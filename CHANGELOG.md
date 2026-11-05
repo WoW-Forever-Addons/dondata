@@ -1,5 +1,9 @@
 # Changes
 
+## 1.2.1
+
+- **WoW Forever build 70790:** the game tables are updated to the current client (quests unchanged).
+
 ## 1.2.0
 
 - **Less to share:** a list of what the data already knows (Forever only) lets Questdon leave out of sharing and `/qd export` what everybody has anyway. Shared data is far smaller.
