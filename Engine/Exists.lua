@@ -30,8 +30,17 @@ local recheck = {}    -- [id] = true: negative from an older build, asked again
 local queue, queued = {}, {}
 local windowStart, windowCount = -1, 0
 local pumpScheduled = false
+local TITLE_TRIES = 6 -- (05.11.2026) ClientQuestTitle below
+local titleMiss = {}  -- [id] = { n = empty answers, at = earliest next try }
 
 local function Now() return ns.Num(ns.Value(GetTime)) or 0 end
+
+-- (05.11.2026, Daniel: "Ja, abschalten") Forever live answers "false" for most quests it does not want to hand out,
+-- real ones included (Logs/QuestCache.log "Deny"; quests our characters had turned in were among 2481 marked missing).
+-- There a "false" says nothing: nothing is stored or hidden, the old marks are dropped. Era keeps the check;
+-- ns.TRUST_SERVER_NO = true turns it on anyway (tests).
+local function Trusted() return ns.ERA == true or ns.TRUST_SERVER_NO == true end
+ns.ServerNoTrusted = Trusted
 
 local function Store()
   local db = ns.db
@@ -120,6 +129,7 @@ ns.CheckQuestExists = ns.RequestQuestData
 
 -- Known not to exist on this server (explicit "false", never for quests in the log).
 function ns.QuestKnownMissing(questID)
+  if not Trusted() then return false end
   local store = Store()
   local id = ns.Num(questID)
   if not (store and id) or store[id] ~= false then return false end
@@ -142,6 +152,7 @@ end
 -- Sorted IDs of the quests the server does not know.
 function ns.MissingQuestIDs()
   local list = {}
+  if not Trusted() then return list end
   for id, v in pairs(Store() or {}) do
     if v == false and type(id) == "number" then list[#list + 1] = id end
   end
@@ -170,13 +181,32 @@ ns.On("QUEST_DATA_LOAD_RESULT", function(_, questID, success)
     confirmed[id] = nil
     -- only quests we know or asked about (other addons ask about many more)
     local ours = asked[id] or (ns.ATT_QUESTS and ns.ATT_QUESTS[id]) or (ns.db.learned and ns.db.learned[id])
-    if ours and not ns.InQuestLog(id) then store[id] = false end
+    if ours and Trusted() and not ns.InQuestLog(id) then store[id] = false end
   elseif success == true then
+    titleMiss[id] = nil -- (05.11.2026) loaded: ClientQuestTitle may ask again
     confirmed[id] = true
     store[id] = nil
   end
 end)
 
+-- (05.11.2026) The client's title of any quest, with a brake. GetTitleForQuestID asks the server by itself when the
+-- client does not have the quest, and Forever live turns most of those down ("Deny" in Logs/QuestCache.log); every
+-- list refresh asked again (11, 88, 91777 every 3 s, the whole session). After an empty answer the next try waits
+-- 4, 8, 16 ... s, after TITLE_TRIES empty answers none this session; a successful load (QUEST_DATA_LOAD_RESULT true,
+-- handler above) lifts it.
+function ns.ClientQuestTitle(questID)
+  local id = ns.Num(questID)
+  if not id or id <= 0 then return nil end
+  local m = titleMiss[id]
+  if m and (m.n >= TITLE_TRIES or Now() < m.at) then return nil end
+  local title = ns.Value(C_QuestLog.GetTitleForQuestID, id)
+  if type(title) == "string" and title ~= "" then titleMiss[id] = nil return title end
+  m = m or { n = 0 }
+  m.n = m.n + 1
+  m.at = Now() + 2 ^ (m.n + 1)
+  titleMiss[id] = m
+  return nil
+end
 -- An accepted quest exists, whatever an earlier answer said.
 ns.On("QUEST_ACCEPTED", function(_, a, b)
   local id = ns.Num(b) or ns.Num(a)
@@ -191,8 +221,9 @@ ns.OnInit(function()
   local store = Store()
   -- keep only [number] = false
   for id, v in pairs(store) do
-    if type(id) ~= "number" or v ~= false then store[id] = nil end
+    if type(id) ~= "number" or v ~= false or not Trusted() then store[id] = nil end
   end
+  if not Trusted() then return end -- (05.11.2026) nothing to recheck
   local build = Build()
   if not build or ns.db.questExistsBuild == build then return end
   local old = ns.db.questExistsBuild

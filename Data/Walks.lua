@@ -5,7 +5,7 @@
 -- tenths of a map percent (0-999); a walk runs from its last point back to its first.
 local _, ns = ...
 ns.WALKS = {
-[330]={[1429]={"jdm7jem3jelwjdltj8lsj6lxj5m3j7m7jam9"}}, -- Princess
+[330]={[1429]={"jdm7jem3jelwjdltj8lsj6lxj5m3j7m7jam9"}}, -- Princess (seen 2)
 [391]={[1436]={"85l386le86lm88m089m58am98dmf8hml8jmo8qmt8umv91my93mz98n29an49hnd9lnk9nno9qnr9snr9tnp9unn9uni9rne9nnc9lnb9in99dn497n191mz8xmx8sms8lmn8hmi8emd8bm586lr85lh84la82kv82km81kg80k77wk07rju7pjp7njk7mjf7kj67jix7jiq7iil7gie7dib7aid7dio7fis7iiw7nj07sj17wj47xj87yjd7xjk7zjv80k280k780kj81kq82kw84l2"}}, -- Old Murk-Eye
 [464]={[1433]={"2ujv2ujy2wk52xk336jn3djg3fjc36jb2sjh2jjm"}}, -- Guard Parker (seen 5)
 [511]={[1431]={"mhk0mgjxmgjvmgjumgjumgjxmfjvmgjwmhjwmgjtmgjtmhjvmgjumgjtmhjsmhjvmgjvmgjvmgjwmhjwmijymgjzmgjxmgjtmgjtmgjumhjumjjxmhjymdjtm8jom5jfm0jblwj2lqjflqjrlvjvluk0lzk9m6kam8k6m5k0m8jpmejt"}}, -- Insane Ghoul

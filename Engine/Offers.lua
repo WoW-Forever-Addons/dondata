@@ -179,7 +179,7 @@ function ns.MatchOfferedTitle(npcID, title)
   if not (title and npcID) then return nil end
   local found
   for _, id in ipairs(GiverQuests(npcID)) do
-    local names = { ns.Value(C_QuestLog.GetTitleForQuestID, id) }
+    local names = { ns.ClientQuestTitle(id) } -- (05.11.2026) with a brake, Exists.lua
     local e = ns.db.learned and ns.db.learned[id]
     if type(e) == "table" then names[#names + 1] = e.title end
     if English() and ns.DataQuestName then names[#names + 1] = ns.DataQuestName(id) end

@@ -1,5 +1,11 @@
 # Changes
 
+## 1.2.2
+
+- **WoW Forever:** real quests are no longer hidden when the server does not answer a question about them.
+- **WoW Forever:** quest titles the game does not have are asked for less often (no more requests every few seconds).
+- **Quest data:** a new day of play on WoW Forever added: quests the server does not have, gathering spots, NPC roles, objectives and turn-ins.
+
 ## 1.2.1
 
 - **WoW Forever build 70790:** the game tables are updated to the current client (quests unchanged).

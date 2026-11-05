@@ -675,8 +675,8 @@ end
 function ns.QuestTitle(questID)
   questID = ns.Num(questID) -- (Questdon review 2) nil or a secret: no error
   if not questID then return "?" end
-  local title = ns.Value(C_QuestLog.GetTitleForQuestID, questID)
-  if type(title) == "string" and title ~= "" then return title end
+  local title = ns.ClientQuestTitle(questID) -- (05.11.2026) with a brake, Exists.lua
+  if title then return title end
   ns.RequestQuestData(questID)
   local learned = ns.db.learned[questID]
   if learned and learned.title then return learned.title end
