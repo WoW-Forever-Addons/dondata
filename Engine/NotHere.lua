@@ -37,6 +37,19 @@ local function Count(t)
   return n
 end
 
+-- (07.11.2026, Discord Kriegnix: "ich hab oft die Ausrufezeichen auf der Karte aber dann ist da nichts"; Daniel's choice
+-- "Nach 1 Gespräch weg", from the quest's own level) one dialog without the quest hides it once the character is at the
+-- quest's level the game shows ([15]) or above: below it the data's minimum level may be too low (1.24), there the
+-- three levels stay. It comes back when offered or after a turn-in there.
+local function AutoHidden(e, questID)
+  if type(e) ~= "table" or type(e.lv) ~= "table" then return false end
+  if Count(e.lv) >= LEVELS then return true end
+  local gl = ns.GameQuestLevel and ns.Num(ns.GameQuestLevel(questID))
+  if not gl then return false end
+  for lv in pairs(e.lv) do if type(lv) == "number" and lv >= gl then return true end end
+  return false
+end
+
 local function Store()
   local db = ns.db
   if type(db) ~= "table" then return {} end
@@ -57,7 +70,7 @@ function ns.NeverOffered(questID)
   if type(e) == "table" then
     if e.ok then return false end
     if e.man then return true, "you" end
-    if Count(e.lv) >= LEVELS then return true, "auto" end
+    if AutoHidden(e, questID) then return true, "auto" end
   end
   if ns.SharedNotHere and ns.SharedNotHere(questID) then return true, "shared" end
   if ns.EXTRA_NOT_HERE and ns.EXTRA_NOT_HERE[questID] then return true, "data" end
@@ -89,15 +102,20 @@ function ns.NoteNotOffered(questID, npcID, level)
   e.npc = npcID or e.npc
   if e.lv[level] then return end
   if Count(e.lv) >= MAX_LEVELS then return end
+  local before = AutoHidden(e, questID)
   e.lv[level] = true
   stats.auto = stats.auto + 1
-  if Count(e.lv) == LEVELS and not e.man then
+  if not before and AutoHidden(e, questID) and not e.man then
     stats.hiddenAuto = stats.hiddenAuto + 1
     -- (31.10.2026) the line names /qd nothere undo: only with Questdon (ns.HOST); without it (Leveldon alone) there is
     -- no /qd, the quest is hidden quietly and Questdon's /qd nothere list shows it once Questdon is there
     if ns.HOST then
-      ns.Print(L["%s is hidden: the quest giver did not offer it at %d different levels. Undo: /qd nothere undo"]:format(
-        ns.QuestTitle(questID), LEVELS))
+      if Count(e.lv) < LEVELS then
+        ns.Print(L["%s is hidden: the quest giver did not offer it. Undo: /qd nothere undo"]:format(ns.QuestTitle(questID)))
+      else
+        ns.Print(L["%s is hidden: the quest giver did not offer it at %d different levels. Undo: /qd nothere undo"]:format(
+          ns.QuestTitle(questID), LEVELS))
+      end
     end
     last = { questID }
     Refresh()
@@ -239,7 +257,7 @@ function ns.NotHereRecords(all)
   table.sort(ids)
   for _, id in ipairs(ids) do
     local e = Store()[id]
-    if type(e) == "table" and not e.ok and (e.man or Count(e.lv) >= LEVELS)
+    if type(e) == "table" and not e.ok and (e.man or AutoHidden(e, id))
         and (all or not (ns.EXTRA_NOT_HERE and ns.EXTRA_NOT_HERE[id])) then
       local npc = ns.Num(e.npc)
       out[#out + 1] = ("N %d %d %s"):format(id, (npc and npc > 0) and npc or 0, e.man and "m" or "a")

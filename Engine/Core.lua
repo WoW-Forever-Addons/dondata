@@ -127,6 +127,7 @@ ns.defaults = {
   ownRepBar = true, -- (1.3.2) a tracked faction is shown in Questdon's own (clickable) reputation bar
   -- 1.21
   minimapPins = true, -- the map pins of the current zone on the minimap too
+  minimapTrackedOnly = false, -- (07.11.2026) quest mob and objective dots on the minimap only for tracked quests
   shareTimes = true, -- (18.10.) play times of quests, drop rates, flights and abandons measured and shared (Timing.lua)
   -- 1.22
   nameplateIcons = true, -- pins above the nameplates of quest mobs (1.3.6: no more ! and ? over NPCs)

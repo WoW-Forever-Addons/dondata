@@ -12,6 +12,7 @@ ns.LEARN_KEYS = {
   learned = true, learnedObj = true, learnedCredit = true, learnedDrops = true, learnedItemStarts = true,
   npcSpots = true, notHere = true, questExists = true, questExistsBuild = true, npcNames = true, questLevels = true,
   objOrder = true, shared = true, movedOrderFix = true,
+  levelScan = true, -- (07.11.2026) where the walk of Engine/Levels.lua is
   npcNamesOrder = true, -- (31.10.2026, C13) the order npcNames were first seen in, for its limit (QuestData.lua)
 }
 ns.CHAR_KEYS = { notOffered = true, offered = true, notOfferedInfo = true }

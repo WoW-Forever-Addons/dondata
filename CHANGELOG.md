@@ -1,5 +1,13 @@
 # Changes
 
+## 1.2.4
+
+- **Quest levels from the WoW Forever server:** levels for 3307 quests (before 589), so grey quests match the game. Questdon asks the server for quest levels in the background, two per second and never in combat.
+- **Grey quests:** a quest counts as too low by the level the server gives it, the way the game greys it.
+- **Empty "!":** a quest the quest giver does not offer at its level is hidden after one talk.
+- **Learned from play:** another day of play added (spawns, walked ways, quest facts).
+- WoW Forever build 70862.
+
 ## 1.2.3
 
 - **Better ways on WoW Forever:** the arrow and the dotted line know far more of the ground players really walk (twice as many walked spots, many more cave insides). Small hills that only look like mountains on the map no longer cause long detours; places where players only tried to climb and slid back still count as mountain.

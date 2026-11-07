@@ -3,7 +3,7 @@
 ## Notes: Quest database for the Don addons on WoW Forever (Questdon, Leveldon): quests, givers and turn-ins, objectives and their spawn points, quest texts, patrol routes, dungeons, inns and flight masters. Needed by Questdon and Leveldon, loads by itself.
 ## Notes-deDE: Questdatenbank der Don-Addons für WoW Forever (Questdon, Leveldon): Quests, Questgeber und Abgaben, Questziele mit ihren Fundorten, Questtexte, Laufwege, Dungeons, Gasthäuser und Flugmeister. Wird von Questdon und Leveldon gebraucht und lädt von selbst.
 ## Author: DonCoohd
-## Version: 1.2.3
+## Version: 1.2.4
 ## X-Curse-Project-ID: 1774402
 ## SavedVariables: DonDataDB
 ## SavedVariablesPerCharacter: DonDataCharDB
@@ -35,5 +35,6 @@ Engine\QuestData.lua
 Engine\POI.lua
 Engine\Dungeons.lua
 Engine\Gear.lua
+Engine\Levels.lua
 Engine\API.lua
 DonData.lua

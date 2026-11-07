@@ -626,10 +626,21 @@ end
 -- counts when ATT has none. (1.24) A quest without any known level is never
 -- low level (the option "noLevelIsLow" is gone, see ns.NoLevelHidden).
 -- knownOnly: kept for the callers (auto accept), same result now.
+-- (07.11.2026, Daniel: "nur für grau") the game greys a quest by its own level, not by the level you may take it at
+-- (65 The Defias Brotherhood: ATT 14, the server 18): the server's level counts first where it is known. Only the
+-- kept and the shipped ones (DonData Engine/Levels.lua, ns.GAME_LEVELS): table reads, no client call per quest
+-- (the map's loops ask for every quest).
+local function KnownGameLevel(questID)
+  local kept = ns.db and type(ns.db.questLevels) == "table" and ns.Num(ns.db.questLevels[questID])
+  if kept and kept > 0 then return kept end
+  local shipped = ns.GAME_LEVELS and ns.Num(ns.GAME_LEVELS[questID])
+  return shipped and shipped > 0 and shipped or nil
+end
+
 function ns.IsLowLevelQuest(questID, player, knownOnly)
   player = player or Player()
   if not player.level then return false end
-  local lv = ns.QuestLevel(questID)
+  local lv = KnownGameLevel(questID) or ns.QuestLevel(questID)
   if lv then return lv <= player.level - ns.LowLevelRange() end
   return false
 end
@@ -1719,11 +1730,14 @@ local function IsTurnInTalk(id, o, state)
   return not LooksLikeKill(state, ty)
 end
 
-local function EachMapObjective(fn)
+-- trackedOnly: only the picked and the watched quests even when objectivePinsTrackedOnly is off (07.11.2026, the minimap's
+-- own "minimapTrackedOnly", Discord tP: too many marks on the minimap)
+local function EachMapObjective(fn, trackedOnly)
   local learnedObj = ns.db.learnedObj or {}
+  local only = trackedOnly or ns.db.objectivePinsTrackedOnly
   for _, info in ipairs(ns.QuestLogEntries()) do
     local id = info.questID
-    local tracked = not ns.db.objectivePinsTrackedOnly or ns.IsQuestTracked(id)
+    local tracked = not only or ns.IsQuestTracked(id)
     if tracked and (OBJ[id] or learnedObj[id] or (ns.SharedSpots and ns.SharedSpots(id))) and not ns.IsQuestComplete(id) and not ns.IsQuestFailed(id)
         and not DrawnElsewhere(id, "objective") then
       local client = ClientObjectives(id)
@@ -1938,7 +1952,7 @@ local MAX_NEAR_TOTAL = 200
 local pool, kept, part = {}, {}, {}
 local function ByDistance(a, b) return a.d2 < b.d2 end
 local metaPool = {}
-function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach)
+function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly)
   TrimPinStore()
   local list = {}
   if not (mapID and pc and pn and pw and reach) then return list end
@@ -1990,7 +2004,7 @@ function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach)
     for k = nc + 1, #part do part[k] = nil end
     if nc > MAX_NEAR then table.sort(part, ByDistance) end
     for k = 1, math.min(nc, MAX_NEAR) do nk = nk + 1 kept[nk] = part[k] end
-  end)
+  end, trackedOnly)
   for k = nk + 1, #kept do kept[k] = nil end
   if nk > MAX_NEAR_TOTAL then table.sort(kept, ByDistance) end
   for k = 1, math.min(nk, MAX_NEAR_TOTAL) do
