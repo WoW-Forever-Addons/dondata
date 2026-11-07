@@ -1,5 +1,11 @@
 # Changes
 
+## 1.2.3
+
+- **Better ways on WoW Forever:** the arrow and the dotted line know far more of the ground players really walk (twice as many walked spots, many more cave insides). Small hills that only look like mountains on the map no longer cause long detours; places where players only tried to climb and slid back still count as mountain.
+- **Quest data:** updated from the current All The Things files and ForeverDB 0.57.0 for WoW Forever (new prerequisites in Tirisfal Glades and Silverpine Forest, Arugal's Folly in five parts, more objective spots).
+- **Learned from play:** a new day of play added: lowest levels quests are offered at, quest starts and turn-ins, quest items, objectives and NPC roles.
+
 ## 1.2.2
 
 - **WoW Forever:** real quests are no longer hidden when the server does not answer a question about them.
