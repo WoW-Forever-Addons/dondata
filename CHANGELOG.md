@@ -1,5 +1,10 @@
 # Changes
 
+## 1.2.5
+
+- **The arrow's ways around mountains and into caves are off by default:** the arrow points straight at the target.
+- **Learned from play:** reports of single players are used when they match the quest data, and another day of play added (quest starts and turn-ins, walked ways, services).
+
 ## 1.2.4
 
 - **Quest levels from the WoW Forever server:** levels for 3307 quests (before 589), so grey quests match the game. Questdon asks the server for quest levels in the background, two per second and never in combat.

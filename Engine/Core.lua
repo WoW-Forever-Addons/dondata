@@ -73,6 +73,9 @@ ns.defaults = {
   arrowNext = true, -- (1.3.5) nothing tracked: the arrow moves on to the next turn-in or an objective close by
   arrowCorpse = true, -- (1.2) as a ghost the arrow leads to your corpse
   pathDots = true, -- (1.3.6) the arrow's way around a mountain or into a cave as dots on the map and minimap
+  -- (09.11.2026, Daniel's screenshot near Kharanos: "the ways are wild") the arrow's ways around mountains and into
+  -- caves are off: the arrow points straight at the target, no dots. Paths.lua stays; arrowPaths = true brings it back.
+  arrowPaths = false,
   arrowPos = nil,
   -- 1.4
   arrowScale = 1.15,
