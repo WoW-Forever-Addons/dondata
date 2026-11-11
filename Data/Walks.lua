@@ -10,7 +10,7 @@ ns.WALKS = {
 [464]={[1433]={"2ujv2ujy2wk52xk336jn3djg3fjc36jb2sjh2jjm"}}, -- Guard Parker (seen 5)
 [511]={[1431]={"mhk0mgjxmgjvmgjumgjumgjxmfjvmgjwmhjwmgjtmgjtmhjvmgjumgjtmhjsmhjvmgjvmgjvmgjwmhjwmijymgjzmgjxmgjtmgjtmgjumhjumjjxmhjymdjtm8jom5jfm0jblwj2lqjflqjrlvjvluk0lzk9m6kam8k6m5k0m8jpmejt"}}, -- Insane Ghoul
 [522]={[1431]={"4maa4ia84eab4bag47al45aw46b444bd42bn42bp44bu47bw4bby4jc24tc150bx57bp5dbl5hbb5ib45gat5dap5aan55am51am4vaj4tak4ran4qap4oar4naq4mao4naj4naf"}}, -- Mor'Ladim
-[550]={[1436]={"cjj9coj3cqiycritcnihcnibcoi2cghvcchnc8h6c5grc3gfc1g0c0foc0f6byf0bresbpembmefble9bldzbfdpbcdhb5d8aucvarcoapclaicoadcga6cc9xc89oc39gbz96by8xc18tc78och8kcr8hcq8fco89cu8acz8bd58dd98hdb8jdf8hdm8edt89dz89dx8edr8hdm8jde8hda8ad58act8fco8kcr8mcl8qcc8uc48zc191bz95bx9ebz9mc29wc7a3c7a6c1a9bra9bcabb0aeaqaiabana3ax9tb79lbd9dbh94bm8mbp8gbx86c57ycb7scd7bcd71ce6vce6jci6dci69cd5ycg5rcg5ocd5hcf5dch5acn52cq51cs53ct57cv59cr51co51ck56ce5ece5mcg5rce5yce61ci6cce6kce6rcd71cb7aca7rc47zbw87bm8lbh91bd9db79laz9rapa1aja9agaiadauaab5a8bpaac0aec7ajcearcoavcwb3d6bbdebedmbgdrble0bmebboelbsetbyf1c0f7c0fkbwfobsfobpfjbmf2bmetbneqbqeqbweyc0f5c0fdc0fpc1fzc3gfc6guc9h8cchkcehrcihxcli0coi2cnidcoikcritcqiycmj7cijbcdjc"}}, -- Defias Messenger (seen 3)
+[550]={[1436]={"cjj9coj3cqiycritcnihcnibcoi2cghvcchnc8h6c5grc3gfc1g0c0foc0f6byf0bresbpembmefble9bldzbfdpbcdhb5d8aucvarcoapclaicoadcga6cc9xc89oc39gbz96by8xc18tc78och8kcr8hcq8fco89cu8acz8bd58dd98hdb8jdf8hdm8edt89dz89dx8edr8hdm8jde8hda8ad58act8fco8kcr8mcl8qcc8uc48zc191bz95bx9ebz9mc29wc7a3c7a6c1a9bra9bcabb0aeaqaiabana3ax9tb79lbd9dbh94bm8mbp8gbx86c57ycb7scd7bcd71ce6vce6jci6dci69cd5ycg5rcg5ocd5hcf5dch5acn52cq51cs53ct57cv59cr51co51ck56ce5ece5mcg5rce5yce61ci6cce6kce6rcd71cb7aca7rc47zbw87bm8lbh91bd9db79laz9rapa1aja9agaiadauaab5a8bpaac0aec7ajcearcoavcwb3d6bbdebedmbgdrble0bmebboelbsetbyf1c0f7c0fkbwfobsfobpfjbmf2bmetbneqbqeqbweyc0f5c0fdc0fpc1fzc3gfc6guc9h8cchkcehrcihxcli0coi2cnidcoikcritcqiycmj7cijbcdjc"}}, -- Defias Messenger (seen 4)
 [576]={[1431]={"knddkqdeksd8kud6kxd6kzcwkucvkucnkpctklcukgcxkgd4kkda"}}, -- Watcher Ladimore (seen 2)
 [723]={[1434]={"dr8kdy8kdu8l"}}, -- Mosh'Ogg Butcher
 [738]={[1434]={"ak0yak0yak10am11an12an14al17al19am1cao1daq1eas1eau1fav1gax1nax1sax1wax1zaz24b228b32bb52db72cb72cb72cb42bb025ax20ax1tax1max1has1far1eap1eao1ean1ean1dam1cal1aal19al17al15al14al12ak11ak0zak0y"}}, -- Private Thorsen
@@ -23,7 +23,7 @@ ns.WALKS = {
 [1737]={[1420]={"8vim8uit8tit8sir8tit8uit8vil8rij8jik8uij"}}, -- Deathguard Oliver
 [1742]={[1420]={"g9eag9eag8e8g7e1g7dug9dsgcdpgddpggdpgidpgkdqgmdqgndqgodpgpdngqdkgrdigrdhgrddgqdagpd7gnd5gmd4gkd3gid1ghd0gfd3ged4gcd7gad9g8dag5dcg4ddg2deg1dhg0dkfzdkfydmfxdnfydpg0dpg2drg3dtg5dtg7dug7dwg7e0g7e5g8e8"}}, -- Deathguard Bartholomew
 [2039]={[1438]={"asm5asm4asm3asm4asm6atm7avm8awm9awm9aumaatmbasmdarmbasmaatm7"}}, -- Ursal the Mauler
-[2198]={[1453]={"fnkmfekzfil7exlwf7mif8mrf6n9f0nkewnqemnwe8o2e1nndtnjdjnid5o6csogciodcao7c7ntc7njc9msc9mjcambcmlxcxlncwlbcnkockk8cajpcnj9d1isdaiedahudihhdth4djgie5fre9fmexfbfcg1ftfifeeqffe9fre0g3eegsdkgjd0gtcoh5cchgczhpdihze1ige7itdxitdxj3dnjdddjrcxk1d9k4dojve2jgeojxfmk6fbkgfaksfql6gel6gqkxh2knhgk8h6jygrjdhfj7h9izhkili1idhthtili5j7hjjzh1kkgsk3gpjxgek4g0ke"}}, -- Crier Goodman (seen 2)
+[2198]={[1453]={"fnkmfekzfil7exlwf7mif8mrf6n9f0nkewnqemnwe8o2e1nndtnjdjnid5o6csogciodcao7c7ntc7njc9msc9mjcambcmlxcxlncwlbcnkockk8cajpcnj9d1isdaiedahudihhdth4djgie5fre9fmexfbfcg1ftfifeeqffe9fre0g3eegsdkgjd0gtcoh5cchgczhpdihze1ige7itdxitdxj3dnjdddjrcxk1d9k4dojve2jgeojxfmk6fbkgfaksfql6gel6gqkxh2knhgk8h6jygrjdhfj7h9izhkili1idhthtili5j7hjjzh1kkgsk3gpjxgek4g0ke"}}, -- Crier Goodman (seen 3)
 [2417]={[1416]={"9sf29xey9zf2a3fba7f8a3exafeoaneoaueaaxe6axe0b2dkb5d4bdcvb6ctb5d9awe7aredalenafeoa3ex9zen9veq9yex9sf29tf49wf4"}}, -- Grel'borg the Miser
 [2449]={[1424]={"91b291ax91ax92an92ah93aa93a5929y929y93a493aa92ak92aq91au92b294b195b19cau9har9har9qar9uar9zata2awa4aya2aw9yat9uar9qar9kar9far9cav97az93b4"}}, -- Citizen Wilkes
 [2451]={[1424]={"9zcya0cva0csa0cn9zck9wcg9vcf9sck9qco9ncr9lcu9icy9hd19hd39jd39md79od79rd99td79wd69yd2a0cz"}}, -- Farmer Kalaba
@@ -47,7 +47,7 @@ ns.WALKS = {
 [3396]={[1413]={"crbccob7ckb1cjayciavcjarclapcnancqajcraecsabctaacva9cxabcyafcyaiczand1aqd5avdaaydeb0dhb2dib8dgbbdcbed6bjd2bnd0bpcxbncublcsbf"}}, -- Hezrul Bloodmark
 [3434]={[1413]={"c6n5c5n6c5n8c6nac7ncc8nec9nfcbngcdngcenfcenccdnaccn8cbn5can3c9n2c7n2c6n3"}}, -- Nak
 [3436]={[1413]={"cjm9cjm5cgm3cem2ccm1cam0c9lzc7lzc4lyc3lzc2m2c1m4c1m7c1m9c1mcc2mec2mgc3mjc4mmc6mnc8mnc9mncammcbmlccmkcemjcgmicjmhckmgclmeckmbckma"}}, -- Kuz
-[3445]={[1413]={"fn2efo2dfo2cfo2bfo2afn2afm2afm2cfm2d"}}, -- Supervisor Lugwizzle
+[3445]={[1413]={"fn2efo2dfo2cfo2bfo2afn2afm2afm2cfm2d"}}, -- Supervisor Lugwizzle (seen 1)
 [3476]={[1413]={"hoenhrechte2hydwi2dqi2dki2dqhydwhte2hrechoenhnez"}}, -- Isha Awak
 [3530]={[1421]={"ctjucujwcvjzcxk2cxk4cxk2cvjzcujwctjucpjt"}}, -- Pyrewood Tailor
 [3667]={[1439]={"bmgvbmgtbogtbqgubsgvbvgwbwgzbxh2bxh6byh7c0h9bzhdbxhebvhgbthgbrhgbphebohcbmh9blh7bih6bmh8bnh5bnh2bmgy"}}, -- Anaya Dawnrunner

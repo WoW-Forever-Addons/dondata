@@ -22,7 +22,6 @@ ns.defaults = {
   autoTurnIn = true,
   skipTrivial = true,
   highlightBest = true,
-  autoPickBest = false,
   suggestReward = true, -- (1.3.8) a green frame on the reward players of your class pick (or the class rule)
   sellJunk = true,
   autoRepair = true,
@@ -34,7 +33,6 @@ ns.defaults = {
   targetButton = false,
   targetButtonPos = nil,
   mobNames = {}, -- [creatureID] = name, learned from nameplates and target
-  exportBlizzardWaypoint = false,
   exportTomTom = false,
   buttonPos = nil, -- { point, relPoint, x, y }
   -- 1.1
@@ -48,7 +46,6 @@ ns.defaults = {
   learnPins = true,
   pinsOnlyUnknown = true,
   shareQuests = false,
-  questieFirst = false, -- (1.3.6, Daniel 12.10.: "we no longer need to give Questie priority")
   -- 1.2
   availablePins = true,
   objectivePins = true,
@@ -80,6 +77,7 @@ ns.defaults = {
   -- 1.4
   arrowScale = 1.15,
   objectivePinSize = 12,
+  wayPinScale = 1, -- (11.11.2026) size of the /way waypoint pins (Questdon Way.lua)
   mapPinScale = 0.6, minimapPinScale = 0.85, -- (Daniel 26.10.) size of all Questdon pins on the world map and the minimap; (04.11.2026, Era-Test) 60 % and 85 %
   thinObjectives = true, -- (1.3.5) many objective dots: fewer, bundled markers (minimap and world map)
   objectiveIcons = true, -- (17.10.) symbols instead of dots (mob, loot, named mob, object, place, item), groups as one
@@ -153,8 +151,6 @@ ns.defaults = {
   -- 1.25: quest givers the game itself marks with ! (its quest lines list the
   -- quest with a spot) get no second ! from Questdon on the map and minimap
   skipGameGivers = true,
-  clusterPins = false, -- (1.28) merge close available pins on the world map
-  upcomingLevels = 0,    -- map pins: also quests of the next 0-5 levels, dimmed
   -- 1.3.5: the entrance of every dungeon with a known entrance: world map; minimap only within 300 yards
   dungeonPins = true,
   dungeonPinsMinimap = true,

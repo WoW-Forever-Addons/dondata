@@ -885,14 +885,8 @@ function ns.KnownTurnIn(questID)
   end
 end
 
--- Questie (or Forever Quest Pins) already draws this, so we do not.
+-- Forever Quest Pins already draws this, so we do not. (10.11.2026) Questie no longer has priority (questieFirst is gone)
 local function DrawnElsewhere(questID, what)
-  -- (Questdon review 2) only while Questie is on: switched off in its own options it draws nothing
-  if ns.db.questieFirst and ns.QuestieOn and ns.QuestieOn() and ns.QuestieKnows(questID) == true then -- (L3) QuestieOn: Questdon (Compat.lua)
-    -- (Questdon review 3) and only while Questie draws that kind of mark itself (its map icons, its available
-    -- quests, its objectives)
-    return ns.QuestieDrawsMarks and ns.QuestieDrawsMarks(what) or false
-  end
   if what == "start" and ns.AddOnLoaded("ForeverQuestPins") then return true end
   return false
 end
@@ -906,26 +900,17 @@ function ns.LevelOptionsState()
     noLevelCount = 0
     for _, q in pairs(Q) do if not q[LEVEL] then noLevelCount = noLevelCount + 1 end end
   end
-  return ("low level from %d below, without level %s (%d quests), next levels +%d"):format(ns.LowLevelRange(),
-    ns.db.showNoLevel and "shown" or "hidden unless confirmed", noLevelCount, ns.UpcomingLevels())
-end
-
--- (1.22) Option "upcomingLevels": quests up to that many levels above you (0 = off).
-function ns.UpcomingLevels()
-  local n = tonumber(ns.db and ns.db.upcomingLevels) or 0
-  if n ~= n then n = 0 end
-  return math.max(0, math.min(5, math.floor(n + 0.5)))
+  return ("low level from %d below, without level %s (%d quests)"):format(ns.LowLevelRange(),
+    ns.db.showNoLevel and "shown" or "hidden unless confirmed", noLevelCount)
 end
 
 -- Quests available on a map: { {questID, x, y (0-1), npc}, ... }
--- upcoming (1.22, map pins only): also quests you can take within the next
--- ns.UpcomingLevels() levels, marked upcoming = minimum level and dimmed.
--- The panel, the next quest and the API never see them.
+-- (10.11.2026, Daniel: dead functions out) the quests of the next levels (1.22, option "upcomingLevels", dimmed pins
+-- with upcoming and notOffered) are gone: the option was 0 for everybody since 28.10.2026 and had no switch.
 -- (1.24) Sources of truth, best first (Offers.lua): the client's quest lines
 -- of the map (listed = available, confirmed = true; "not yet" = hidden), the
--- quest givers (not offered at this level = hidden; with upcoming a dimmed pin
--- with notOffered = level), then the data. Unconfirmed quests without a level
--- only with the option "showNoLevel".
+-- quest givers (not offered at this level = hidden), then the data. Unconfirmed
+-- quests without a level only with the option "showNoLevel".
 local AvailableOnMap
 -- (24.10., Daniel's list: the quest list and the minimap on quest log events; bench "quest, map closed": the panel's
 -- available quests 27 KB/s) kept across scopes while the log's state (ns.QuestLogState), the level, the options and the
@@ -946,33 +931,31 @@ end
 local function AvailOptions()
   local d = ns.db
   return table.concat({ tostring(d.showLowLevel), tostring(d.confirmedOnly), tostring(d.hideEventQuests), tostring(d.showNoLevel),
-    tostring(d.upcomingLevels), tostring(d.lowLevelRange), tostring(d.hideRepeatable), tostring(d.clientRepeatable),
-    tostring(d.nextConfirmedOnly), tostring(d.questieFirst) }, ",")
+    tostring(d.lowLevelRange), tostring(d.hideRepeatable), tostring(d.clientRepeatable),
+    tostring(d.nextConfirmedOnly) }, ",")
 end
-local function KeptAvailable(mapID, upcoming)
-  if QD_TEST_FRESH_LOG or not (ns.InScope and ns.InScope()) or not ns.QuestLogState then return AvailableOnMap(mapID, upcoming) end
+local function KeptAvailable(mapID)
+  if QD_TEST_FRESH_LOG or not (ns.InScope and ns.InScope()) or not ns.QuestLogState then return AvailableOnMap(mapID) end
   local h, n = ns.QuestLogState()
   local now = ns.Num(ns.Value(GetTime)) or 0
   local level, opt = Player().level, AvailOptions()
-  local key = upcoming and -mapID or mapID
-  local k = availKeep[key]
+  local k = availKeep[mapID]
   if k and k.gen == availGen and k.h == h and k.n == n and k.level == level and k.opt == opt
       and now >= k.at and now - k.at <= AVAIL_SECS then
     return k.list
   end
-  local list = AvailableOnMap(mapID, upcoming)
-  availKeep[key] = { list = list, gen = availGen, h = h, n = n, level = level, opt = opt, at = now }
+  local list = AvailableOnMap(mapID)
+  availKeep[mapID] = { list = list, gen = availGen, h = h, n = n, level = level, opt = opt, at = now }
   return list
 end
-function ns.AvailableQuestsOnMap(mapID, upcoming)
+function ns.AvailableQuestsOnMap(mapID)
   -- (1.23) once per map and scope (panel, map, minimap share it); callers only read it
-  return ns.Memo(upcoming and "availableUp" or "available", mapID, KeptAvailable, upcoming)
+  return ns.Memo("available", mapID, KeptAvailable)
 end
-function AvailableOnMap(mapID, upcoming)
+function AvailableOnMap(mapID)
   local list, seen = {}, {}
   if not mapID then return list end
   local player = Player()
-  local above = upcoming and player.level and ns.UpcomingLevels() or 0
   local client = ns.ClientQuestLines and ns.ClientQuestLines(mapID) -- asks the client once per map
   local function Listed(id) return client and client.available[id] and not ns.IsQuestDone(id) and not ns.InQuestLog(id) end
   local function Add(id)
@@ -987,18 +970,6 @@ function AvailableOnMap(mapID, upcoming)
       entry = { confirmed = (listed or ns.OfferConfirmed(id, player.level)) and true or nil }
       -- (1.0) event quests only once confirmed; "confirmedOnly" for every quest
       if not entry.confirmed and (ns.db.confirmedOnly or (ns.db.hideEventQuests and ns.IsEventQuest(id))) then return end
-    elseif above > 0 and not ns.db.confirmedOnly and not (ns.db.hideEventQuests and ns.IsEventQuest(id))
-        and ns.CanTakeQuest(id, player, above) then
-      if not ns.db.showLowLevel and ns.IsLowLevelQuest(id, player) then return end
-      local lv = Q[id][LEVEL]
-      local refused = ns.NotOfferedLevel(id, player.level)
-      if lv and player.level and lv > player.level then
-        entry = { upcoming = lv, dimmed = true, notOffered = refused }
-      elseif refused then
-        entry = { notOffered = refused, dimmed = true }
-      else
-        return -- the client says "not yet" although the level fits: hidden
-      end
     else
       return
     end

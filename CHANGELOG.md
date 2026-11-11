@@ -1,5 +1,13 @@
 # Changes
 
+## 1.2.6
+
+- **New quest data:** 231 more quests (4583), among them the quests of Krol'dok Stronghold and The Drowned City and many in Zephras Isle and the higher zones; more quest starts, turn-ins and objective places, fewer quests the game knows but the data did not.
+- **Learned from play:** three more days of play (levels at which quests are offered, places of objectives, gathering finds, quest levels from the server).
+- **No find places at the bank:** quest items taken out of the bank, mail, a trade or the auction house are not learned as a place where they are found.
+- **Two new dungeons:** Krol'dok Stronghold (40 to 45) and The Drowned City (35 to 40) with their level ranges.
+- For WoW Forever build 70888.
+
 ## 1.2.5
 
 - **The arrow's ways around mountains and into caves are off by default:** the arrow points straight at the target.

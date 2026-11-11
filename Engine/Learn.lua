@@ -343,9 +343,43 @@ function ns.LearnVersion() return learnVersion end
 local spotVersion = {}
 function ns.QuestSpotVersion(questID) return spotVersion[questID] or 0 end
 
+-- (10.11.2026, Daniel: quest items taken out of the bank made the bank a find spot on the map) Where items only change
+-- hands, a rising counter is no find: bank, guild bank, mailbox, trade and auction house. Open, and a few seconds after
+-- closing (the bags update late), nothing is learned. A spot at a bank or auction house of the service data
+-- (ns.SERVICES, percent) is never one either: dropped when learned, at login (own) and when shared by others.
+local MOVE_GRACE = 5
+local moving = {} -- [what] = true while open
+local movedAt = -1000
+local function MoveOpen(what) moving[what] = true end
+local function MoveClosed(what) moving[what] = nil movedAt = Clock() end
+for _, ev in ipairs({ { "BANKFRAME_OPENED", "BANKFRAME_CLOSED", "bank" }, { "GUILDBANKFRAME_OPENED", "GUILDBANKFRAME_CLOSED", "guild" },
+    { "MAIL_SHOW", "MAIL_CLOSED", "mail" }, { "TRADE_SHOW", "TRADE_CLOSED", "trade" },
+    { "AUCTION_HOUSE_SHOW", "AUCTION_HOUSE_CLOSED", "auction" } }) do
+  ns.On(ev[1], function() MoveOpen(ev[3]) end)
+  ns.On(ev[2], function() MoveClosed(ev[3]) end)
+end
+function ns.ItemsMoving()
+  local since = Clock() - movedAt
+  return next(moving) ~= nil or (since >= 0 and since <= MOVE_GRACE)
+end
+ns.NoteItemsMoving = function(what, open) if open then MoveOpen(what) else MoveClosed(what) end end -- (tests)
+
+local SERVICE_NEAR = 0.03 -- (0-1) as the data build (parse_export.py SERVICE_NEAR, percent)
+function ns.AtService(map, x, y)
+  local list = type(ns.SERVICES) == "table" and map and ns.SERVICES[map]
+  if not (list and x and y) then return false end
+  for _, p in ipairs(list) do
+    if (p[1] == "b" or p[1] == "a") and math.abs(p[2] / 100 - x) <= SERVICE_NEAR and math.abs(p[3] / 100 - y) <= SERVICE_NEAR then
+      return true
+    end
+  end
+  return false
+end
+
 -- Remember a spot (0-1) for an objective. true if it was new.
 function ns.AddObjectiveSpot(questID, index, map, x, y)
   if not (map and x and y) or (ns.IsZoneMap and not ns.IsZoneMap(map)) then return false end
+  if ns.AtService(map, x, y) then return false end
   ns.db.learnedObj = ns.db.learnedObj or {}
   local q = ns.db.learnedObj[questID] or {}
   ns.db.learnedObj[questID] = q
@@ -375,7 +409,7 @@ function ns.DropContinentSpots()
       if type(spots) == "table" then
         local keep = {}
         for i = 1, #spots - 2, 3 do
-          if ns.IsZoneMap(spots[i]) then
+          if ns.IsZoneMap(spots[i]) and not ns.AtService(spots[i], spots[i + 1], spots[i + 2]) then -- (10.11.) also bank, AH
             keep[#keep + 1] = spots[i] keep[#keep + 1] = spots[i + 1] keep[#keep + 1] = spots[i + 2]
           else
             dropped = dropped + 1
@@ -682,7 +716,8 @@ local function ScanProgress()
     local sure = not ns.ObjectiveOrderSure or ns.ObjectiveOrderSure(id)
     for index, o in ipairs(list) do
       now[index] = type(o) == "table" and ns.Num(o.numFulfilled) or 0
-      if progressReady and ns.db.learnQuests and sure and old and old[index] and now[index] > old[index] then
+      if progressReady and ns.db.learnQuests and sure and old and old[index] and now[index] > old[index]
+          and not ns.ItemsMoving() then -- (10.11.) items from the bank, mail or a trade are no find
         AddSpot(id, index)
         NoteCredit(id, index, o)
       end
