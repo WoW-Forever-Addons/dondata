@@ -1,5 +1,13 @@
 # Changes
 
+## 1.3.0
+
+- **New quest data:** 115 more quests (4698), among them the quests of Alcaz Prison and Blackmaw Hold and new quests in Shen'dralas, Desolace, Theramore and Tanaris, and the racial riding quests; more quest starts, turn-ins and objectives.
+- **Learned from play:** three more days of play from over 590 players (where quests start and end, objective places, quest levels, gathering finds).
+- **Two new dungeons:** Alcaz Prison (48 to 53) and Blackmaw Hold (55 to 60) with their level ranges.
+- **Fewer wrong pins at the quest giver:** a learned objective spot right at the quest giver or the turn-in is left out when the quest's mobs or another place are known.
+- **For Questdon 1.7.0:** usable items of each quest for the item buttons in the quest list, new defaults for new installs.
+
 ## 1.2.6
 
 - **New quest data:** 231 more quests (4583), among them the quests of Krol'dok Stronghold and The Drowned City and many in Zephras Isle and the higher zones; more quest starts, turn-ins and objective places, fewer quests the game knows but the data did not.

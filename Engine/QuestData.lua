@@ -1131,6 +1131,95 @@ local function GiverAndTurnIn(questID)
   return refs
 end
 
+-- (12.11.2026, Daniel: Bounty on Garrick Padfoot, "es gab 2 Pins ein kill pin beim questmop und ein lootpin beim
+-- questgeber") Is a spot (0-1) right at the quest's giver or turn-in (1.5 map units)? The game's own quest point of an
+-- open quest can be the turn-in: POI.lua learned it as a find spot of the objective.
+local AT_NPC = 1.5
+function ns.AtGiverOrTurnIn(questID, m, x, y)
+  if not (m and x and y) then return false end
+  for _, r in ipairs(GiverAndTurnIn(questID)) do
+    if r[1] == m and math.abs(r[2] - x * 100) < AT_NPC and math.abs(r[3] - y * 100) < AT_NPC then return true end
+  end
+  return false
+end
+
+-- (13.11.2026, Daniel: The Valor Family 96139, "0/1 Raven Hill Tome": a pin at the quest giver in Darkshire "obwohl
+-- ganz links auch schon da") Yesterday's rule only looked at objectives with mobs, and only the arrow and the POI
+-- learning asked it; the map's own list (BuildObjective) showed every learned spot. Now for every objective that is
+-- not "use an item", on both lists: the learned spots right at the quest's giver or turn-in are left out
+-- a) when one of the objective's mobs or objects has known spawns (12.11., the spawns are shown anyway), or
+-- b) when a place elsewhere is known (a learned spot or a data point not at the NPC) and the spots at the NPC are one
+--    single place (all within ONE_PLACE map units: the game's quest point, learned once and shared by others; several
+--    different spots there mean the counter really went up around the NPC, harness "1.25 report 1").
+-- When the place at the NPC is all that is known, it stays. Data points are never left out (they count as a place
+-- elsewhere only). Nothing is deleted from the saved data.
+-- NPCPlaces: giver and turn-in (0-100), nil where unknown (no tables: asked per objective).
+local ONE_PLACE = 0.25
+local function NPCPlaces(questID)
+  local gm, gx, gy = ns.QuestStart(questID)
+  if not (gm and gx and gy) or ns.IsItemStartQuest(questID) then gm, gx, gy = nil, nil, nil end
+  local tm, tx, ty = ns.TurnInPoint(questID, true)
+  if tm and tx and ty then tx, ty = tx * 100, ty * 100 else tm, tx, ty = nil, nil, nil end
+  return gm, gx, gy, tm, tx, ty
+end
+local function AtPlaces(m, x, y, gm, gx, gy, tm, tx, ty)
+  if not (m and x and y) then return false end
+  return (gm ~= nil and gm == m and math.abs(gx - x) < AT_NPC and math.abs(gy - y) < AT_NPC)
+    or (tm ~= nil and tm == m and math.abs(tx - x) < AT_NPC and math.abs(ty - y) < AT_NPC)
+end
+-- hide, gm, gx, gy, tm, tx, ty: hide = true when the learned spots at the giver or turn-in are to be left out
+local function HideAtNPC(questID, index, o, spots)
+  if #spots == 0 then return false end
+  local gm, gx, gy, tm, tx, ty = NPCPlaces(questID)
+  if not (gm or tm) then return false end
+  local at, away = 0, false
+  local am, x0, x1, y0, y1
+  local one = true
+  for i = 1, #spots, 3 do
+    local m, x, y = spots[i], spots[i + 1], spots[i + 2]
+    if m and x and y then
+      x, y = x * 100, y * 100
+      if AtPlaces(m, x, y, gm, gx, gy, tm, tx, ty) then
+        at = at + 1
+        if at == 1 then
+          am, x0, x1, y0, y1 = m, x, x, y, y
+        else
+          if m ~= am then one = false end
+          if x < x0 then x0 = x elseif x > x1 then x1 = x end
+          if y < y0 then y0 = y elseif y > y1 then y1 = y end
+        end
+      else
+        away = true
+      end
+    end
+  end
+  if at == 0 then return false end
+  -- a) known spawns
+  for _, cr in ipairs(o[1] or {}) do
+    if Spawns(cr) then return true, gm, gx, gy, tm, tx, ty end
+  end
+  -- b) one single place at the NPC and a place elsewhere
+  if not one or x1 - x0 > ONE_PLACE or y1 - y0 > ONE_PLACE then return false end
+  local pts = o[3] or {}
+  if not away then
+    for i = 1, #pts, 3 do
+      if pts[i] and pts[i + 1] and pts[i + 2] and not AtPlaces(pts[i], pts[i + 1], pts[i + 2], gm, gx, gy, tm, tx, ty) then away = true break end
+    end
+  end
+  if not away and #pts == 0 then
+    -- the data's creature points (shown when the objective has no points of its own)
+    for _, cr in ipairs(o[1] or {}) do
+      local arr = NPC[cr]
+      for i = 2, arr and #arr or 0, 3 do
+        if arr[i] and arr[i + 1] and arr[i + 2] and not AtPlaces(arr[i], arr[i + 1], arr[i + 2], gm, gx, gy, tm, tx, ty) then away = true break end
+      end
+      if away then break end
+    end
+  end
+  if not away then return false end
+  return true, gm, gx, gy, tm, tx, ty
+end
+
 -- Points of one unfinished objective (0-1 coordinates):
 -- { {mapID, x, y, creature, needsItem, dimmed}, ... }, hint
 -- hint = itemID when it is a "u" objective and the item is not in the bags.
@@ -1155,7 +1244,15 @@ function ns.ObjectiveTargets(questID, index, o, spots, onlyMap)
       Add = function(list, m, x, y, creature, scale) if m == onlyMap then add(list, m, x, y, creature, scale) end end
     end
     -- 1. spots this account has seen the counter go up (0-1 coordinates)
-    for i = 1, #spots, 3 do Add(out, spots[i], spots[i + 1], spots[i + 2], ns.OnlyObject(o), 1) end
+    -- (12.11.2026, wider 13.11.2026: HideAtNPC) not a learned spot at the quest giver or turn-in when the data knows
+    -- where the objective's mobs are or a place elsewhere is known (own old spots and ones shared by others: left out
+    -- here, nothing is deleted)
+    local hide, gm, gx, gy, tm, tx, ty = HideAtNPC(questID, index, o, spots)
+    for i = 1, #spots, 3 do
+      if not (hide and spots[i + 1] and spots[i + 2] and AtPlaces(spots[i], spots[i + 1] * 100, spots[i + 2] * 100, gm, gx, gy, tm, tx, ty)) then
+        Add(out, spots[i], spots[i + 1], spots[i + 2], ns.OnlyObject(o), 1)
+      end
+    end
     -- 2. ATT objective coordinates (0-100)
     for i = 1, #pts, 3 do Add(out, pts[i], pts[i + 1], pts[i + 2], o[1] and o[1][1], 100) end
     -- 3. (1.2) where the objective's creatures are: the spawns (all of
@@ -1599,8 +1696,13 @@ local function BuildObjective(questID, index, o, spots, mapID)
   local e = { keep = {}, sources = {}, total = 0 }
   local pts = o[3] or {}
   -- 1. spots this account (and others) saw the counter go up (0-1)
+  -- (13.11.2026) as ns.ObjectiveTargets: HideAtNPC
+  local hide, gm, gx, gy, tm, tx, ty = HideAtNPC(questID, index, o, spots)
   for i = 1, #spots, 3 do
-    if spots[i] == mapID and spots[i + 1] and spots[i + 2] then e.keep[#e.keep + 1] = { x = spots[i + 1], y = spots[i + 2], creature = ns.OnlyObject(o) } end
+    if spots[i] == mapID and spots[i + 1] and spots[i + 2]
+        and not (hide and AtPlaces(mapID, spots[i + 1] * 100, spots[i + 2] * 100, gm, gx, gy, tm, tx, ty)) then
+      e.keep[#e.keep + 1] = { x = spots[i + 1], y = spots[i + 2], creature = ns.OnlyObject(o) }
+    end
   end
   -- 2. the data's objective coordinates (0-100)
   local first = o[1] and o[1][1]
@@ -2115,8 +2217,9 @@ end
 
 -- Item of an open "u" objective of the super-tracked quest that is in the
 -- bags (for the quest item button), else nil.
-function ns.TrackedUseItem()
-  local questID = C_SuperTrack and ns.Num(ns.Value(C_SuperTrack.GetSuperTrackedQuestID))
+-- (12.11.2026, Questdon's item buttons in the quest list) the same for any quest in the log: ns.QuestUseItem(questID)
+function ns.QuestUseItem(questID)
+  questID = ns.Num(questID)
   if not questID or questID <= 0 or not ns.InQuestLog(questID) then return nil end
   local objs = OBJ[questID] or {}
   local open = OpenIndices(questID, ClientObjectives(questID))
@@ -2128,6 +2231,9 @@ function ns.TrackedUseItem()
     end
   end
   return nil
+end
+function ns.TrackedUseItem()
+  return ns.QuestUseItem(C_SuperTrack and ns.Num(ns.Value(C_SuperTrack.GetSuperTrackedQuestID)))
 end
 
 -- All points (any map, 0-1 coordinates) for the unfinished objectives of one quest.

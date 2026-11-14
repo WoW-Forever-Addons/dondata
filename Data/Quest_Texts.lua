@@ -14,6 +14,7 @@ ns.ENDER_NAMES = [=[
 n196=Eagan Peltskinner
 n197=Marshal McBride
 n198=Khelden Bremen
+n228=Avette Fellwood
 n233=Farmer Saldean
 n234=Gryan Stoutmantle
 n235=Salma Saldean
@@ -119,6 +120,8 @@ n928=Lord Grayson Shadowbreaker
 n944=Marryk Nurribit
 n951=Brother Paxton
 n952=Brother Neals
+n955=Sergeant De Vries
+n956=Dorin Songblade
 n963=Deputy Rainer
 n1068=Gorn
 n1070=Deputy Feldon
@@ -215,6 +218,7 @@ n1652=Deathguard Burgess
 n1661=Novice Elreth
 n1681=Brock Stoneseeker
 n1684=Khara Deepwater
+n1698=Frast Dokner
 n1699=Gremlock Pilsnor
 n1700=Paxton Ganter
 n1719=Warden Thelwater
@@ -596,6 +600,7 @@ n4784=Argent Guard Manados
 n4791=Nazeer Bloodpike
 n4792="Swamp Eye" Jarl
 n4794=Morgan Stern
+n4877=Jandia
 n4926=Krog
 n4941=Caz Twosprocket
 n4943=Mosarn
@@ -661,6 +666,7 @@ n5675=Carendin Halgar
 n5688=Innkeeper Renee
 n5693=Godrick Farsan
 n5694=High Sorcerer Andromath
+n5695=Vance Undergloom
 n5752=Corporal Melkins
 n5765=Ruzan
 n5767=Nalpak
@@ -722,6 +728,7 @@ n6247=Doan Karhan
 n6251=Strahad Farsan
 n6266=Menara Voidrender
 n6286=Zarrin
+n6287=Radnaal Maneweaver
 n6289=Rand Rhobart
 n6290=Yonn Deepcut
 n6291=Balthus Stoneflayer
@@ -1048,6 +1055,8 @@ n11811=Narain Soothfancy
 n11814=Kali Remik
 n11820=Locke Okarr
 n11823=Vark Battlescar
+n11826=Kristy Grant
+n11827=Kimberly Grant
 n11832=Keeper Remulos
 n11833=Rahauro
 n11835=Theodore Griffs
@@ -1094,6 +1103,7 @@ n12877=Ertog Ragetusk
 n12919=Nat Pagle
 n12920=Doctor Gregory Victor
 n12939=Doctor Gustaf VanHowzen
+n13155=Deathstalker Agent
 n13220=Layo Starstrike
 n13278=Duke Hydraxis
 n13417=Sagorne Creststrider
@@ -1345,6 +1355,7 @@ n17079=General Kirika
 n17080=Marshal Bluewall
 n211022=Owen Thadd
 n211033=Garion Wendell
+n218230=Wendel Mathers
 n244808=Aramis Hammerhand
 n246152=Shari Stilwell
 n246349=Breton Samuels
@@ -1382,6 +1393,7 @@ n251903=Rathiril Sunlance
 n251904=Sania Silverstream
 n251905=Zerril Softbreeze
 n251906=Teeri Wellwind
+n251964=Blademaster Ren
 n251968=Ayessa Dawnsinger
 n251991=Taleen Shimmerthread
 n251992=Fenn Fairweather
@@ -1433,6 +1445,7 @@ n258043=Norric Lochthane
 n258098=Eldrun Stormbreaker
 n258785=High Priestess Mims
 n259012=Ealaane Nimbuswalker
+n259118=Muln Earthfury
 n259119=Alaana Stormwalker
 n259190=Ephram Barbaro
 n259611=Deathguard Baldren
@@ -1440,6 +1453,8 @@ n259620=Lumina Windsinger
 n261366=Walton
 n263399=Sam Sarsaparilla
 n263664=Raan Wildwind
+n264072=Yorn Grimtotem
+n264074=Mazu'kon
 n264265=Magus Olvek
 n264936=Earthseer Farsen
 n264943=Afadra Dunwall
@@ -1463,6 +1478,8 @@ n268682=Migi
 n268684=Thra
 n269068=Eylah Sunhorn
 n269127=Image of Archmage Modera
+n269452=Excitable Slime
+n270038=Calder Gray
 n270637=Howin Kindfeather
 n270844=Sylessa Duskwhisper
 n271181=Eye of Kilrogg
@@ -1940,7 +1957,7 @@ ns.QUEST_TEXTS.enUS = {
 [338]={o="Collect the missing pages from The Green Hills of Stranglethorn manuscript. Once all four chapters are complete, return them to Barnil.",r={"Green Hills of Stranglethorn - Chapter I (1)","Green Hills of Stranglethorn - Chapter II (1)","Green Hills of Stranglethorn - Chapter III (1)","Green Hills of Stranglethorn - Chapter IV (1)"},s="Barnil Stonepot",e="Barnil Stonepot"},
 [339]={o="Bring pages 1, 4, 6, and 8 of Nesingwary's The Green Hills of Stranglethorn to Barnil Stonepot in order to complete Chapter I.",r={"Green Hills of Stranglethorn - Page 1 (1)","Green Hills of Stranglethorn - Page 4 (1)","Green Hills of Stranglethorn - Page 6 (1)","Green Hills of Stranglethorn - Page 8 (1)"},s="Barnil Stonepot",e="Barnil Stonepot"},
 [340]={o="Bring pages 10, 11, 14 and 16 of Nesingwary's The Green Hills of Stranglethorn to Barnil Stonepot in order to complete Chapter II.",r={"Green Hills of Stranglethorn - Page 10 (1)","Green Hills of Stranglethorn - Page 11 (1)","Green Hills of Stranglethorn - Page 14 (1)","Green Hills of Stranglethorn - Page 16 (1)"},s="Barnil Stonepot",e="Barnil Stonepot"},
-[341]={o="Bring pages 18, 20, 21 and 24 of Nesingwary's The Green Hills of Stranglethorn to Barnil Stonepot in order to complete Chapter III.",r={"Green Hills of Stranglethorn - Page 18 (1)","Green Hills of Stranglethorn - Page 20 (1)","Green Hills of Stranglethorn - Page 21 (1)","Green Hills of Stranglethorn - Page 24 (1)"},s="Barnil Stonepot",e="Barnil Stonepot"},
+[341]={o="Bring pages 18, 20, 21and 24 of Nesingwary's The Green Hills of Stranglethorn to Barnil Stonepot in order to complete Chapter III.",r={"Green Hills of Stranglethorn - Page 18 (1)","Green Hills of Stranglethorn - Page 20 (1)","Green Hills of Stranglethorn - Page 21 (1)","Green Hills of Stranglethorn - Page 24 (1)"},s="Barnil Stonepot",e="Barnil Stonepot"},
 [342]={o="Bring pages 25, 26, and 27 of Nesingwary's The Green Hills of Stranglethorn to Barnil Stonepot in order to complete Chapter IV.",r={"Green Hills of Stranglethorn - Page 25 (1)","Green Hills of Stranglethorn - Page 26 (1)","Green Hills of Stranglethorn - Page 27 (1)"},s="Barnil Stonepot",e="Barnil Stonepot"},
 [343]={o="Go to the Royal Library in Stormwind Keep and speak with Milton Sheaf. He can find for you the book on metallurgy that Brother Kristoff needs for his speech.",s="Brother Kristoff",e="Milton Sheaf"},
 [344]={o="Speak with Brother Paxton in the Northshire Abbey.",s="Milton Sheaf",e="Brother Paxton"},
@@ -2106,7 +2123,7 @@ ns.QUEST_TEXTS.enUS = {
 [512]={o="Bring 7 Alterac Signet Rings to Magistrate Maleb in Southshore.",r={"Alterac Signet Ring (7)"},s="Magistrate Henry Maleb",e="Magistrate Henry Maleb"},
 [513]={o="Take the Mudsnout Composite to Master Apothecary Faranell in the Undercity.",r={"Mudsnout Composite (1)"},s="Apothecary Lydon",e="Master Apothecary Faranell"},
 [514]={o="Take the Cleverly Encrypted Letter to Prospector Stormpike in Ironforge.",r={"Cleverly Encrypted Letter (1)"},s="Loremaster Dibbs",e="Prospector Stormpike"},
-[515]={o="Bring the Mudsnout Mixture, a Strong Troll's Blood Potion, 5 Daggerspine Scales and 5 Torn Fin Eyes to Apothecary Lydon in Tarren Mill.",r={"Mudsnout Mixture (1)","Strong Troll's Blood Potion (1)","Daggerspine Scale (5)","Torn Fin Eye (5)"},s="Master Apothecary Faranell",e="Apothecary Lydon"},
+[515]={o="Bring the Mudsnout Mixture, a Strong Troll's Blood Elixir, 5 Daggerspine Scales and 5 Torn Fin Eyes to Apothecary Lydon in Tarren Mill.",r={"Mudsnout Mixture (1)","Strong Troll's Blood Potion (1)","Daggerspine Scale (5)","Torn Fin Eye (5)"},s="Master Apothecary Faranell",e="Apothecary Lydon"},
 [516]={o="Locate Beren's Peril, then kill 6 Ravenclaw Drudgers and 6 Ravenclaw Guardians, then return to Shadow Priest Allister at the Sepulcher.",r={"Ravenclaw Drudger (6)","Ravenclaw Guardian (6)"},s="Shadow Priest Allister",e="Shadow Priest Allister"},
 [517]={o="Bring a keg of Shindigger Stout to Apothecary Lydon in Tarren Mill.",r={"Keg of Shindigger Stout (1)"},s="Apothecary Lydon",e="Apothecary Lydon"},
 [518]={o="Kill 14 Crushridge Maulers for Melisara in Tarren Mill.",r={"Crushridge Mauler (10)"},s="Melisara",e="Melisara"},
@@ -2135,7 +2152,7 @@ ns.QUEST_TEXTS.enUS = {
 [542]={o="Bring the Tomes of Alterac to Milton Sheaf in Stormwind.",r={"Tomes of Alterac (1)"},s="Loremaster Dibbs",e="Milton Sheaf"},
 [543]={o="Bring the Perenolde Tiara to Remington Ridgewell in Stormwind.",r={"Perenolde Tiara (1)"},s="Count Remington Ridgewell",e="Count Remington Ridgewell"},
 [544]={o="Find the traitors and recover their artifacts, then return to me, you.",r={"Bloodstone Wedge (1)","Bloodstone Marble (1)","Bloodstone Shard (1)","Bloodstone Oval (1)"},s="Magus Wordeen Voidglare",e="Magus Wordeen Voidglare"},
-[545]={o="Kill 6 Dalaran Summoners and 12 Elemental Slaves, then return to Magus Voidglare in Tarren Mill.",r={"Dalaran Summoner (6)","Elemental Slave (12)"},s="Magus Wordeen Voidglare",e="Magus Wordeen Voidglare"},
+[545]={o="Kill 6 Dalaran Summoners and 8 Elemental Slaves, then return to Magus Voidglare in Tarren Mill.",r={"Dalaran Summoner (6)","Elemental Slave (12)"},s="Magus Wordeen Voidglare",e="Magus Wordeen Voidglare"},
 [546]={o="Deathguard Samsa of Tarren Mill wants 30 Hillsbrad Human Skulls.",r={"Hillsbrad Human Skull (30)"},s="Deathguard Samsa",e="Deathguard Samsa"},
 [547]={o="Retrieve Deathguard Humbert's sword from Dun Garok and return it to him in Tarren Mill.",r={"Humbert's Sword (1)"},s="Deathguard Humbert",e="Deathguard Humbert"},
 [549]={o="Kill 10 Syndicate Rogues and 10 Syndicate Watchmen. Return to High Executor Darthalia in Tarren Mill for your reward.",r={"Syndicate Rogue (10)","Syndicate Watchman (10)"},e="High Executor Darthalia"},
@@ -2172,7 +2189,7 @@ ns.QUEST_TEXTS.enUS = {
 [580]={o="Whiskey Slim in Booty Bay wants you to bring him the bottles of Pupellyverbos Port he lost.",r={"Pupellyverbos Port (12)"},s="Whiskey Slim",e="Whiskey Slim"},
 [581]={o="Bring 9 Bloodscalp Tusks to Nimboya at the Grom'gol Base Camp.",r={"Bloodscalp Tusk (9)"},s="Nimboya",e="Nimboya"},
 [582]={o="Bring 20 Shrunken Heads to Nimboya at the Grom'gol Base Camp.",r={"Shrunken Head (20)"},s="Nimboya",e="Nimboya"},
-[583]={o="Speak with Hemet Nesingwary",s="Barnil Stonepot",e="Hemet Nesingwary"},
+[583]={o="Speak with Hemet Nesingwary.",s="Barnil Stonepot",e="Hemet Nesingwary"},
 [584]={o="Bring Gan'zulah's Head and Nezzliok's Head to the bubbling cauldron at the Grom'gol Base Camp.",r={"Gan'zulah's Head (1)","Nezzliok's Head (1)"},s="Nimboya"},
 [585]={o="Bring a Balia'mah Trophy, a Ziata'jai Trophy and a Zul'Mamwe Trophy to the Bubbling Cauldron at the Grom'gol Base Camp.",r={"Balia'mah Trophy (1)","Ziata'jai Trophy (1)","Zul'Mamwe Trophy (1)"}},
 [586]={o="Kill 8 Skullsplitter Hunters, 6 Skullsplitter Headhunters, and 4 Skullsplitter Berserkers. Bring the Broken Armor of Ana'thek to the Bubbling Cauldron at the Grom'gol Base Camp.",r={"Skullsplitter Hunter (8)","Skullsplitter Headhunter (6)","Skullsplitter Berserker (4)","Broken Armor of Ana'thek (1)"}},
@@ -2268,7 +2285,7 @@ ns.QUEST_TEXTS.enUS = {
 [679]={o="Kill 7 Boulderfist Shaman and 3 Boulderfist Lords and return to Drum Fel in the Hammerfall outpost.",r={"Boulderfist Shaman (7)","Boulderfist Lord (3)"},s="Drum Fel",e="Drum Fel"},
 [680]={o="Slay Or'Kalar and bring his Head to Korin Fel in the Hammerfall outpost.",r={"Or'Kalar's Head (1)"},s="Korin Fel",e="Korin Fel"},
 [681]={o="Kill 10 Syndicate Highwaymen and 6 Syndicate Mercenaries. Return to Captain Nials at Refuge Pointe.",r={"Syndicate Highwayman (10)","Syndicate Mercenary (6)"},s="Captain Nials",e="Captain Nials"},
-[682]={o="Bring 7 Stromgarde Badges to Captain Nials at Refuge Pointe.",r={"Stromgarde Badge (7)"},s="Captain Nials",e="Captain Nials"},
+[682]={o="Bring Stromgarde Badges to Captain Nials at Refuge Pointe.",r={"Stromgarde Badge (7)"},s="Captain Nials",e="Captain Nials"},
 [683]={o="Take Sara Balloo's note to King Magni Bronzebeard of Ironforge.",r={"Sara Balloo's Plea (1)"},s="Sara Balloo",e="King Magni Bronzebeard"},
 [684]={o="Bring Marez's head to Captain Nials at Refuge Pointe.",r={"Marez's Head (1)"},e="Captain Nials"},
 [685]={o="Bring Otto's Head and Falconcrest's Head to Captain Nials at Refuge Pointe.",r={"Otto's Head (1)","Falconcrest's Head (1)"},e="Captain Nials"},
@@ -2720,7 +2737,7 @@ ns.QUEST_TEXTS.enUS = {
 [1173]={o="Defeat Mok'Morokk and report the news to Draz'Zilb in Brackenwall Village.",s="Overlord Mok'Morokk",e="Draz'Zilb"},
 [1175]={o="Kill 10 Saltstone Basilisks, 10 Saltstone Crystalhides and 6 Saltstone Gazers for Trackmaster Zherin on the Shimmering Flats.",r={"Saltstone Basilisk (10)","Saltstone Crystalhide (10)","Saltstone Gazer (6)"},s="Trackmaster Zherin",e="Trackmaster Zherin"},
 [1176]={o="Get 10 Hollow Vulture Bones for Pozzik in the Shimmering Flats.",r={"Hollow Vulture Bone (10)"},s="Pozzik",e="Pozzik"},
-[1177]={o="Mudcrush Durtfeet in northern Dustwallow wants 8 Mirefin Heads.",r={"Mirefin Head (8)"},s="Mudcrush Durtfeet",e="Mudcrush Durtfeet"},
+[1177]={o="Mudcrush Durtfeet in northern Dustwallow wants 12 Mirefin Heads.",r={"Mirefin Head (8)"},s="Mudcrush Durtfeet",e="Mudcrush Durtfeet"},
 [1178]={o="Speak to Gazlowe in Ratchet.",s="Pozzik",e="Gazlowe"},
 [1179]={o="Bring the crate of crash helmets to Wizzle Brassbolts in the Shimmering Flats.",r={"Crate of Crash Helmets (1)"},s="Pilot Longbeard",e="Wizzle Brassbolts"},
 [1180]={o="Speak with Wharfmaster Lozgil in Booty Bay.",s="Gazlowe",e="Wharfmaster Lozgil"},
@@ -2749,7 +2766,7 @@ ns.QUEST_TEXTS.enUS = {
 [1203]={o="Bring a Moonsteel Broadsword to Jarl in Dustwallow Marsh.",r={"Moonsteel Broadsword (1)"},s="\"Swamp Eye\" Jarl",e="\"Swamp Eye\" Jarl"},
 [1204]={o="Bring 8 Forked Mudrock Tongues to Morgan Stern in Theramore.",r={"Forked Mudrock Tongue (8)"},s="Morgan Stern",e="Morgan Stern"},
 [1205]={o="Bring Deadmire's Tooth to Melor in Thunder Bluff.",r={"Deadmire's Tooth (1)"},s="Melor Stonehoof",e="Melor Stonehoof"},
-[1206]={o="Bring 20 Unpopped Darkmist Eyes to \"Swamp Eye\" Jarl at the Swamplight Manor.",r={"Unpopped Darkmist Eye (20)"},s="\"Swamp Eye\" Jarl",e="\"Swamp Eye\" Jarl"},
+[1206]={o="Bring 40 Unpopped Darkmist Eyes to \"Swamp Eye\" Jarl at the Swamplight Manor.",r={"Unpopped Darkmist Eye (20)"},s="\"Swamp Eye\" Jarl",e="\"Swamp Eye\" Jarl"},
 [1218]={o="Bring 3 Soothing Spices to \"Swamp Eye\" Jarl in Dustwallow Marsh.",r={"Soothing Spices (3)"},s="\"Swamp Eye\" Jarl",e="\"Swamp Eye\" Jarl"},
 [1219]={o="Bring the Spy's Report to a Theramore Lieutenant.",r={"Spy's Report (1)"},e="Theramore Lieutenant"},
 [1220]={o="Bring the Spy's Report to Captain Garran Vimes.",r={"Spy's Report (1)"},s="Theramore Lieutenant",e="Captain Garran Vimes"},
@@ -2788,7 +2805,7 @@ ns.QUEST_TEXTS.enUS = {
 [1274]={o="Find Bishop DeLavey in Stormwind Keep.",s="Thomas",e="Bishop DeLavey"},
 [1275]={o="Gershala Nightwhisper in Auberdine wants 8 Corrupt Brain stems.",r={"Corrupted Brain Stem (8)"},s="Gershala Nightwhisper",e="Gershala Nightwhisper"},
 [1276]={o="Show the Blackened Iron Shield to Mosarn in Thunder Bluff.",r={"Blackened Iron Shield (1)"},s="Krog",e="Mosarn"},
-[1282]={o="Speak with Captain Garran Vimes on the top floor of Foothold Citadel.",s="Guard Byron",e="Captain Garran Vimes"},
+[1282]={o="Speak with Captain Garran Vimes in Theramore.",s="Guard Byron",e="Captain Garran Vimes"},
 [1284]={o="Report about the suspicious prints at the Shady Rest Inn to Captain Garran Vimes in Theramore.",e="Captain Garran Vimes"},
 [1285]={o="Return the information about Reethe to Captain Garran Vimes in Theramore.",s="Adjutant Tesoran",e="Captain Garran Vimes"},
 [1286]={o="Get information about Reethe from Balos Jacken and the deserters in Dustwallow Marsh.",s="Captain Garran Vimes",e="Balos Jacken"},
@@ -2949,7 +2966,7 @@ ns.QUEST_TEXTS.enUS = {
 [1558]={o="Take the orphan to the Stonewrought Dam in Loch Modan. You should take him to the middle of the dam so he can see out over the giant waterfall.",s="Human Orphan",e="Human Orphan"},
 [1559]={s="Rigglefuzz",e="Rigglefuzz"},
 [1560]={o="Show Tooga the way back to his wife, Torta.",s="Tooga",e="Torta"},
-[1578]={o="Bring 6 Copper Axes and 6 Copper Chain Belts to Thorvald in the southern guard tower of Loch Modan.",r={"Copper Axe (6)","Copper Chain Belt (6)"},s="Tormus Deepforge",e="Thorvald Deepforge"},
+[1578]={o="Bring 6 Copper Axes and 6 Copper Chain Belts to Thorvald in the southern guard tower of Loch Modan",r={"Copper Axe (6)","Copper Chain Belt (6)"},s="Tormus Deepforge",e="Thorvald Deepforge"},
 [1579]={o="Bring 8 Gaffer Jacks to Wizbang Cranktoggle in Auberdine.",r={"Gaffer Jack (8)"},s="Wizbang Cranktoggle",e="Wizbang Cranktoggle"},
 [1580]={o="Bring 12 Electropellers to Wizbang Cranktoggle in Auberdine.",r={"Electropeller (12)"},s="Wizbang Cranktoggle",e="Wizbang Cranktoggle"},
 [1581]={o="Bring 6 Elixirs of Lion's Strength and 2 Elixirs of Minor Defense to Syral Bladeleaf in Dolanaar.",r={"Elixir of Lion's Strength (6)","Elixir of Minor Defense (2)"},s="Syral Bladeleaf",e="Syral Bladeleaf"},
@@ -3089,7 +3106,7 @@ ns.QUEST_TEXTS.enUS = {
 [1918]={o="Bring the Befouled Water Globe to Mastok Wrilehiss at Splintertree Post, Ashenvale.",r={"Befouled Water Globe (1)"},e="Mastok Wrilehiss"},
 [1919]={o="Speak with Jennea Cannon in Stormwind.",s="Zaldimar Wefhellt",e="Jennea Cannon"},
 [1920]={o="Obtain a Cantation of Manifestation and a Chest of Containment coffers from behind Jennea Cannon. Bring 3 Filled Containment Coffers to Jennea at the Wizard's Sanctum.",r={"Filled Containment Coffer (3)","Chest of Containment Coffers (1)","Cantation of Manifestation (1)"},s="Jennea Cannon",e="Jennea Cannon"},
-[1921]={o="Bring 10 Linen Cloth and the 6 Charged Rift Gems to Wynne Larson in Stormwind.",r={"Linen Cloth (10)","Charged Rift Gem (6)"},s="Jennea Cannon",e="Wynne Larson"},
+[1921]={o="Bring 10 Linen and the 6 Charged Rift Gems to Wynne Larson in Stormwind.",r={"Linen Cloth (10)","Charged Rift Gem (6)"},s="Jennea Cannon",e="Wynne Larson"},
 [1938]={o="Bring Ur's Treatise on Shadow Magic to High Sorcerer Andromath in Stormwind.",r={"Ur's Treatise on Shadow Magic (1)"},s="High Sorcerer Andromath",e="High Sorcerer Andromath"},
 [1939]={o="Speak with High Sorcerer Andromath.",s="Jennea Cannon",e="High Sorcerer Andromath"},
 [1940]={o="Bring 8 Pristine Spider Silk to Wynne Larson in Stormwind.",r={"Pristine Spider Silk (8)"},s="High Sorcerer Andromath",e="Wynne Larson"},
@@ -5488,6 +5505,7 @@ ns.QUEST_TEXTS.enUS = {
 [9664]={o="Capture Crown Guard Tower, Eastwall Tower, Northpass Tower and Plaguewood Tower in the Eastern Plaguelands, then return to Emmisary Whitebeard at Light's Hope Chapel.",r={"Capture Crown Guard Tower (1)","Capture Eastwall Tower (1)","Capture Northpass Tower (1)","Capture Plaguewood Tower (1)"},s="Emmisary Whitebeard",e="Emmisary Whitebeard"},
 [9665]={o="Capture Crown Guard Tower, Eastwall Tower, Northpass Tower and Plaguewood Tower in the Eastern Plaguelands, then return to Emmisary Gormok at Light's Hope Chapel.",r={"Capture Crown Guard Tower (1)","Capture Eastwall Tower (1)","Capture Northpass Tower (1)","Capture Plaguewood Tower (1)"},s="Emmisary Gormok",e="Emmisary Gormok"},
 [65601]={o="Speak with Magar in Orgrimmar.",s="Cazul"},
+[65602]={s="Takar the Seer",e="Gakin the Darkbinder"},
 [76156]={o="Sneak into the Venture Company mine southeast of Thunder Bluff and collect 5 Seaforium Mining Charges from carts of blasting supplies, then return them to Boarton Shadetotem in Thunder Bluff.",s="Boarton Shadetotem"},
 [78124]={e="Garion Wendell"},
 [78127]={e="Owen Thadd"},
@@ -5498,6 +5516,7 @@ ns.QUEST_TEXTS.enUS = {
 [78270]={e="Veenix"},
 [79007]={o="Charred remains of the note serve as your only guide."},
 [79008]={o="Charred remains of the note serve as your only guide."},
+[79091]={e="Garion Wendell"},
 [79092]={e="Garion Wendell"},
 [79093]={e="Garion Wendell"},
 [79094]={e="Owen Thadd"},
@@ -5513,9 +5532,11 @@ ns.QUEST_TEXTS.enUS = {
 [79980]={o="Find what awaits you."},
 [86574]={e="Innkeeper Faralia"},
 [86576]={o="Bring 15 Glittering Sunstones to Mor'rogal.",s="Maggran Earthbinder",e="Mor'rogal"},
+[86613]={o="Return 6 Excavation Tools to Magmar Fellhew.",e="Prospector Ironband"},
 [86614]={o="Return the Monogrammed Silver Hair clip to its owner.",e="Khara Deepwater"},
 [86667]={o="Deliver a Jar of Snow to Norric Lochthane at his house on the northwest coast of the Loch.",s="Grenhild Darktalon",e="Norric Lochthane"},
 [86757]={o="Bring 6 Jagged Orc Swords and 4 Curved Orc Daggers to Shandrina.",s="Shandrina",e="Shandrina"},
+[86758]={o="Find and defeat the crocolisk Daggerfang and bring back Marek's knife.",s="Marek Ironheart"},
 [86784]={o="Collect 6 Dry Branches and bring them to Eleanor Shackleton.",s="Deathguard Bartholomew",e="Eleanor Shackleton"},
 [87288]={o="Bring 6 Soft Nightsaber Pelts to Aldria.",s="Aldia",e="Aldia"},
 [87491]={e="Roggo Harlbarrow"},
@@ -5534,6 +5555,7 @@ ns.QUEST_TEXTS.enUS = {
 [91725]={o="Collect 5 Stolen Enchanting Supplies from gnoll camps around Stone Cairn Lake, then return to Blixie Fitzwink near the Tower of Azora.",s="Blixie Fitzwink",e="Blixie Fitzwink"},
 [91732]={o="Collect 4 Mining Tools from Jasperlode Mine, then return to Hagar Lowe in Eastvale Logging Camp.",s="Hagar Lowe",e="Hagar Lowe"},
 [91733]={o="Collect the Waterlogged Axe, Waterlogged Saw, and Waterlogged Toolbox that have washed downstream from Eastvale Logging Camp, then return to Ormin Pelford.",s="Ormin Pelford",e="Ormin Pelford"},
+[91738]={e="Sergeant De Vries"},
 [91740]={o="Deliver Croaky's Head to Merell Ross at Ridgepoint Tower.",e="Merell Ross"},
 [91741]={o="Return the book to Brother Paxton.",e="Brother Paxton"},
 [91743]={o="Retrieve 8 Stolen Books from kobolds in Northshire Valley and return them to Brother Paxton.",s="Brother Paxton",e="Brother Paxton"},
@@ -5554,16 +5576,19 @@ ns.QUEST_TEXTS.enUS = {
 [91899]={e="Marcy Baker"},
 [91900]={e="Dokimi"},
 [91904]={e="Dokimi"},
+[91905]={e="Dokimi"},
 [91920]={o="Gather 3 murloc eyes and bring them to Apothecary Renferrel at the Sepulcher.",s="Quinn Yorick",e="Apothecary Renferrel"},
 [91921]={o="Bring Quinn's potion to Quinn Yorick at the Ivar Patch, north of the Sepulcher.",s="Apothecary Renferrel",e="Quinn Yorick"},
+[92109]={o="Bring 5 Empty Vials, 5 Silverleaf, and 5 Peacebloom to the young, aspiring alchemist inside the barn of Moonbrook in Westfall."},
 [92124]={o="Speak to Daniel, Brother Paxton's assistant in the library.",s="Brother Paxton",e="Daniel"},
 [92401]={o="Investigate the disappearance of Edward Heartweaver in the Ruins of Lordaeron.",s="Tabitha Heartweaver",e="Tabitha Heartweaver"},
 [92415]={o="Bring the Blood-Stained Letter to Orphan Matron Nightingale in Stormwind City.",e="Orphan Matron Nightingale"},
 [92421]={o="Collect 25 Intact Limbs within The Ruins of Lordaeron for Morbin Lightbane in the Undercity.",s="Morbin Lightbane",e="Morbin Lightbane"},
 [92422]={o="Kill Rath'mael in the Ruins of Lordaeron for Deathguard Kristof in Brill.",s="Deathguard Kristof",e="Deathguard Kristof"},
-[92432]={e="Image of Archmage Modera"},
-[92456]={e="Shylamiir"},
-[92457]={o="Defeat 8 Seeking Remnants, 8 Saturated Remnants, and 8 Mana Echoes inside the City of Dalaran for Archmage Modera outside of Dalaran.",s="Image of Archmage Modera"},
+[92432]={o="Report to the Image of Archmage Modera near the City of Dalaran.",s="Emissary Jacques",e="Image of Archmage Modera"},
+[92434]={o="Find a way into Dalaran along the Lordamere Lake.",s="Magus Wordeen Voidglare",e="Image of Archmage Modera"},
+[92456]={s="Shylamiir",e="Shylamiir"},
+[92457]={o="Defeat 8 Seeking Remnants, 8 Saturated Remnants, and 8 Mana Echoes inside the City of Dalaran for Archmage Modera outside of Dalaran.",s="Image of Archmage Modera",e="Image of Archmage Modera"},
 [92458]={o="Collect the Arcane Mote for the Image of Archmage Modera near the City of Dalaran.",s="Image of Archmage Modera",e="Image of Archmage Modera"},
 [92459]={o="Speak to Archmage Celindra in the City of Dalaran.",s="Image of Archmage Modera",e="Archmage Celindra"},
 [92460]={o="Speak with Rorian the Dayseeker in Thendal Grove.",s="Ailee Farheart",e="Rorian the Dayseeker"},
@@ -5589,8 +5614,10 @@ ns.QUEST_TEXTS.enUS = {
 [92515]={o="Collect 10 Prideclaw Pelts from the Prideclaws in Shen'dar Highlands.",s="Indari Sunseam",e="Indari Sunseam"},
 [92516]={o="Slay 8 Hippogryph Youths, 6 Hippogryph Protectors and a Hippogryph Matriarch in the Shen'dar Highlands.",s="Teeri Wellwind",e="Teeri Wellwind"},
 [92517]={o="Kill 10 Highlands Bandits and their leader, \"Badwind\" Bennic in the Shen'dar Highlands.",s="Constable Aonda",e="Constable Aonda"},
+[92519]={o="Pick up a case of Packaged Tonics at Jorell's lab in Go'shek Farm and return to Doctor Gregory Victor in Hammerfall.",s="Doctor Gregory Victor"},
 [92528]={o="Look around Falaath Village to learn about the cult's intentions in the Shen'dar Highlands.",s="Missionary Jasaan",e="Constable Aonda"},
 [92529]={o="Report to Missionary Jasaan near the entrance to Falaath Village. If you lose your Mark of Akir, speak with Sania Silverstream in Shen'dar Village to regain the effect.",s="Sania Silverstream",e="Missionary Jasaan"},
+[92532]={o="Read the Crumpled Note you've been given, then seek out Blademaster Ren inside the Thendal Village watchtower.",s="Rorian the Dayseeker",e="Blademaster Ren"},
 [92544]={o="Slay 6 Al'Aketh Brutes, 4 Al'Aketh Neophytes, and Malduko Cloudcrush in Thendal Grove.",s="Hanaa Nightwind",e="Hanaa Nightwind"},
 [92550]={o="Travel to the ruins of Falaath Village and slay 6 Al'Aketh Stormcallers, 4 Living Lightning and take the head of Commander Cyclas.",s="Constable Aonda",e="Constable Aonda"},
 [92551]={o="Collect 10 packs of Stolen Shen'dar Supplies from Falaath Village in the Shen'dar Highlands.",s="Danarii Bellowveil",e="Danarii Bellowveil"},
@@ -5627,11 +5654,11 @@ ns.QUEST_TEXTS.enUS = {
 [92745]={o="Slay 4 Kobold Diggers in the Jangolode Mine and 6 Riverpaw Miners in the Gold Coast Quarry.",s="Alba Fairmoon",e="Alba Fairmoon"},
 [92747]={o="Collect 8 Suspicious Industrial Supplies from Moonbrook.",s="Alba Fairmoon",e="Alba Fairmoon"},
 [92748]={o="Travel to the Dwarven District in Stormwind and find an engineer who can help.",s="Alba Fairmoon",e="Sprite Jumpsprocket"},
-[92749]={o="Obtain 10 Rough Dynamite from crafting, trading, or the auction house, then return to Sprite Jumpsprocket in the Dwarven District of Stormwind.",s="Sprite Jumpsprocket"},
+[92749]={o="Obtain 10 Rough Dynamite from crafting, trading, or the auction house, then return to Sprite Jumpsprocket in the Dwarven District of Stormwind.",s="Sprite Jumpsprocket",e="Sprite Jumpsprocket"},
 [92750]={o="Talk to someone in Stormwind Intelligence about acquiring a remote detonator.",s="Sprite Jumpsprocket",e="Jasper Fel"},
 [92751]={o="Bring the Remote Detonator Kit to Sprite Jumpsprocket in the Dwarven District of Stormwind.",s="Jasper Fel",e="Sprite Jumpsprocket"},
-[92752]={o="Return to Alba Fairmoon in Westfall."},
-[92753]={o="Find the forge hidden in the Deadmines, and plant the Extra-Destructive Explosives nearby. Then, meet up with Alba Fairmoon at the Deadmines exit."},
+[92752]={o="Return to Alba Fairmoon in Westfall.",s="Sprite Jumpsprocket",e="Alba Fairmoon"},
+[92753]={o="Find the forge hidden in the Deadmines, and plant the Extra-Destructive Explosives nearby. Then, meet up with Alba Fairmoon at the Deadmines exit.",s="Alba Fairmoon"},
 [92840]={o="Take the Index Esoteria to the Overlook Standing Stones in Shen'dar Highlands and use it on the Windstone Formations in the area to gather data.",s="Elaadrin Evengale"},
 [92849]={o="Keep searching for Fillion Flamebreeze.",e="Fillion Flamebreeze"},
 [92850]={o="Slay the Shriekling Matriarch in the Shriekling Den then return its head to Fillion Flamebreeze in Valanaar.",s="Fillion Flamebreeze",e="Fillion Flamebreeze"},
@@ -5640,7 +5667,6 @@ ns.QUEST_TEXTS.enUS = {
 [92881]={o="Speak with Talaanis Shadowsong in Valanaar.",s="Valennia Stormfist",e="Talaanis Shadowsong"},
 [92909]={o="Ozwin Ironsprocket at Saldean's Farm wants you to bring him 14 Golem Isosprings and 5 Harvester Gyrostabilizers.",s="Ozwin Ironsprocket",e="Ozwin Ironsprocket"},
 [92910]={o="Bring the Precessive Autocognition Assembly to Ozwin Ironsprocket at Saldean's Farm."},
-[92911]={o="Ozwin Ironsprocket at Saldean's Farm wants you to bring him 8 Golem Isosprings, 4 Copper Modulators, and a Crude Scope."},
 [92947]={o="Slay 7 Al'Aketh Guardians, 7 Al'Aketh Spiritcallers, and 7 Al'Aketh Blademasters, then report to Hyusaa Quickbreeze at the Shrine of Akir.",s="Valennia Stormfist",e="Hyusaa Quickbreeze"},
 [93036]={o="Speak with Sania Silverstream in Shen'dar Village.",s="Constable Aonda",e="Sania Silverstream"},
 [93065]={o="Speak with Valennia Stormfist in the Gustberry Lowlands.",s="Valennia Stormfist",e="Valennia Stormfist"},
@@ -5649,13 +5675,15 @@ ns.QUEST_TEXTS.enUS = {
 [93160]={o="Gather 8 Shadowgale Acorns in Shadowgale Forest.",s="Strange Hermit",e="Strange Hermit"},
 [93165]={o="Collect 5 Al'Aketh Cultist's Ears from the Al'Aketh cultists in Shadowgale Forest, the Shrine of Akir, or Gustberry Lowlands.",s="Vayn Moongaze",e="Vayn Moongaze"},
 [93172]={o="Destroy 10 Wind Hollows in Shadowgale Forest.",s="Strange Hermit",e="Strange Hermit"},
+[93224]={s="Captain Pentigast"},
+[93225]={s="Gurda Wildmane"},
 [93317]={o="Collect 6 pieces of Windsong Crawler Meat.",s="Nyalah Brightfire",e="Nyalah Brightfire"},
 [93318]={o="Kill Vulgara the Insatiable in the Shen'dar Highlands and bring her head to Danarii Bellowveil.",e="Danarii Bellowveil"},
 [93319]={o="Collect 10 Pilfered Windstones from the Highlands Bandits in the Shen'dar Highlands.",s="Teeri Wellwind",e="Teeri Wellwind"},
 [93320]={o="Report to Yorana Windyreed at the eastern watchtower in the Gustberry Lowlands.",s="Valennia Stormfist",e="Yorana Windyreed"},
 [93461]={o="Speak with Rathiril Sunlance and Coriella Calmbreeze in Shen'dar Village.",s="Constable Aonda",e="Constable Aonda"},
 [93552]={o="Collect 15 Windstone Clusters from Raw Windstones in Thendal Grove.",s="Dalia the Collector",e="Dalia the Collector"},
-[93680]={o="Acquire the Dalaran Sewer Key for Magus Wordeen Voidglare in Tarren Mill.",s="Magus Wordeen Voidglare"},
+[93680]={o="Acquire the Dalaran Sewer Key for Magus Wordeen Voidglare in Tarren Mill.",s="Magus Wordeen Voidglare",e="Magus Wordeen Voidglare"},
 [93735]={o="Find Riaani Nightwind on the west side of Valanaar.",s="Ayessa Dawnsinger",e="Riaani Nightwind"},
 [93736]={o="Gather 10 Wind Hollow Essences from Wind Hollows in the Shadowgale Forest.",s="Endaria Mistgaze",e="Endaria Mistgaze"},
 [93737]={o="Speak with Riaani Nightwind and listen to what he has to say.",s="Riaani Nightwind",e="Riaani Nightwind"},
@@ -5678,7 +5706,10 @@ ns.QUEST_TEXTS.enUS = {
 [94050]={o="Speak to Quel'dora Quickgale in Valanaar.",s="Quel'ana Quickgale",e="Quel'dora Quickgale"},
 [94212]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction.",e="Muggol Breezebeard"},
 [94216]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction."},
+[94217]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction."},
 [94220]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction."},
+[94227]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction."},
+[94243]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction.",e="Ziz Fizziks"},
 [94246]={o="Acquire the items requested by the customer and deliver them to the location marked on your map. This writ must be in your possession to complete the transaction."},
 [94373]={o="Bring 2 Frostmane Bear Pendants to Teo Hammerstorm in Anvilmar.",s="Teo Hammerstorm",e="Teo Hammerstorm"},
 [94374]={o="Find the Spirit Stone and drink the Earth Sapta.",s="Teo Hammerstorm",e="Minor Manifestation of Earth"},
@@ -5693,7 +5724,8 @@ ns.QUEST_TEXTS.enUS = {
 [94438]={o="Take the Symbol of Life and use it to resurrect Deathguard Falgan at Venomweb Vale. Should you misplace your Symbol of Life, return to Danitha Morr for a replacement.",s="Deathguard Billmuth",e="Deathguard Falgan"},
 [94440]={o="Retrieve the Scarlet Crusade Attack Plans from the Scarlet Crusaders at Venomweb Vale, and return to Deathguard Billmuth at Bandarion Keep.",s="Deathguard Falgan",e="Deathguard Billmuth"},
 [94441]={o="Speak with Danitha Morr in the keep at Bandarion Keep.",s="Deathguard Billmuth",e="Danitha Morr"},
-[94449]={o="Find Bruegs Kindleborn in Dun Morogh.",s="Ingrid Dunwald"},
+[94449]={o="Find Bruegs Kindleborn in Dun Morogh.",s="Eldrun Stormbreaker",e="Bruegs Kindleborn"},
+[94465]={s="Bruegs Kindleborn"},
 [94468]={e="Bruegs Kindleborn"},
 [94472]={e="Teo Hammerstorm"},
 [94484]={o="Find and speak with Elegael Thornpaw in the northeastern part of Shadowgale Forest.",s="Lotheluum Starbreeze",e="Elegael Thornpaw"},
@@ -5713,6 +5745,7 @@ ns.QUEST_TEXTS.enUS = {
 [94568]={o="Speak with Talaanis Shadowsong and observe the conversation.",s="Talaanis Shadowsong",e="Talaanis Shadowsong"},
 [94616]={e="Norric Lochthane"},
 [94638]={o="Find and kill Ur'endra in the Shen'dar Highlands.",s="Urs'endris",e="Urs'endris"},
+[94819]={o="Speak to High Priestess Mims in Ironforge.",s="High Priestess Laurena",e="High Priestess Mims"},
 [94820]={s="Priestess Alathea"},
 [94821]={o="Speak to High Priestess Mims in Ironforge.",s="High Priestess Laurena",e="High Priestess Mims"},
 [94896]={o="Collect 8 Abandoned Belongings from the ruins of Ban'aethal.",s="Ealaane Nimbuswalker",e="Ealaane Nimbuswalker"},
@@ -5725,7 +5758,8 @@ ns.QUEST_TEXTS.enUS = {
 [95036]={o="Speak with Trevan Rol in the Sepulcher and bring him the materials he requires.",s="Lumina Windsinger"},
 [95041]={o="Collect 7 Gnomeregan Archival Data cards from around Gnomeregan, then deliver them to Jemma Quikswitch in Ironforge.",s="Jemma Quikswitch",e="Jemma Quikswitch"},
 [95065]={o="Bring 1 Shiny Bauble and 3 Nightcrawlers to Gilbert Gray at the harbor in Stormwind.",s="Gilbert Gray",e="Gilbert Gray"},
-[95161]={o="Deliver the Blood-Stained Letter to Avette Fellwood in Duskwood.",s="Orphan Matron Nightingale"},
+[95144]={s="Innkeeper Fizzgrimble"},
+[95161]={o="Deliver the Blood-Stained Letter to Avette Fellwood in Duskwood.",s="Orphan Matron Nightingale",e="Avette Fellwood"},
 [95189]={o="Return the Crest of Lordaeron to Lady Dena Kennedy in Stormwind City.",e="Lady Dena Kennedy"},
 [95195]={o="Collect 10 Bloodied Insignias and take them to General Marcus Jonathan in Stormwind City.",e="General Marcus Jonathan"},
 [95204]={o="Bring the Crest of Lordaeron to Oran Snakewrithe in Undercity.",e="Oran Snakewrithe"},
@@ -5733,6 +5767,7 @@ ns.QUEST_TEXTS.enUS = {
 [95213]={o="Bring the Empty Powder Keg to Quarrymaster Thesten at Gol'Bolar Quarry.",e="Quarrymaster Thesten"},
 [95214]={o="Recover 16 Stolen Blasting Powder from the troggs east of Gol'Bolar Quarry, then return to Quarrymaster Thesten.",s="Quarrymaster Thesten",e="Quarrymaster Thesten"},
 [95216]={o="Collect the Highly Toxic Strain from Witherfang in Ruins of Lordaeron for Theodore Griffs in Undercity.",s="Theodore Griffs",e="Theodore Griffs"},
+[95217]={s="Frast Dokner",e="Frast Dokner"},
 [95250]={o="Collect the Head of the Baron in the Ruins of Lordaeron and bring it back to Captain Truman."},
 [95314]={o="Collect 8 Bottles of Whispering Elixir from Shadowvale, then return to Carolai Anise in Brill.",s="Carolai Anise",e="Carolai Anise"},
 [95328]={o="Deliver Whispering Horror Residue to Father Lankester in the War Quarter of Undercity.",e="Father Lankester"},
@@ -5743,27 +5778,34 @@ ns.QUEST_TEXTS.enUS = {
 [95507]={o="Collect 8 Trapped Game from traps found in Sprung Traps in the Barrens.",s="Vrang Wildgore",e="Vrang Wildgore"},
 [95508]={o="Help Walton survive the encounter with Terry Longdrink and the Kul Tiras marines.",s="Walton",e="Walton"},
 [95621]={o="Travel to the wrecked caravan and learn more about why the Kul Tirans are here.",s="Walton",e="Walton"},
-[95646]={o="Kill a Highland Horror within Excavation Sites and bring its root core to Rethiel the Greenwarden in the Wetlands.",s="Rethiel the Greenwarden"},
+[95646]={o="Kill a Highland Horror within Excavation Sites and bring its root core to Rethiel the Greenwarden in the Wetlands.",s="Rethiel the Greenwarden",e="Rethiel the Greenwarden"},
 [95647]={o="Find Ardin Grassman in the Excavation Sites.",s="Caitlin Grassman"},
-[95697]={o="Enter the Excavation Sites in the Wetlands and bring back Thicket Raptor Meat.",e="Borstan"},
+[95663]={o="Travel to the Wetlands and meet the Deathstalker Agent in the hills above the Dragonmaw camp.",s="Zaruk",e="Deathstalker Agent"},
+[95664]={o="Take the Titan Relic to the Elder Rise in Thunder Bluff and look for someone who can tell you more about it.",e="Bashana Runetotem"},
+[95682]={o="Slay the Dragonmaw forces within the Excavation Site and return to the Deathstalker Agent outside with anything you recover.",s="Deathstalker Agent",e="Deathstalker Agent"},
+[95697]={o="Enter the Excavation Sites in the Wetlands and bring back Thicket Raptor Meat.",s="Borstan",e="Borstan"},
 [95737]={o="Speak with Caitlin Grassman in Menethil Harbor.",s="Llana",e="Caitlin Grassman"},
 [95772]={o="Look for Dorin Songblade's brother, Daewyn, in Whelgar's Excavation Site.",s="Dorin Songblade"},
 [95774]={o="Slay quilboars and collect 4 of Olgra's Adornments for Mankrik's memorial.",s="Mankrik",e="Mankrik"},
+[95795]={o="Return to Dorin Songblade.",e="Dorin Songblade"},
 [95803]={o="Bring the head of Rudolph Gelhardt to Sylvanas Windrunner in the Undercity.",s="Danitha Morr",e="Lady Sylvanas Windrunner"},
 [95805]={o="Carry the Smoldering Incense to the shrine of An'she and Mu'sha in the southeastern hills before the incense burns to ash in ten minutes!",s="Seer Graytongue"},
-[95809]={e="Caitlin Grassman"},
+[95809]={o="Return to Caitlin Grassman in Menethil Harbor.",e="Caitlin Grassman"},
+[95810]={o="Bring the Titan Relic to Prospector Whelgar in the Wetlands excavation site.",e="Prospector Whelgar"},
 [95883]={o="Collect a Tortured Soul from the nearby undead in Beren's Peril in Silverpine Forest."},
 [95884]={o="Find the Offering Stone in Beren's Peril in Silverpine Forest."},
 [95885]={o="Use the Tortured Soul to give an offering of blood at the Offering Stone in Beren's Peril."},
 [95981]={o="Slay 8 Dalaran Wizards and 8 Dalaran Watchers for Shadow Priest Allister in the Sepulcher.",s="Shadow Priest Allister",e="Shadow Priest Allister"},
 [95998]={o="Sit near Sam's Basic Campfire and wait until you receive the Boosted Rest buff.",s="Sam Sarsaparilla",e="Sam Sarsaparilla"},
 [95999]={o="Deliver the Broken Staff of Incinerator Gar'im to Magistrate Solomon in Lakeshire.",e="Magistrate Solomon"},
+[96044]={e="Tognus Flintfire"},
 [96045]={o="Speak with Vosur Brakthel in Ironforge to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Vosur Brakthel"},
 [96046]={o="Speak with Yarr Hammerstone in Kharanos to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eric Brighthammer"},
 [96047]={o="Speak with Thamner Pol in Kharanos to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eric Brighthammer"},
 [96050]={o="Speak with Paxton Ganter near Iceflow Lake in Dun Morogh to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eric Brighthammer",e="Paxton Ganter"},
 [96055]={o="Speak with Reyna Stonebranch in Ironforge to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eric Brighthammer"},
 [96056]={o="Speak with Balthus Stoneflayer in Ironforge to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eric Brighthammer",e="Balthus Stoneflayer"},
+[96057]={s="Eric Brighthammer"},
 [96059]={o="Speak with Thonys Pillarstone in Ironforge to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Thonys Pillarstone",e="Thonys Pillarstone"},
 [96101]={o="Sit near Raan's Basic Campfire and wait until you receive the Boosted Rest buff.",s="Raan Wildwind",e="Raan Wildwind"},
 [96102]={o="Speak with Snang in Orgrimmar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Snang"},
@@ -5772,6 +5814,11 @@ ns.QUEST_TEXTS.enUS = {
 [96138]={o="Defeat 8 Splint Fist Warriors and 4 Splint Fist Taskmasters then return to Sirra Von'Indi in Darkshire for more information.",e="Sirra Von'Indi"},
 [96139]={o="Search Raven Hill for anything of interest and return to Sirra Von'Indi in Darkshire.",s="Sirra Von'Indi",e="Sirra Von'Indi"},
 [96204]={o="Accompany Lumina Windsinger and help her escape Fenris Keep.",s="Lumina Windsinger",e="Lumina Windsinger"},
+[96241]={o="Use the Toxin Extractor to gather 5 Gloomrise Toxin Samples from the Gnawed Corpses at Gloomrise.",s="Mazu'kon",e="Mazu'kon"},
+[96259]={o="Kill 10 Gloomrise Hatchlings and 5 Gloomrise Soldiers.",s="Muln Earthfury",e="Muln Earthfury"},
+[96260]={o="Gather 3 strands of Crystalline Silk from Gloomrise Spinners.",s="Yorn Grimtotem",e="Yorn Grimtotem"},
+[96261]={o="Kill Broodmother Valraxx at Gloomrise.",s="Muln Earthfury",e="Muln Earthfury"},
+[96294]={o="Bring the letter you recovered from Broodmother Valraxx to Muln Earthfury at Skywatcher Plateau.",e="Muln Earthfury"},
 [96390]={o="Slay 10 Dark Iron Spies in Dun Morogh.",s="Earthseer Farsen",e="Earthseer Farsen"},
 [96391]={o="Deliver the Dark Iron Map to Earthseer Farsen in Dun Morogh.",e="Earthseer Farsen"},
 [96392]={o="Speak with Earthseer Farsen and ask him to lend you his far sight to observe the Dark Iron threat.",s="Earthseer Farsen",e="Earthseer Farsen"},
@@ -5799,6 +5846,7 @@ ns.QUEST_TEXTS.enUS = {
 [96658]={o="Speak with William Pickman in Brill to learn to become a cook.",s="Eleanor Shackleton",e="William Pickman"},
 [96659]={o="Deliver the Supply Bundle to Kaga Wildhoof near Bloodhoof Village.",s="Chief Hawkwind",e="Kaga Wildhoof"},
 [96661]={o="Speak with Pyall Silentstride in Bloodhoof Village to learn to become a cook.",s="Kaga Wildhoof",e="Pyall Silentstride"},
+[96774]={o="Recover an Ancient Gurubashi Idol from the Drowned City.",s="Mazu'kon"},
 [96800]={o="Retrieve the book The Lost Magic of the Runemasters from the Scarlet Monastery.",e="Magus Olvek"},
 [96821]={o="Kill 6 Ridgeshade Creepers and 6 Ridgeshade Lurkers in southern Durotar, then report to Gar'thok in Razor Hill.",s="Vel'rin Fang",e="Gar'Thok"},
 [96822]={o="Collect the Raider's Battleaxe, Raider's Bow, and Raider's Shield from the Tiragarde Keep outskirts, then return them to Turroc in Razor Hill.",s="Turroc",e="Turroc"},
@@ -5813,10 +5861,13 @@ ns.QUEST_TEXTS.enUS = {
 [96897]={o="Kill 8 Dark Neophytes and 8 Dark Enforcers in Tirisfal Glades.",s="Hadric Harlson",e="Hadric Harlson"},
 [96898]={o="Gather 12 Necrotic Crystal Fragments in Tirisfal Glades.",s="Hadric Harlson",e="Hadric Harlson"},
 [96899]={o="Meet Leonid Barthalomew at Bandarion Keep in Tirisfal Glades.",s="Hadric Harlson",e="Leonid Barthalomew the Revered"},
+[96984]={o="Collect the Arcane Mote in the City of Dalaran for Magus Wordeen Voidglare in Tarren Mill.",s="Image of Archmage Modera",e="Magus Wordeen Voidglare"},
 [96986]={o="Defeat Atrexis the Grave Knight in the City of Dalaran for Melisara in Tarren Mill.",s="Melisara",e="Melisara"},
 [96987]={o="Collect the Founding of Dalaran from the City of Dalaran for Rexxie Copperclutch near the sewer entrance."},
-[96988]={o="Collect 6 Cracked Sentry Cores in the City of Dalaran for Doctor Martin Felben in Undercity.",s="Doctor Martin Felben"},
+[96988]={o="Collect 6 Cracked Sentry Cores in the City of Dalaran for Doctor Martin Felben in Undercity.",s="Doctor Martin Felben",e="Doctor Martin Felben"},
 [97003]={o="Bring the head of Chol'aruk to Gur'ak in the Barrens.",s="Gur'ak",e="Gur'ak"},
+[97047]={o="Find a key to Wendel's cage, and a disguise for him to sneak out, within the Kurzen compound.",s="Wendel Mathers",e="Wendel Mathers"},
+[97048]={s="Wendel Mathers"},
 [97220]={o="Bring the Gatehouse Shipment to the stockroom entrance located in Trias' Cheese shop in the Trade District.",e="Elaine Trias"},
 [97222]={o="Carry the Gatehouse Shipment up the stairs in Trias' shop and leave it outside the door.",s="Elaine Trias",e="Elaine Trias"},
 [97223]={o="Bring Eggs of the Bloodtalon Matriarch to Xar'Ti in Sen'jin Village.",s="Xar'Ti",e="Xar'Ti"},
@@ -5835,29 +5886,35 @@ ns.QUEST_TEXTS.enUS = {
 [97279]={o="Collect 6 Abandoned Training Weapons, then return to Kzan Thornslash in the Den.",s="Gornek",e="Kzan Thornslash"},
 [97281]={o="Bring the Dull Stormy Orb to Rezlak near Drygulch Ravine.",e="Rezlak"},
 [97282]={o="Bring 5 Charged Thunder Lizard Organs to Rezlak near Drygulch Ravine.",s="Rezlak",e="Rezlak"},
+[97284]={s="Vahlarriel Demonslayer",e="Vahlarriel Demonslayer"},
 [97286]={e="Garion Wendell"},
+[97287]={o="Speak with the Image of Archmage Modera near Dalaran.",s="Magus Wordeen Voidglare"},
 [97288]={o="Deliver the Abominable Head to Master Apothecary Faranell within the Undercity.",e="Master Apothecary Faranell"},
 [97289]={o="Bring the Head of the Baron to the body of Othmar in the Undercity.",s="Master Apothecary Faranell",e="Unfinished Abomination"},
 [97290]={o="Report your findings to Master Apothecary Faranell in Undercity.",s="Unfinished Abomination",e="Master Apothecary Faranell"},
 [97291]={o="Collect a Toxic Skullcap from Tawny Grisette in the Trade Quarter, Blisterweed near the Herbalism Trainer, and Essence of Agony from the poison vendor in the Rogues' Quarter for Master Apothecary Faranell in Undercity.",s="Master Apothecary Faranell",e="Master Apothecary Faranell"},
 [97292]={o="Inject the Hissing Serum into the system above Othmar's body for Master Apothecary Faranell.",s="Master Apothecary Faranell",e="Master Apothecary Faranell"},
 [97326]={o="Return 8 Smooth Boulders to Thra behind Grommash Hold.",s="Thra",e="Thra"},
+[97328]={o="Recover 8 Stolen Shipments from the Ruins of Zul'Kunda in Stranglethorn Vale and return your haul to someone in Booty Bay."},
 [97485]={o="Purchase a Bundle of Herbs from Nida the herbalist, a Bundle of Cedar Twigs from Nata the enchanting supplier, and Sinew Thread from Mahu the leatherworking supplier and Ceremonial Flint and Tinder from Naal the cooking supplier. Combine the items and sprinkle the incense off of Hunter's Rise.",s="Eylah Sunhorn",e="Eylah Sunhorn"},
 [97538]={o="Tah Winterhoof in Thunder Bluff wants 30 Mirkweed Pods from Mirkfallon Lake.",s="Tah Winterhoof",e="Tah Winterhoof"},
+[97539]={o="Return 12 Surgical Spidersilk to Doctor Gregory Victor in Hammerfall, Arathi Highlands.",s="Doctor Gregory Victor",e="Doctor Gregory Victor"},
 [97558]={o="Bring Shelene Rhobart 8 Duskbat Wing Membranes, 6 Darkhound Hides and 3 Vile Fin Murloc Skin.",s="Shelene Rhobart",e="Shelene Rhobart"},
+[97583]={o="Purchase Nutritious Slime Sludge and return to your befriended excitable slime. If it seems tired, try dancing with it again to catch its attention.",s="Excitable Slime",e="Excitable Slime"},
 [97891]={o="Bring the Unstable Potion to Doctor Martin Felben in the Apothecarium within the time limit.",s="Alessandro Luca",e="Doctor Martin Felben"},
 [97894]={o="Check on Gorbold Steelhand in Auberdine in Darkshore. Borgus mentioned a boat on the southern-most dock in Stormwind Harbor that can take you there.",s="Borgus Steelhand",e="Gorbold Steelhand"},
 [97900]={o="Speak with Dwukk in Razor Hill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Dwukk"},
 [97901]={o="Speak with Jhag in Orgrimmar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Jhag"},
-[97902]={o="Speak with Mukdrak in Razor Hill to learn to craft a camping item for your profession once you have shown proficiency in your skill."},
+[97902]={o="Speak with Mukdrak in Razor Hill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk"},
 [97903]={o="Speak with Rawrk in Razor Hill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Rawrk"},
+[97904]={o="Speak with Lau'Tiki near Sen'jin Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk"},
 [97905]={o="Speak with Jandi in Orgrimmar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Jandi"},
 [97906]={o="Speak with Karolek in Orgrimmar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Karolek"},
 [97907]={o="Speak with Krunn in Razor Hill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Krunn"},
 [97908]={o="Speak with Thuwd in Orgrimmar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Brakk",e="Thuwd"},
 [97914]={o="Bring Thundris' Letter to Baros Alexston in Stormwind. Thundris mentioned a boat in Auberdine that can take you there.",s="Thundris Windweaver",e="Baros Alexston"},
 [97916]={o="Speak with Smith Argus in Goldshire to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Sam Sarsaparilla",e="Smith Argus"},
-[97917]={o="Speak with Betty Quin in Stormwind to learn to craft a camping item for your profession once you have shown proficiency in your skill."},
+[97917]={o="Speak with Betty Quin in Stormwind to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Sam Sarsaparilla"},
 [97918]={o="Speak with Sprite Jumpsprocket in Stormwind to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Sam Sarsaparilla",e="Sprite Jumpsprocket"},
 [97919]={o="Speak with Michelle Belle in Goldshire to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Sam Sarsaparilla",e="Michelle Belle"},
 [97920]={o="Speak with Lee Brown near Goldshire to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Sam Sarsaparilla",e="Lee Brown"},
@@ -5874,9 +5931,11 @@ ns.QUEST_TEXTS.enUS = {
 [97942]={o="Speak with Byancie in Dolanaar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Lyreena Duskblade",e="Byancie"},
 [97943]={o="Speak with Astaia in Darnassus to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Lyreena Duskblade",e="Astaia"},
 [97944]={o="Speak with Malorne Bladeleaf in Dolanaar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Lyreena Duskblade",e="Malorne Bladeleaf"},
-[97949]={o="Speak with Radnaal Maneweaver on the road to Darnassus from Dolanaar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Lyreena Duskblade"},
+[97948]={s="Lyreena Duskblade"},
+[97949]={o="Speak with Radnaal Maneweaver on the road to Darnassus from Dolanaar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Lyreena Duskblade",e="Radnaal Maneweaver"},
 [97950]={e="Trianna"},
 [97952]={o="Speak with Basil Frye in Undercity to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eleanor Shackleton",e="Basil Frye"},
+[97953]={s="Eleanor Shackleton",e="Vance Undergloom"},
 [97955]={o="Speak with Nurse Neela in Brill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eleanor Shackleton"},
 [97956]={o="Speak with Clyde Kellen in Brill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eleanor Shackleton"},
 [97957]={o="Speak with Faruza in Brill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",e="Faruza"},
@@ -5884,7 +5943,7 @@ ns.QUEST_TEXTS.enUS = {
 [97960]={o="Speak with Rand Rhobart on the road to Undercity from Brill to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Eleanor Shackleton",e="Rand Rhobart"},
 [97963]={o="Speak with Nyassa Swiftdraught in Shen'dar Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind"},
 [97965]={o="Speak with Naleeia Tattermend in Shen'dar Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind"},
-[97967]={e="Fenn Fairweather"},
+[97967]={s="Raan Wildwind",e="Fenn Fairweather"},
 [97968]={o="Speak with Syriel Nightrain in Valanaar to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind",e="Syriel Nightrain"},
 [97969]={o="Speak with Indari Sunseam in Shen'dar Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind",e="Indari Sunseam"},
 [97970]={o="Speak with Messana Crestwind in Shen'dar Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind",e="Messana Crestwind"},
@@ -5892,7 +5951,7 @@ ns.QUEST_TEXTS.enUS = {
 [97973]={o="Speak with Taleen Shimmerthread in Shen'dar Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind",e="Taleen Shimmerthread"},
 [97977]={o="Collect 4 Gnarlpine Totems and bring them to Tarindrella.",s="Tarindrella",e="Tarindrella"},
 [97979]={o="Cast Elune's Light and Shadowmeld.",s="Shanda",e="Shanda"},
-[97985]={o="Slay Stormheart in Thousand Needles and acquire its heart.",s="Calder Gray"},
+[97985]={o="Slay Stormheart in Thousand Needles and acquire its heart.",s="Calder Gray",e="Calder Gray"},
 [98024]={o="Report To Thork at The Crossroads in The Barrens.",s="Thrall",e="Thork"},
 [98025]={o="Find and slay the owl known as Jai'vhanel and take one of her feathers. The black owl was last seen north of the Ameth'Aran ruins near the mountain base. Report the death of Jai'vhanel to Sentinel Glynda Nal'Shea in Auberdine.",e="Sentinel Glynda Nal'Shea"},
 [98027]={o="Deliver the Crescent Necklace to Maliynn in Astranaar.",e="Maliynn"},
@@ -5901,10 +5960,14 @@ ns.QUEST_TEXTS.enUS = {
 [98046]={o="Bring the Drained Vessel to Lariia in the Temple of the Moon in Darnassus.",s="Arch Druid Fandral Staghelm",e="Lariia"},
 [98065]={o="Bring the Moonwell Remnants to Tyrande Whisperwind in the Temple of the Moon in Darnassus.",s="Lariia",e="Tyrande Whisperwind"},
 [98067]={o="Place Sentinel Owls at the entrance to the Cenarion Hold depths, the Darnassus Bank, the Craftsman's Terrace Inn, and the City Gate for Sentinel Dalia Sunblade in the Temple of the Moon in Darnassus.",s="Sentinel Dalia Sunblade",e="Sentinel Dalia Sunblade"},
-[98071]={o="Deliver the bottles of Fallrook Varietal to Dun Garok in southeast Hillsbrad Foothills, and bring back a sack of their Homebrew Hops.",s="Brewmeister Bilger"},
+[98069]={o="Bring 8 Stolen Freewind Supplies to Jandia in Freewind Post.",s="Jandia",e="Jandia"},
+[98070]={o="Slay 5 Screeching Harpies, 5 Screeching Roguefeather Harpies and 5 Screeching Windcaller Harpies.",s="Jandia",e="Jandia"},
+[98071]={o="Deliver the bottles of Fallrook Varietal to Dun Garok in southeast Hillsbrad Foothills, and bring back a sack of their Homebrew Hops.",s="Brewmeister Bilger",e="Brewmeister Bilger"},
 [98072]={o="Collect 8 Pristine Crimson Scales and bring them to James Halloran in Menethil Harbor.",s="James Halloran",e="James Halloran"},
 [98093]={o="Sulhasa in southern Barrens wants you to clear out 7 Stormhide lizards and 7 Hecklefang Stalkers in the area so she can leave the tree safely.",s="Sulhasa",e="Sulhasa"},
 [98094]={o="High Executor Darthalia wants you to deliver updated orders to Deathstalker Masoj, south of Tarren Mill, outside of Dun Garok.",s="High Executor Darthalia"},
+[98155]={o="Bring 5 Pristine Pesterhide Pelts to Kristy Grant.",s="Kristy Grant",e="Kristy Grant"},
+[98156]={o="Bring the Package of Pristine Pelts to Kimberly Grant.",s="Kristy Grant",e="Kimberly Grant"},
 [98189]={o="Bring the Menethil Statuette to Captain Stoutfist in Menethil Keep.",s="Karl Boran",e="Captain Stoutfist"},
 [98190]={o="Bring the Menethil Statuette to Highlord Bolvar Fordragon in Stormwind Keep.",s="Captain Stoutfist",e="Highlord Bolvar Fordragon"},
 [98191]={o="Bring the Menethil Statuette to Lord Grayson Shadowbreaker in the Cathedral of Light.",s="Highlord Bolvar Fordragon",e="Lord Grayson Shadowbreaker"},
@@ -5927,7 +5990,8 @@ ns.QUEST_TEXTS.enUS = {
 [98286]={o="Speak with Nasalanna Windsinger in Shen'dar Village to learn to craft a camping item for your profession once you have shown proficiency in your skill.",s="Raan Wildwind",e="Nasalanna Windsinger"},
 [98291]={o="Kill 8 Dragonmaw Reclaimers, 5 Dragonmaw Soulbinders, and 3 Dragonmaw Infiltrators in Dragonmaw Retreat for Howin Kindfeather.",s="Howin Kindfeather",e="Howin Kindfeather"},
 [98293]={o="Collect 30 Dragonmaw Armaments in Dragonmaw Retreat, then bring them to Captain Stoutfist in Menethil Keep.",e="Captain Stoutfist"},
-[98297]={o="Kill the Subdued Dragonspawn at the Dragonmaw Gates for Howin Kindfeather.",s="Howin Kindfeather"},
+[98297]={o="Kill the Subdued Dragonspawn at the Dragonmaw Gates for Howin Kindfeather.",s="Howin Kindfeather",e="Howin Kindfeather"},
+[98300]={s="Howin Kindfeather",e="King Magni Bronzebeard"},
 [98310]={o="Use the Goaz Stone near Ados, Modr, Golm, and Neru and bring their hearts back to Prospector Whelgar.",s="Prospector Whelgar",e="Prospector Whelgar"},
 [98313]={o="Bring the Whelgar Relic Package to Historian Karnik in Ironforge.",s="Prospector Whelgar",e="Historian Karnik"},
 [98319]={o="Find Mountaineer Cornelius in the Grizzled Den for Mountaineer Gretchen.",s="Mountaineer Gretchen",e="Mountaineer Gretchen"},
@@ -5940,7 +6004,7 @@ ns.QUEST_TEXTS.enUS = {
 [98342]={o="Recover the Relic of the Fang, Relic of the Claw, and Relic of the Silent Shadow from the Stormrage Barrow Den, and return them to the Great Cat Spirit.",s="Great Cat Spirit",e="Great Cat Spirit"},
 [98362]={o="Return to Thunder Bluff and speak with Turak Runetotem on the Elder Rise.",s="Dendrite Starblaze",e="Turak Runetotem"},
 [98372]={e="Night Watch Guard"},
-[98386]={s="Foreman Oslow",e="Foreman Oslow"},
+[98386]={o="Slay 12 Greater Tarantulas and destroy 6 Tarantula Eggs in Alther's Mill for Foreman Oslow in Redridge.",s="Foreman Oslow",e="Foreman Oslow"},
 [98387]={o="Bring 8 Stolen Weapons and 10 Blackrock Supplies to Marshal Marris in Lakeshire.",s="Marshal Marris",e="Marshal Marris"},
 [98389]={o="Free 6 Webbed Victims in Night's Web Hollow for Aramis Hammerhand in Deathknell.",s="Aramis Hammerhand",e="Aramis Hammerhand"},
 [98391]={o="Speak to Sister Aquinne in Darnassus.",s="Laurna Morninglight",e="Sister Aquinne"},
@@ -5959,10 +6023,12 @@ ns.QUEST_TEXTS.enUS = {
 [98424]={o="Collect the rest of Supervisor Fizsprocket's pages inside The Venture Co. Mine and bring them to Morin Cloudstalker near Bloodhoof Village.",e="Morin Cloudstalker"},
 [98427]={o="Bring the Clearcutter Key to Morin Cloudstalker outside Bloodhoof Village.",s="Morin Cloudstalker"},
 [98435]={o="Bring Thunderhorn's Report to Arch Druid Hamuul Runetotem in Thunder Bluff.",s="Mull Thunderhorn",e="Arch Druid Hamuul Runetotem"},
+[98459]={o="Deliver Tom's Gift to Bart Tidewater in Menethil Harbor in the Wetlands.",s="Tom \"Half-fish\" Wilson"},
 [98461]={o="Deliver Hollee's Note to Tarrel Rockweaver near Menethil Harbor in the Wetlands.",s="Archaeologist Hollee",e="Tarrel Rockweaver"},
+[98463]={o="Visit Nixxrax Fillamug in the Salty Sailor Tavern in Booty Bay in Stranglethorn.",s="Barkeep Kelly",e="Nixxrax Fillamug"},
 [98512]={o="Kill 10 Al'Aketh Assassins in the Shen'dar Highlands.",s="Fendaal Windstone",e="Fendaal Windstone"},
 [98545]={o="Deliver the Sealed Letter to Glix Xizzix in the Undercity.",s="Leonid Barthalomew the Revered",e="Glix Xizzix"},
-[98574]={o="Read the Hallowed Memorandum and speak to Branstock Khalder in Anvilmar.",s="Sten Stoutarm"},
+[98574]={o="Read the Hallowed Memorandum and speak to Branstock Khalder in Anvilmar.",s="Sten Stoutarm",e="Branstock Khalder"},
 [98576]={o="Read the Glyphic Parchment and speak with Mai'ah near the entrance to the Den in the Valley of Trials.",s="Gornek",e="Mai'ah"},
 [98581]={o="Read the Archaic Rune and speak to Teo Hammerstorm in Anvilmar.",s="Sten Stoutarm",e="Teo Hammerstorm"},
 [98601]={o="Read the Consecrated Scroll and speak to Aramis Hammerhand in the church in Deathknell.",s="Shadow Priest Sarvis",e="Aramis Hammerhand"},
@@ -5970,7 +6036,8 @@ ns.QUEST_TEXTS.enUS = {
 [98738]={o="Speak to Dendrite.",s="Avatar of Saeyleenan",e="Dendrite Starblaze"},
 [98739]={o="Speak to Dendrite.",s="Great Cat Spirit",e="Dendrite Starblaze"},
 [98815]={o="Return 4 Thicket Raptor Hides to James Halloran, the tanner, in Menethil Harbor.",s="James Halloran",e="James Halloran"},
-[98823]={o="Bring the Titan Relic to Muln Earthfury at the Skywatcher Plateau in northwest Mulgore.",s="Bashana Runetotem"},
+[98823]={o="Bring the Titan Relic to Muln Earthfury at the Skywatcher Plateau in northwest Mulgore.",s="Bashana Runetotem",e="Muln Earthfury"},
+[98824]={o="Bring the Titan Relic to High Explorer Magellas in Ironforge's Hall of Explorers.",s="Prospector Whelgar",e="High Explorer Magellas"},
 [98895]={o="Bring 3 Darkspear Islands Marks of Honor to an Alliance Brigadier General outside the battlegrounds.",s="Alliance Brigadier General"},
 [99046]={o="Search for Sentinel Eralya Leafshadow on the road leading to the Oracle Glade.",s="Sentinel Kyra Starsong",e="Sentinel Eralya Leafshadow"},
 [99047]={o="Seek aid from Byancie in Dolanaar for Sentinel Eralya Leafshadow.",s="Sentinel Eralya Leafshadow",e="Byancie"},

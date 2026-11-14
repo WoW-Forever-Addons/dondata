@@ -27,7 +27,8 @@ ns.defaults = {
   autoRepair = true,
   useGuildRepair = false,
   fastLoot = true,
-  questItemButton = true,
+  questItemButton = false, -- (12.11.2026) the single button is an option; the buttons in the quest list are the default
+  trackerItemButtons = true, -- (12.11.2026, Daniel) a button for each quest's usable item beside its row in the quest list
   starterNotice = true, -- (1.3.5) a small note above the button when a looted item starts a quest
   -- 1.27: target button (macro of mob names, learned), waypoint export (both off)
   targetButton = false,
@@ -63,7 +64,7 @@ ns.defaults = {
   trackerAlpha = 0.82,
   trackerPlain = true, -- (17.10.) no background and frame; (18.10., Daniel) on for new players, a switch in the start window
   trackerHideGrey = false, -- (1.3.7) grey quests folded into one line at the bottom of the quest list
-  trackerScale = 1.2, -- (Daniel 12.10.: "the writing looks very small") text size 120 %, Ctrl + mouse wheel changes it
+  trackerScale = 1, -- (Daniel 12.11.2026 on the laptop: "pin sizes und schrift auf 100% als standard bei neuinstallation"; 120 % since 12.10.) Ctrl + mouse wheel changes it
   trackerCombatFade = true,
   questTexts = {}, -- (1.3.6) [questID] = { d, o, p, c }: the game's quest texts, kept when a quest giver shows them
   arrow = true,
@@ -78,7 +79,7 @@ ns.defaults = {
   arrowScale = 1.15,
   objectivePinSize = 12,
   wayPinScale = 1, -- (11.11.2026) size of the /way waypoint pins (Questdon Way.lua)
-  mapPinScale = 0.6, minimapPinScale = 0.85, -- (Daniel 26.10.) size of all Questdon pins on the world map and the minimap; (04.11.2026, Era-Test) 60 % and 85 %
+  mapPinScale = 1, minimapPinScale = 1, -- (Daniel 26.10.) size of all Questdon pins on the world map and the minimap; (12.11.2026, Daniel) 100 % for new installs, 60 % and 85 % since the Era-Test of 04.11.
   thinObjectives = true, -- (1.3.5) many objective dots: fewer, bundled markers (minimap and world map)
   objectiveIcons = true, -- (17.10.) symbols instead of dots (mob, loot, named mob, object, place, item), groups as one
   objectiveAreas = true, -- (17.10.) the area of a group of spots in the quest's colour (world map)

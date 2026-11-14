@@ -214,7 +214,10 @@ function Learn()
         for _, p in ipairs(ns.ObjectiveTargets(id, index, o, spots)) do
           if Near(p, m, x, y) then known = true break end
         end
-        if not known and ns.AddObjectiveSpot(id, index, m, x, y) then stats.learned = stats.learned + 1 end
+        -- (12.11.2026) the game's point at the quest giver or turn-in is where the quest ends, not where its loot is
+        if not known and not (ns.AtGiverOrTurnIn and ns.AtGiverOrTurnIn(id, m, x, y)) and ns.AddObjectiveSpot(id, index, m, x, y) then
+          stats.learned = stats.learned + 1
+        end
       end
     end
   end
