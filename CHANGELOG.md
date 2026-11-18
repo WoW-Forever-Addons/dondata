@@ -1,5 +1,10 @@
 # Changes
 
+## 1.3.1
+
+- **Learned from play:** four more days of play (15 to 18 November), about 3650 new facts: quest starts, turn-ins, quest levels, objective places, gathering finds and paths.
+- **Hints of a New Plague? (Kinelory):** the quest now shows where Kinelory walks in the Go'Shek Farm, with a hint to talk to her and take the escort quest.
+
 ## 1.3.0
 
 - **New quest data:** 115 more quests (4698), among them the quests of Alcaz Prison and Blackmaw Hold and new quests in Shen'dralas, Desolace, Theramore and Tanaris, and the racial riding quests; more quest starts, turn-ins and objectives.
