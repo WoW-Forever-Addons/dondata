@@ -43,6 +43,7 @@ ns.DUNGEON_LEVELS = {
   [229] = { 55, 60 },  -- Blackrock Spire (game; table 57-60)
   [230] = { 54, 60 },  -- Dire Maul (game; table 58-60)
   [236] = { 58, 60 },  -- Stratholme
+  [3001] = { 58, 60 }, -- The Shaper's Terrace (18.11.2026, ATT bf4d48d: "Blizzard lists it for levels 58-60")
   [742] = { 60, 60 },  -- Blackwing Lair
   [743] = { 60, 60 },  -- Ruins of Ahn'Qiraj
   [744] = { 60, 60 },  -- Temple of Ahn'Qiraj
