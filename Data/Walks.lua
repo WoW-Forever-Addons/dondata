@@ -13,7 +13,7 @@ ns.WALKS = {
 [550]={[1436]={"cjj9coj3cqiycritcnihcnibcoi2cghvcchnc8h6c5grc3gfc1g0c0foc0f6byf0bresbpembmefble9bldzbfdpbcdhb5d8aucvarcoapclaicoadcga6cc9xc89oc39gbz96by8xc18tc78och8kcr8hcq8fco89cu8acz8bd58dd98hdb8jdf8hdm8edt89dz89dx8edr8hdm8jde8hda8ad58act8fco8kcr8mcl8qcc8uc48zc191bz95bx9ebz9mc29wc7a3c7a6c1a9bra9bcabb0aeaqaiabana3ax9tb79lbd9dbh94bm8mbp8gbx86c57ycb7scd7bcd71ce6vce6jci6dci69cd5ycg5rcg5ocd5hcf5dch5acn52cq51cs53ct57cv59cr51co51ck56ce5ece5mcg5rce5yce61ci6cce6kce6rcd71cb7aca7rc47zbw87bm8lbh91bd9db79laz9rapa1aja9agaiadauaab5a8bpaac0aec7ajcearcoavcwb3d6bbdebedmbgdrble0bmebboelbsetbyf1c0f7c0fkbwfobsfobpfjbmf2bmetbneqbqeqbweyc0f5c0fdc0fpc1fzc3gfc6guc9h8cchkcehrcihxcli0coi2cnidcoikcritcqiycmj7cijbcdjc"}}, -- Defias Messenger (seen 1)
 [576]={[1431]={"knddkqdeksd8kud6kxd6kzcwkucvkucnkpctklcukgcxkgd4kkda"}}, -- Watcher Ladimore (seen 2)
 [723]={[1434]={"dr8kdy8kdu8l"}}, -- Mosh'Ogg Butcher
-[738]={[1434]={"ak0yak0yak10am11an12an14al17al19am1cao1daq1eas1eau1fav1gax1nax1sax1wax1zaz24b228b32bb52db72cb72cb72cb42bb025ax20ax1tax1max1has1far1eap1eao1ean1ean1dam1cal1aal19al17al15al14al12ak11ak0zak0y"}}, -- Private Thorsen (seen 3)
+[738]={[1434]={"ak0yak0yak10am11an12an14al17al19am1cao1daq1eas1eau1fav1gax1nax1sax1wax1zaz24b228b32bb52db72cb72cb72cb42bb025ax20ax1tax1max1has1far1eap1eao1ean1ean1dam1cal1aal19al17al15al14al12ak11ak0zak0y"}}, -- Private Thorsen (seen 1)
 [840]={[1431]={"k49hke91kc93k39qk2ack6aokib0knb8kpbhkscbkqblklb4khayk5ank2adk09xk09xjz9x"}}, -- Watcher Backus (seen 2)
 [1137]={[1426]={"aud7avd7azd6b2d6b4d5b6d3b7d0b8cxb9cubacsbccqbdcpbecnbdcqbbcsbbcsbacub9cyb9d1b8d4b7d7b7d9b7dcb6dcb5deb3dgb0dhaydjavdkaudlasdkardhardeasdbatd9","bqdqbsdqbudrbudubudxbudzbwdybxdxbydxc0dwc1duc2dsc2dpc3dmc2dlc1dkc0djbzdkbzdmbydnbwdobvdobudnbudmbtdkbsdlbsdlbsdnbsdpbrdq"}}, -- Edan the Howler
 [1271]={[1426]={"amf0aiexadetabesacepaceladefafecaie8ake4aheaaeedadeiademaeepafeuagevaiexakeyapf1aqf2apf2apf1apf2"}}, -- Old Icebeard (seen 1)
@@ -23,7 +23,7 @@ ns.WALKS = {
 [1737]={[1420]={"8vim8uit8tit8sir8tit8uit8vil8rij8jik8uij"}}, -- Deathguard Oliver
 [1742]={[1420]={"g9eag9eag8e8g7e1g7dug9dsgcdpgddpggdpgidpgkdqgmdqgndqgodpgpdngqdkgrdigrdhgrddgqdagpd7gnd5gmd4gkd3gid1ghd0gfd3ged4gcd7gad9g8dag5dcg4ddg2deg1dhg0dkfzdkfydmfxdnfydpg0dpg2drg3dtg5dtg7dug7dwg7e0g7e5g8e8"}}, -- Deathguard Bartholomew
 [2039]={[1438]={"asm5asm4asm3asm4asm6atm7avm8awm9awm9aumaatmbasmdarmbasmaatm7"}}, -- Ursal the Mauler
-[2198]={[1453]={"fnkmfekzfil7exlwf7mif8mrf6n9f0nkewnqemnwe8o2e1nndtnjdjnid5o6csogciodcao7c7ntc7njc9msc9mjcambcmlxcxlncwlbcnkockk8cajpcnj9d1isdaiedahudihhdth4djgie5fre9fmexfbfcg1ftfifeeqffe9fre0g3eegsdkgjd0gtcoh5cchgczhpdihze1ige7itdxitdxj3dnjdddjrcxk1d9k4dojve2jgeojxfmk6fbkgfaksfql6gel6gqkxh2knhgk8h6jygrjdhfj7h9izhkili1idhthtili5j7hjjzh1kkgsk3gpjxgek4g0ke"}}, -- Crier Goodman (seen 2)
+[2198]={[1453]={"fnkmfekzfil7exlwf7mif8mrf6n9f0nkewnqemnwe8o2e1nndtnjdjnid5o6csogciodcao7c7ntc7njc9msc9mjcambcmlxcxlncwlbcnkockk8cajpcnj9d1isdaiedahudihhdth4djgie5fre9fmexfbfcg1ftfifeeqffe9fre0g3eegsdkgjd0gtcoh5cchgczhpdihze1ige7itdxitdxj3dnjdddjrcxk1d9k4dojve2jgeojxfmk6fbkgfaksfql6gel6gqkxh2knhgk8h6jygrjdhfj7h9izhkili1idhthtili5j7hjjzh1kkgsk3gpjxgek4g0ke"}}, -- Crier Goodman (seen 3)
 [2417]={[1416]={"9sf29xey9zf2a3fba7f8a3exafeoaneoaueaaxe6axe0b2dkb5d4bdcvb6ctb5d9awe7aredalenafeoa3ex9zen9veq9yex9sf29tf49wf4"}}, -- Grel'borg the Miser (seen 2)
 [2449]={[1424]={"91b291ax91ax92an92ah93aa93a5929y929y93a493aa92ak92aq91au92b294b195b19cau9har9har9qar9uar9zata2awa4aya2aw9yat9uar9qar9kar9far9cav97az93b4"}}, -- Citizen Wilkes
 [2451]={[1424]={"9zcya0cva0csa0cn9zck9wcg9vcf9sck9qco9ncr9lcu9icy9hd19hd39jd39md79od79rd99td79wd69yd2a0cz"}}, -- Farmer Kalaba
@@ -77,7 +77,7 @@ ns.WALKS = {
 [5928]={[1440]={"46l847la49lc4blg4blj4blo4bls4dlw4ely4hly4im14km44mm84nmc4omg4mmi4jmg4jmb4jm64jm14jlx4jlt4jlp4jll4jlf4hld4el94dl64bkz4akw48kr46kp44ko42ko40kn3xkl3vkk3rkj3qki3okg3mke3kke3ikg3gki3dkl3fkn3hkq3jkt3lkx3nkx3ql23ql53pl83mla3llf3nlj3qlj3slf3ulc3xl941l943l945l8"}}, -- Sorrow Wing
 [5934]={[1445]={"11p014oz17ow1aot1cox1dp31cp71ap917p711p00yp00yp00uoy0sov0rop0qon0ros0toy0xp0"}}, -- Heartrazor
 [6170]={[1431]={"kjlgklliknlmkmltkllxklm1kmlykmltknlnkmli"}}, -- Gutspill (seen 4)
-[6175]={[1455]={"6hh764fb62ee62ee66g56hh76hh773iu7sk58wlp90lu90luadmtaun3bxndbxndaun29kmb8rlp7mjs6mhr6hh7"}}, -- John Turner (seen 3)
+[6175]={[1455]={"6hh764fb62ee62ee66g56hh76hh773iu7sk58wlp90lu90luadmtaun3bxndbxndaun29kmb8rlp7mjs6mhr6hh7"}}, -- John Turner (seen 8)
 [6176]={[1416]={"mdilm9ikm2iim0i9m1hwm3hfm8hdmchim8hdm3hfm1hwm0i9m2iim9ik"}}, -- Bath'rah the Windwatcher
 [6182]={[1436]={"bmorblopbjolbjopbjopbgosbgosbfoobiomblonboonbtolbtolbvojbwokbtolbtolbooo"}}, -- Daphne Stilwell (seen 2)
 [6494]={[1413]={"h5c8h3cah3cah7cch9cdhacgh9cihbcdhdcahec8hgc8hhc8hjcbhlcahmcbhncdhpcchscahtc9hvc8hxc8hwc8hucchrchhqcnhpcrhocshpcnhqcihpcdhncdhmcchmcahlcahkcahjcbhicahic9hhc8hfc8hdc8hac8h8c7"}}, -- Tazan

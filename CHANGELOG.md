@@ -1,5 +1,9 @@
 # Changes
 
+## 1.4.1
+
+- **Learned from play:** the days up to 19 November, about 900 new facts: quest levels (now 1,820), objective places, gathering finds, services and paths.
+
 ## 1.4.0
 
 - **Data of 18 November:** All The Things and ForeverDB brought more than 300 new quests (now over 5,000), among them 151 in Mount Hyjal, with their givers, turn-ins and texts, and new spawns and services.
