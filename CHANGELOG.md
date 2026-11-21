@@ -1,5 +1,10 @@
 # Changes
 
+## 1.5.2
+
+- **Data from more players (21 November):** quest starts, turn-ins, objective places, quest levels, drops and paths from the recordings of two more players.
+- **Hints of a New Plague? (Kinelory):** Kinelory stands right next to Quae, the walking was her escort quest. The hint and the map point now show her there.
+
 ## 1.5.1
 
 - **Smoother play:** fixed short stutters. The background check of quest levels after an update asks only for changed quests, more slowly, and no longer makes the map and lists redraw; quest tags and levels from the log are read once per log change; armor and health changes of other units no longer wake the gear check.

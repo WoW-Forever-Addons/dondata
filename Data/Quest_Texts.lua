@@ -1699,9 +1699,6 @@ q9081=Rohan the Assassin
 q9083=Rohan the Assassin
 q9084=Rohan the Assassin
 q93976=Friz Frazzlespark
-q94841=Friz Frazzlespark
-q95066=Demar Brant
-q97332=Wharfmaster Whizzbuzz
 ]=]
 local SRC = {}
 SRC.enUS = [=[
@@ -5905,7 +5902,7 @@ ns.QUEST_TEXTS.enUS = {
 [94877]={o="Defeat 8 Twilight Raiders, 8 Twilight Shadowmancers, and 8 Twilight Neophytes within Sunnyglade for Demar Brant.",s="Demar Brant",e="Demar Brant"},
 [94879]={o="Collect 5 Twilight Pages from within Sunnyglade for Ashe Amberall in Farholde Keep.",s="Ashe Amberhall",e="Ashe Amberhall"},
 [94881]={o="Retrieve 25 Twilight Charms from Twilight Shadowmancers and Twilight Neophytes in Sunnyglade for Ashe Amberhall in Farholde Keep.",s="Ashe Amberhall",e="Ashe Amberhall"},
-[94884]={e="Ashe Amberhall"},
+[94884]={o="Bring the Filled Crystal Catalyst to Ashe Amberhall in Farholde Keep.",e="Ashe Amberhall"},
 [94885]={o="Deliver the Field Marshal's Log to Demar Brant in Farholde Keep.",e="Demar Brant"},
 [94886]={s="Demar Brant"},
 [94887]={o="Find Marshal Ryan within the Twilight's Shroud.",s="Demar Brant"},
@@ -5974,7 +5971,7 @@ ns.QUEST_TEXTS.enUS = {
 [95214]={o="Recover 16 Stolen Blasting Powder from the troggs east of Gol'Bolar Quarry, then return to Quarrymaster Thesten.",s="Quarrymaster Thesten",e="Quarrymaster Thesten"},
 [95216]={o="Collect the Highly Toxic Strain from Witherfang in Ruins of Lordaeron for Theodore Griffs in Undercity.",s="Theodore Griffs",e="Theodore Griffs"},
 [95217]={s="Frast Dokner",e="Frast Dokner"},
-[95219]={s="Friz Frazzlespark",e="Mardrack Greenwell"},
+[95219]={o="Deliver the Cask of Powderfuse Port to Mardrack Greenwell at Feathermoon Stronghold in Feralas.",s="Friz Frazzlespark",e="Mardrack Greenwell"},
 [95250]={o="Collect the Head of the Baron in the Ruins of Lordaeron and bring it back to Captain Truman."},
 [95254]={o="Bring Trapclaw's Pincer to Fimbo Greasemitz.",e="Fimbo Greasemitz"},
 [95260]={o="Find someone at Powderfuse Port who can identify the monster from the painted hide.",e="Argo Brinewhistle"},
@@ -5987,8 +5984,8 @@ ns.QUEST_TEXTS.enUS = {
 [95296]={s="Friz Frazzlespark"},
 [95314]={o="Collect 8 Bottles of Whispering Elixir from Shadowvale, then return to Carolai Anise in Brill.",s="Carolai Anise",e="Carolai Anise"},
 [95315]={s="Captain Nials"},
-[95322]={s="Caravaneer Ruzzgot",e="Caravaneer Ruzzgot"},
-[95325]={s="Caravaneer Ruzzgot"},
+[95322]={o="Find the Bloodsail Trunk outside of Booty Bay in Stranglethorn Vale.",s="Caravaneer Ruzzgot",e="Caravaneer Ruzzgot"},
+[95325]={o="Find the Venture Co. Ledger in the Venture Co. Camp near Lake Nezferiti in Stranglethorn.",s="Caravaneer Ruzzgot"},
 [95327]={e="Friz Frazzlespark"},
 [95328]={o="Deliver Whispering Horror Residue to Father Lankester in the War Quarter of Undercity.",e="Father Lankester"},
 [95329]={o="Go to Terral's Watch to get a status report from Watcher Cornelius.",s="Demar Brant",e="Watcher Cornelius"},
@@ -6041,6 +6038,7 @@ ns.QUEST_TEXTS.enUS = {
 [95912]={o="Bring the Blademaster's Banner to Ember Bladewhisper in Farholde Keep.",e="Ember Bladewhisper"},
 [95913]={o="Collect 3 Coyote Pelts for Tessa Dawnbright in Farholde Keep.",s="Tessa Dawnbright",e="Tessa Dawnbright"},
 [95943]={o="Locate the Foreman's Crate and return it to Bertrand Ironbrow in Farholde Keep.",s="Bertrand Ironbrow",e="Bertrand Ironbrow"},
+[95957]={o="Deliver Zizplink's Frothing Mug to Gray Dawnbright in Powderfuse Port."},
 [95961]={o="Find Gray Dawnbright in Powderfuse Port.",s="Tessa Dawnbright"},
 [95975]={e="Tessa Dawnbright"},
 [95981]={o="Slay 8 Dalaran Wizards and 8 Dalaran Watchers for Shadow Priest Allister in the Sepulcher.",s="Shadow Priest Allister",e="Shadow Priest Allister"},
@@ -6048,6 +6046,7 @@ ns.QUEST_TEXTS.enUS = {
 [95983]={o="Bring the Gnawed Skull to Watcher Cornelius at Terral's Watch.",s="Picked Carcass",e="Watcher Cornelius"},
 [95984]={o="Bring an Intact Tallstrider Beak to Watcher Cornelius at Terral's Watch.",s="Watcher Cornelius",e="Watcher Cornelius"},
 [95986]={o="Use the Tallstrider Call to call forth the leader of the lion pride. Slay the beast and retrieve its hide for Watcher Cornelius at Terral's Watch.",s="Watcher Cornelius",e="Watcher Cornelius"},
+[95988]={o="Gather 3 Crawler Spittle, Fresh Chum, Goblin Degreaser, and Expired Poison for Innkeeper Zizplink in Powderfuse Port."},
 [95991]={o="Bring Ghostmaw's Fang to Wheatley in Farholde Keep."},
 [95998]={o="Sit near Sam's Basic Campfire and wait until you receive the Boosted Rest buff.",s="Sam Sarsaparilla",e="Sam Sarsaparilla"},
 [95999]={o="Deliver the Broken Staff of Incinerator Gar'im to Magistrate Solomon in Lakeshire.",e="Magistrate Solomon"},
@@ -6100,6 +6099,7 @@ ns.QUEST_TEXTS.enUS = {
 [96606]={o="Sit near Lyreena's Basic Campfire and wait until you receive the Boosted Rest buff.",s="Lyreena Duskblade",e="Lyreena Duskblade"},
 [96607]={o="Sit near Eleanor's Basic Campfire and wait until you receive the Boosted Rest buff.",s="Eleanor Shackleton",e="Eleanor Shackleton"},
 [96608]={o="Sit near Eric's Basic Campfire and wait until you receive the Boosted Rest buff.",s="Eric Brighthammer",e="Eric Brighthammer"},
+[96609]={o="Bring 10 bottles of Silvermoon Shimmerwine to Arille Azuregaze in Dalaran city."},
 [96626]={o="Speak with Tomas in Goldshire to learn to become a cook.",s="Sam Sarsaparilla",e="Tomas"},
 [96627]={o="Speak to Sam Sarsparilla near Goldshire.",s="Marshal McBride",e="Sam Sarsaparilla"},
 [96628]={o="Deliver the Supply Bundle to Eric Brighthammer near Kharanos.",s="Mountaineer Thalos",e="Eric Brighthammer"},
@@ -6182,6 +6182,7 @@ ns.QUEST_TEXTS.enUS = {
 [97329]={o="Bring the Primitive Key obtained from the trolls at the Ruins of Zul'kunda in Stranglethorn Vale to Zimmix Sputterspark.",s="Zimmix Sputterspark",e="Zimmix Sputterspark"},
 [97331]={o="Escort Zimmix Sputterspark away from the Ruins of Zul'Kunda then tell Wharfmaster Lozgil in Booty Bay of your successful rescue.",s="Zimmix Sputterspark",e="Wharfmaster Lozgil"},
 [97332]={s="Wharfmaster Lozgil",e="Wharfmaster Whizzbuzz"},
+[97420]={o="Acquire 4 Drums of Crude Oil from the Venture Co. operations at Lake Nazferiti, then return to Knaz Blunderflame in Stranglethorn Vale."},
 [97485]={o="Purchase a Bundle of Herbs from Nida the herbalist, a Bundle of Cedar Twigs from Nata the enchanting supplier, and Sinew Thread from Mahu the leatherworking supplier and Ceremonial Flint and Tinder from Naal the cooking supplier. Combine the items and sprinkle the incense off of Hunter's Rise.",s="Eylah Sunhorn",e="Eylah Sunhorn"},
 [97530]={s="Security Chief Bilgewhizzle"},
 [97536]={s="Jhordy Lapforge"},
