@@ -321,9 +321,34 @@ end
 ---------------------------------------------------------------------------
 local callbacks = {}
 local gearVersion = 0
-local function Notify(what)
-  if what == "gear" then gearVersion = gearVersion + 1 end
+local function Call(what)
   for i = 1, #callbacks do pcall(callbacks[i], what) end
+end
+-- (21.11.2026, Ruckler) "gear" at most once per GEAR_GAP s (buffs and health in a fight came several times a second, and
+-- Geardon judges every bag item again on each): GearVersion goes up at once, the callbacks hear it at once when the
+-- last notice is GEAR_GAP s back, else once at its end (so the last state is told). Without timers (ns.After) at once.
+local GEAR_GAP = 1.5
+local gearAt, gearLater
+local function GearNotice()
+  gearVersion = gearVersion + 1
+  local now = ns.Num(ns.Value(GetTime))
+  local canWait = ns.After and type(C_Timer) == "table" and type(C_Timer.After) == "function"
+  if not now or not canWait or not gearAt or now - gearAt >= GEAR_GAP or now < gearAt then
+    gearAt = now
+    Call("gear")
+    return
+  end
+  if gearLater then return end
+  gearLater = true
+  ns.After(GEAR_GAP - (now - gearAt), function()
+    gearLater = nil
+    gearAt = ns.Num(ns.Value(GetTime))
+    Call("gear")
+  end)
+end
+local function Notify(what)
+  if what == "gear" then GearNotice() return end
+  Call(what)
 end
 ns.ApiNotify = Notify
 function API.RegisterCallback(fn)
@@ -374,8 +399,12 @@ local function CheckGear(_, unit)
   end
 end
 for _, e in ipairs({ "PLAYER_LEVEL_UP", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "PLAYER_EQUIPMENT_CHANGED",
-    "UNIT_MAXHEALTH", "UNIT_RESISTANCES", "PLAYER_ENTERING_WORLD" }) do
+    "PLAYER_ENTERING_WORLD" }) do
   ns.On(e, CheckGear)
+end
+-- (21.11.2026, Ruckler) the player's health and resistances only (Gear.lua registers the same way, first)
+for _, e in ipairs({ "UNIT_MAXHEALTH", "UNIT_RESISTANCES" }) do
+  if ns.OnPlayerUnit then ns.OnPlayerUnit(e, CheckGear) else ns.On(e, CheckGear) end
 end
 -- items a gear question could not read yet (not loaded): their arrival is a "gear" notice
 local missed, missedN = {}, 0

@@ -171,11 +171,18 @@ function ns.QuestExistsCounts()
   return c
 end
 
+-- (21.11.2026, Ruckler) did the last answer tell this check something (its own request, a title it waited for, a
+-- stored "false" set or lifted)? Levels.lua keeps such an answer of its background walk from being quiet.
+local changedID
+function ns.QuestExistsJustChanged(questID) return changedID ~= nil and changedID == ns.Num(questID) end
 ns.On("QUEST_DATA_LOAD_RESULT", function(_, questID, success)
+  changedID = nil
   local id = ns.Num(questID)
   if not id or success == nil or not ns.Usable(success) then return end
   local store = Store()
   if not store then return end
+  local before = store[id]
+  if pending[id] or recheck[id] or titleMiss[id] then changedID = id end
   pending[id], noAnswer[id], recheck[id] = nil, nil, nil
   if success == false then
     confirmed[id] = nil
@@ -187,6 +194,7 @@ ns.On("QUEST_DATA_LOAD_RESULT", function(_, questID, success)
     confirmed[id] = true
     store[id] = nil
   end
+  if store[id] ~= before then changedID = id end
 end)
 
 -- (05.11.2026) The client's title of any quest, with a brake. GetTitleForQuestID asks the server by itself when the

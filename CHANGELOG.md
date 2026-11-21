@@ -1,5 +1,9 @@
 # Changes
 
+## 1.5.1
+
+- **Smoother play:** fixed short stutters. The background check of quest levels after an update asks only for changed quests, more slowly, and no longer makes the map and lists redraw; quest tags and levels from the log are read once per log change; armor and health changes of other units no longer wake the gear check.
+
 ## 1.5.0
 
 - **Dungeon quests:** a list of dungeon and raid quests (from CMaNGOS) and the quest marks the game shows in your log, so the Don addons can mark Elite, Dungeon and Raid quests correctly.

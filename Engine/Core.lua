@@ -524,6 +524,32 @@ function ns.On(event, fn)
   return true
 end
 
+-- (21.11.2026, Ruckler) A unit event of the player only (UNIT_MAXHEALTH, UNIT_RESISTANCES): its own frame registered
+-- with RegisterUnitEvent(event, "player"), so the events of every other unit (a raid, nameplates) do not reach Lua at
+-- all; without RegisterUnitEvent the frame takes all and passes on the player's. fn(event, unit, ...) as with ns.On,
+-- only once the engine has its settings.
+local unitFrame, unitListeners
+function ns.OnPlayerUnit(event, fn)
+  if not unitFrame then
+    unitFrame, unitListeners = CreateFrame("Frame"), {}
+    unitFrame:SetScript("OnEvent", function(_, ev, unit, ...)
+      if unit ~= "player" or not ns.db then return end
+      local list = unitListeners[ev]
+      if not list then return end
+      for i = 1, #list do ns.SafeCall(ev, list[i], ev, unit, ...) end
+    end)
+  end
+  if not unitListeners[event] then
+    local ok = type(unitFrame.RegisterUnitEvent) == "function" and pcall(unitFrame.RegisterUnitEvent, unitFrame, event, "player")
+    if not ok then ok = pcall(unitFrame.RegisterEvent, unitFrame, event) end
+    if not ok then return false end
+    unitListeners[event] = {}
+  end
+  table.insert(unitListeners[event], fn)
+  listenerWhere[fn] = listenerWhere[fn] or Where(3)
+  return true
+end
+
 function ns.OnInit(fn) table.insert(initCallbacks, fn) end
 
 -- (25.10.2026) call the listeners of an event the client does not send (Era: SUPER_TRACKING_CHANGED)

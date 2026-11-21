@@ -70,9 +70,14 @@ end
 local mine = {}
 local function Forget() mine.w, mine.class, mine.armorSta = nil, nil, nil end
 if ns.On then
+  local function OnEvent(_, unit) if unit == nil or unit == "player" then Forget() end end
   for _, e in ipairs({ "PLAYER_LEVEL_UP", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "PLAYER_EQUIPMENT_CHANGED",
-      "UNIT_MAXHEALTH", "UNIT_RESISTANCES", "PLAYER_ENTERING_WORLD" }) do
-    ns.On(e, function(_, unit) if unit == nil or unit == "player" then Forget() end end)
+      "PLAYER_ENTERING_WORLD" }) do
+    ns.On(e, OnEvent)
+  end
+  -- (21.11.2026, Ruckler) health and resistances of the player only (ns.OnPlayerUnit, Core.lua), not of every unit
+  for _, e in ipairs({ "UNIT_MAXHEALTH", "UNIT_RESISTANCES" }) do
+    if ns.OnPlayerUnit then ns.OnPlayerUnit(e, OnEvent) else ns.On(e, OnEvent) end
   end
 end
 function ns.GearWeights(class, tree)

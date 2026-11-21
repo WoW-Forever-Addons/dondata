@@ -572,7 +572,7 @@ end
 function ns.GameQuestLevel(questID)
   questID = ns.Num(questID)
   if not questID then return nil end
-  local lv = ns.ScopeValue("logLevels", LogLevels)[questID]
+  local lv = ns.LogValue("logLevels", LogLevels)[questID] -- (21.11.2026, Ruckler) once per quest log event, not per scope
   if lv then
     if ns.db then
       ns.db.questLevels = type(ns.db.questLevels) == "table" and ns.db.questLevels or {}
@@ -638,7 +638,7 @@ end
 function ns.QuestTag(questID)
   questID = ns.Num(questID)
   if not questID then return nil end
-  local game = ns.ScopeValue("logTags", LogTags)[questID]
+  local game = ns.LogValue("logTags", LogTags)[questID] -- (21.11.2026, Ruckler) once per quest log event, not per scope
   if type(game) == "number" then -- in the log and the game told (0: no tag)
     if ns.db then
       ns.db.questTags = type(ns.db.questTags) == "table" and ns.db.questTags or {}
@@ -810,6 +810,7 @@ end
 -- (31.10.2026, C11) Quest_Texts.lua keeps each language as one string until it is first needed: the first T.enUS here
 -- reads it (about 5 ms, then about 1 MB more), every later call finds the table. A locale without a string costs one
 -- metatable lookup. Same tables as before for everyone who reads ns.QUEST_TEXTS directly.
+local textMix, textMixN = {}, 0
 function ns.QuestText(questID)
   local T = ns.QUEST_TEXTS
   if type(T) ~= "table" then return nil end
@@ -818,7 +819,14 @@ function ns.QuestText(questID)
   local en = T.enUS and T.enUS[questID]
   if type(mine) == "table" and type(en) == "table" then
     -- names not translated: the English ones
-    return { o = mine.o or en.o, r = mine.r or en.r, s = mine.s or en.s, e = mine.e or en.e }
+    -- (21.11.2026, Ruckler) the mix is kept per quest while both texts stay the same tables (was a new table per call)
+    local k = textMix[questID]
+    if k and k.mine == mine and k.en == en then return k.t end
+    local t = { o = mine.o or en.o, r = mine.r or en.r, s = mine.s or en.s, e = mine.e or en.e }
+    if textMixN >= 400 then textMix, textMixN = {}, 0 end
+    if not k then textMixN = textMixN + 1 end
+    textMix[questID] = { mine = mine, en = en, t = t }
+    return t
   end
   return type(mine) == "table" and mine or (type(en) == "table" and en) or nil
 end
@@ -981,15 +989,26 @@ function ns.ForgetAvailable()
   availGen = availGen + 1
   if ns.ForgetMinimapBase then ns.ForgetMinimapBase() end
 end
-for _, e in ipairs({ "QUEST_DATA_LOAD_RESULT", "QUESTLINE_UPDATE", "QUEST_ACCEPTED", "QUEST_REMOVED", "QUEST_TURNED_IN",
+-- (21.11.2026, Ruckler) QUEST_DATA_LOAD_RESULT: Levels.lua listens for it after its own handler and leaves out the quiet
+-- answers of the background level walk (ns.LevelScanAsked; about one every 1.5 s for a long while after new data)
+for _, e in ipairs({ "QUESTLINE_UPDATE", "QUEST_ACCEPTED", "QUEST_REMOVED", "QUEST_TURNED_IN",
     "PLAYER_LEVEL_UP", "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA", "GOSSIP_SHOW", "QUEST_DETAIL", "QUEST_GREETING" }) do
   ns.On(e, ns.ForgetAvailable)
 end
+-- (21.11.2026, Ruckler) the options as one number instead of eight tostrings joined per call: it goes up when one of
+-- them (or the settings table) differs from the last call
+local OPT_KEYS = { "showLowLevel", "confirmedOnly", "hideEventQuests", "showNoLevel", "lowLevelRange", "hideRepeatable",
+  "clientRepeatable", "nextConfirmedOnly" }
+local optSeen, optDB, optKey = {}, nil, 0
 local function AvailOptions()
   local d = ns.db
-  return table.concat({ tostring(d.showLowLevel), tostring(d.confirmedOnly), tostring(d.hideEventQuests), tostring(d.showNoLevel),
-    tostring(d.lowLevelRange), tostring(d.hideRepeatable), tostring(d.clientRepeatable),
-    tostring(d.nextConfirmedOnly) }, ",")
+  local same = optDB == d
+  for i = 1, #OPT_KEYS do
+    local v = d[OPT_KEYS[i]]
+    if optSeen[i] ~= v then optSeen[i], same = v, false end
+  end
+  if not same then optDB, optKey = d, optKey + 1 end
+  return optKey
 end
 local function KeptAvailable(mapID)
   if QD_TEST_FRESH_LOG or not (ns.InScope and ns.InScope()) or not ns.QuestLogState then return AvailableOnMap(mapID) end

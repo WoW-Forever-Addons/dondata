@@ -6,11 +6,18 @@ local _, ns = ...
 -- server 18), and the minimum level can not be asked, the quest's level can (C_QuestLog.GetQuestDifficultyLevel after
 -- C_QuestLog.RequestLoadQuestByID, also for quests that are not in the log).
 --
---   * Forever only (Era ships CMaNGOS' levels). Starts START s after login, then one quest every GAP s (RATE a second),
+--   * Forever only (Era ships CMaNGOS' levels). Starts START s after login, then one quest every GAP s,
 --     never in combat, never while the manual /qd scan (Questdon Scan.lua) runs.
 --   * Walks the quest IDs of ns.ATT_QUESTS in ascending order; the place is kept account-wide in
---     DonDataDB.levelScan = { p = last ID done, b = client build, v = data version, d = true when through }.
---     A new client build or new data starts it again from the first ID; nothing else is kept per quest.
+--     DonDataDB.levelScan = { p = last ID done, b = client build, v = data version, d = true when through,
+--     h = { [ID // 64] = fingerprint } }. A new client build starts it again from the first ID without h.
+--   * (21.11.2026, Ruckler) New data (same build) walks again but asks only the quests of the blocks of 64 IDs whose
+--     fingerprint (their IDs and shipped levels) changed: a block walked through (answer, no answer or a kept level)
+--     keeps its fingerprint in h, a block with the same fingerprint is passed without a request. About 320 numbers.
+--   * (21.11.2026, Ruckler) The walk's answers are quiet: ns.LevelScanAsked(questID) tells the listeners of
+--     QUEST_DATA_LOAD_RESULT (ForgetAvailable below, Questdon's map pins, minimap, nameplates and quest book), so they
+--     build nothing anew. Not quiet: a quest in the log, a level that differs from the shipped one (it shows), and an
+--     answer that told the existence check something (Exists.lua ns.QuestExistsJustChanged).
 --   * One request open at a time; no answer within WAIT s or "false": go on. Quests the account knows a level of
 --     (DonDataDB.questLevels) are skipped without a request.
 --   * A level is kept in DonDataDB.questLevels (as the quest log's levels, QuestData.lua ns.GameQuestLevel) only when
@@ -19,7 +26,7 @@ local _, ns = ...
 --   * Any successful load of a quest of the data (other addons, Exists.lua) is read the same way.
 ---------------------------------------------------------------------------
 local START = 60   -- seconds after login
-local GAP = 0.5    -- seconds between two quests (2 a second)
+local GAP = 1.5    -- seconds between two quests ((21.11.2026, Ruckler) was 0.5)
 local WAIT = 5     -- seconds to wait for the server's answer
 
 local ids          -- sorted quest IDs (made when the walk starts, dropped when it is through)
@@ -27,6 +34,9 @@ local pos = 0      -- index into ids
 local waiting, sentAt = nil, 0
 local ticker
 local stats = { asked = 0, found = 0, same = 0, none = 0 }
+local BLOCK = 64   -- (21.11.2026) IDs per fingerprint
+local prints       -- [block] = fingerprint of the data now (made with ids)
+local answered, answeredAt, answeredQuiet -- the walk's last answer (ns.LevelScanAsked)
 
 local function Now() return ns.Num(ns.Value(GetTime)) or 0 end
 
@@ -46,9 +56,13 @@ local function State()
   if type(db.levelScan) ~= "table" then db.levelScan = {} end
   local s = db.levelScan
   local b, v = Build(), DataVersion()
-  if s.b ~= b or s.v ~= v then
-    s.b, s.v, s.p, s.d = b, v, 0, nil
+  if s.b ~= b then
+    s.b, s.v, s.p, s.d, s.h = b, v, 0, nil, nil
+  elseif s.v ~= v then
+    -- (21.11.2026, Ruckler) new data, same build: the blocks' fingerprints stay, only changed blocks are asked
+    s.v, s.p, s.d = v, 0, nil
   end
+  if type(s.h) ~= "table" then s.h = {} end
   return s
 end
 
@@ -80,7 +94,7 @@ ns.NoteServerQuestLevel = Note
 
 local function Stop()
   if ticker and ticker.Cancel then ticker:Cancel() end
-  ticker, ids, waiting = nil, nil, nil
+  ticker, ids, prints, waiting = nil, nil, nil, nil
 end
 
 local function Count(result)
@@ -94,18 +108,39 @@ local function Done(s, id)
   if id and id > (ns.Num(s.p) or 0) then s.p = id end
 end
 
-local function MakeIDs(s)
-  ids = {}
+local function Block(id) return math.floor(id / BLOCK) end
+
+-- (21.11.2026) the sorted IDs and each block's fingerprint: its IDs and shipped levels in order
+local function Sorted()
+  local list, fp = {}, {}
   for id in pairs(ns.ATT_QUESTS or {}) do
-    if type(id) == "number" and id > 0 then ids[#ids + 1] = id end
+    if type(id) == "number" and id > 0 then list[#list + 1] = id end
   end
-  table.sort(ids)
+  table.sort(list)
+  local GL = ns.GAME_LEVELS
+  for i = 1, #list do
+    local id = list[i]
+    local b = Block(id)
+    local lv = GL and ns.Num(GL[id]) or 0
+    fp[b] = ((fp[b] or 7) * 31 + id * 101 + lv) % 2147483629
+  end
+  return list, fp
+end
+
+local function MakeIDs(s)
+  ids, prints = Sorted()
   -- go on where the last session stopped
   local p = ns.Num(s.p) or 0
   pos = 0
   for i = 1, #ids do
     if ids[i] > p then break end
     pos = i
+  end
+  -- (21.11.2026) blocks wholly behind that place were walked with this data (also by a walk before the fingerprints)
+  local open = ids[pos + 1] and Block(ids[pos + 1])
+  for i = 1, pos do
+    local b = Block(ids[i])
+    if b ~= open then s.h[b] = prints[b] end
   end
 end
 
@@ -130,13 +165,18 @@ local function Tick()
   while true do
     pos = pos + 1
     local id = ids[pos]
+    local last = ids[pos - 1]
+    -- (21.11.2026) the block before is through: keep its fingerprint
+    if last and (not id or Block(id) ~= Block(last)) then s.h[Block(last)] = prints[Block(last)] end
     if not id then
       s.d = true
       Stop()
       return
     end
-    if store[id] == nil then
+    local b = Block(id)
+    if store[id] == nil and s.h[b] ~= prints[b] then
       waiting, sentAt = id, Now()
+      answered = nil
       stats.asked = stats.asked + 1
       if not pcall(C_QuestLog.RequestLoadQuestByID, id) then
         Count(nil)
@@ -153,12 +193,37 @@ ns.On("QUEST_DATA_LOAD_RESULT", function(_, questID, success)
   if not id or not (ns.ATT_QUESTS and ns.ATT_QUESTS[id]) or ns.ERA then return end
   local ok = success == true and ns.Usable(success)
   if id == waiting then
-    Count(ok and Note(id) or nil)
+    local r = ok and Note(id) or nil
+    Count(r)
+    -- (21.11.2026, Ruckler) quiet unless the level shows anew or the existence check learned something
+    answered, answeredAt = id, Now()
+    answeredQuiet = r ~= "new" and not (ns.QuestExistsJustChanged and ns.QuestExistsJustChanged(id))
     local s = State()
     if s then Done(s, id) end
   elseif ok then
     Note(id)
   end
+end)
+
+-- (21.11.2026, Ruckler) Is this QUEST_DATA_LOAD_RESULT (or the request it answers) the background walk's and quiet?
+-- true: the quest is the walk's open request, or its answer was just read (same moment, at most a second) and changed
+-- nothing a list shows. Always false for a quest in the log. Listeners of QUEST_DATA_LOAD_RESULT call it first:
+--   if ns.LevelScanAsked and ns.LevelScanAsked(questID) then return end
+-- (one namespace, Questdon/Link.lua: Questdon reaches it as ns.LevelScanAsked; not part of DonDataAPI)
+function ns.LevelScanAsked(questID)
+  local id = ns.Num(questID)
+  if not id or (waiting ~= id and answered ~= id) then return false end
+  if ns.InQuestLog and ns.InQuestLog(id) then return false end
+  if waiting == id then return not (ns.QuestExistsJustChanged and ns.QuestExistsJustChanged(id)) end
+  local d = Now() - (answeredAt or 0)
+  return answeredQuiet == true and d >= 0 and d <= 1
+end
+
+-- (21.11.2026, Ruckler) the available quests are worked out anew after a load of quest data (QuestData.lua), but not
+-- after a quiet answer of the walk. Registered here, after the handler above, so the answer is read first.
+ns.On("QUEST_DATA_LOAD_RESULT", function(_, questID)
+  if ns.LevelScanAsked(questID) then return end
+  if ns.ForgetAvailable then ns.ForgetAvailable() end
 end)
 
 local function CanRun()
@@ -168,7 +233,15 @@ end
 
 function ns.StartLevelScan()
   local s = State()
-  if ticker or not s or s.d or not CanRun() then return false end
+  if ticker or not s or not CanRun() then return false end
+  if s.d then
+    -- (21.11.2026) a walk through before the fingerprints: every block was walked with this data
+    if next(s.h) == nil then
+      local _, fp = Sorted()
+      for b, f in pairs(fp) do s.h[b] = f end
+    end
+    return false
+  end
   ticker = ns.NewTicker(GAP, Tick)
   return ticker ~= nil
 end
@@ -192,5 +265,6 @@ function ns.LevelScanTick() Tick() end
 function ns.LevelScanReset()
   Stop()
   pos, stats = 0, { asked = 0, found = 0, same = 0, none = 0 }
+  answered, answeredAt, answeredQuiet = nil, nil, nil
   if ns.db then ns.db.levelScan = nil end
 end
