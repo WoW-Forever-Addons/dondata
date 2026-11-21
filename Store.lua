@@ -14,6 +14,7 @@ ns.LEARN_KEYS = {
   objOrder = true, shared = true, movedOrderFix = true,
   levelScan = true, -- (07.11.2026) where the walk of Engine/Levels.lua is
   npcNamesOrder = true, -- (31.10.2026, C13) the order npcNames were first seen in, for its limit (QuestData.lua)
+  questTags = true, -- (21.11.2026) the quest tag the game showed in the log: 1 elite, 81 dungeon, 62 raid, 0 none
 }
 ns.CHAR_KEYS = { notOffered = true, offered = true, notOfferedInfo = true }
 -- always there (the others are made by the code that needs them, as before)

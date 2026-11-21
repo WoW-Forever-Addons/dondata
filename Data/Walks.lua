@@ -63,7 +63,7 @@ ns.WALKS = {
 [4982]={[1453]={"duceducidxcoefdneldmeqdweie5edduefdoduchducedscddtcd"}}, -- Thomas (seen 1)
 [5347]={[1444]={"fjkffmk8flk1fgjufejofgjhfhj9fdj6f9j5f6j4f6iyfaiqfdijfai9f6i2f2i5eziaf0iieyipezixewj3ewjcexjlezjuf0k0f4k6f6kdfakjfgkm"}}, -- Antilus the Soarer
 [5543]={[1456]={"82787z7g81787y757s707p6x7m6u7i6p7e6l7a6j756h716d6x696v676p626j5w6f5s6c5o685j6256645b6b5n6d5q6j5w6o606u656w68706d746g7a6k7f6l7j6p7n6w7r6z7w747y76"}}, -- Clarice Foster
-[5601]={[1443]={"icmdicmdihm7igm9"}}, -- Khan Jehn
+[5601]={[1443]={"icmdicmdihm7igm9"}}, -- Khan Jehn (seen 1)
 [5637]={[1455]={"j166in5mip56iv4viv4vim5bio5wix66ja64jf5xjf5x"}}, -- Roetten Stonehammer
 [5682]={[1421]={"d8ntd7nrd6nnd4nld2njcznicwnicvnmcunoctnrctnucsnxcro0crnxcsnuctnqcunncvnkcwnicvnccvn9cxn7d0n7d1n6d3n8d4nad6ned7nid8nmd9nq"}}, -- Dalin Forgewright
 [5725]={[1420]={"fmelfeekfbejf7emf3eoeyeresexelf5eefee9foe3fye0g1dtg4dng4dcg1d5fxcyfucqfqcifncefgc6f4cdfecifncofpcwftd4fxdbg0dlg4dsg4dyg2e1g0e7fqeeffejf6ereyewesf1epf5enfaejfdejfkelfseifyegg5edgdebghebgkedgseigzeoh2evh7f8hafehefghjfhhmfohpfzhqgahogfhngohoghhpgchpg2hnfshkfihgfghcffh8fbh4eyh0eqguejgmeegiecgfebg8edg0effueh"}}, -- Deathguard Lundmark
@@ -77,7 +77,7 @@ ns.WALKS = {
 [5928]={[1440]={"46l847la49lc4blg4blj4blo4bls4dlw4ely4hly4im14km44mm84nmc4omg4mmi4jmg4jmb4jm64jm14jlx4jlt4jlp4jll4jlf4hld4el94dl64bkz4akw48kr46kp44ko42ko40kn3xkl3vkk3rkj3qki3okg3mke3kke3ikg3gki3dkl3fkn3hkq3jkt3lkx3nkx3ql23ql53pl83mla3llf3nlj3qlj3slf3ulc3xl941l943l945l8"}}, -- Sorrow Wing
 [5934]={[1445]={"11p014oz17ow1aot1cox1dp31cp71ap917p711p00yp00yp00uoy0sov0rop0qon0ros0toy0xp0"}}, -- Heartrazor
 [6170]={[1431]={"kjlgklliknlmkmltkllxklm1kmlykmltknlnkmli"}}, -- Gutspill (seen 4)
-[6175]={[1455]={"6hh764fb62ee62ee66g56hh76hh773iu7sk58wlp90lu90luadmtaun3bxndbxndaun29kmb8rlp7mjs6mhr6hh7"}}, -- John Turner (seen 8)
+[6175]={[1455]={"6hh764fb62ee62ee66g56hh76hh773iu7sk58wlp90lu90luadmtaun3bxndbxndaun29kmb8rlp7mjs6mhr6hh7"}}, -- John Turner (seen 9)
 [6176]={[1416]={"mdilm9ikm2iim0i9m1hwm3hfm8hdmchim8hdm3hfm1hwm0i9m2iim9ik"}}, -- Bath'rah the Windwatcher
 [6182]={[1436]={"bmorblopbjolbjopbjopbgosbgosbfoobiomblonboonbtolbtolbvojbwokbtolbtolbooo"}}, -- Daphne Stilwell (seen 2)
 [6494]={[1413]={"h5c8h3cah3cah7cch9cdhacgh9cihbcdhdcahec8hgc8hhc8hjcbhlcahmcbhncdhpcchscahtc9hvc8hxc8hwc8hucchrchhqcnhpcrhocshpcnhqcihpcdhncdhmcchmcahlcahkcahjcbhicahic9hhc8hfc8hdc8hac8h8c7"}}, -- Tazan

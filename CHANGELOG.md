@@ -1,5 +1,10 @@
 # Changes
 
+## 1.5.0
+
+- **Dungeon quests:** a list of dungeon and raid quests (from CMaNGOS) and the quest marks the game shows in your log, so the Don addons can mark Elite, Dungeon and Raid quests correctly.
+- **Learned from play:** the days up to 21 November: more quest levels, objective places, spawns, services, paths and quest texts.
+
 ## 1.4.1
 
 - **Learned from play:** the days up to 19 November, about 900 new facts: quest levels (now 1,820), objective places, gathering finds, services and paths.

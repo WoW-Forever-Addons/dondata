@@ -580,16 +580,20 @@ function ns.GameQuestLevel(questID)
     end
     return lv
   end
+  -- (21.11.2026, Daniel's picture: "Strange Pylons" [35] grey at level 41, the quest log says 43) the levels the quest
+  -- log showed (kept, then our players' logs) go before the client's GetQuestDifficultyLevel: that one reads the
+  -- client's quest table, which Forever's server overrides (92914: 35 there, 43 in every log)
+  local kept = ns.db and type(ns.db.questLevels) == "table" and ns.Num(ns.db.questLevels[questID])
+  if kept and kept > 0 then return kept end
+  -- (23.10.) the level the game showed in our players' quest logs (Extra_Quests.lua ns.GAME_LEVELS)
+  local shipped = ns.GAME_LEVELS and ns.Num(ns.GAME_LEVELS[questID])
+  if shipped and shipped > 0 then return shipped end
   local fn = C_QuestLog and C_QuestLog.GetQuestDifficultyLevel
   if type(fn) == "function" then
     local lv = ns.Num(ns.Value(fn, questID))
     if lv and lv > 0 then return lv end
   end
-  local kept = ns.db and type(ns.db.questLevels) == "table" and ns.Num(ns.db.questLevels[questID])
-  if kept and kept > 0 then return kept end
-  -- (23.10.) the level the game showed in our players' quest logs (Extra_Quests.lua ns.GAME_LEVELS)
-  local shipped = ns.GAME_LEVELS and ns.Num(ns.GAME_LEVELS[questID])
-  return shipped and shipped > 0 and shipped or nil
+  return nil
 end
 
 -- (1.22) "[12] " in difficulty colour, "[?] " for an unknown level. (1.3.6) the game's level first.
@@ -601,10 +605,63 @@ end
 
 -- (1.3.8, Daniel 15.10.: "is there an elite mark in the list?") " (Group)" behind a group quest's name (quest
 -- type 1: elites, Hogger, Book Return), in the colour of its level; "" for others.
+-- (21.11.2026, Daniel: "wie liest Questdon aus, ob es eine Elitequest ist?") the game first, then the list: a quest in
+-- the log takes the game's quest tag (GetQuestTagInfo: 1 group/elite, 81 dungeon, 62 raid), kept in
+-- DonDataDB.questTags (0: the game shows none) so the map and lists know it later. Outside the log the client's quest
+-- table is stale on Forever (as its levels), so: kept, then ns.GROUP_QUESTS (CMaNGOS Type 1) and ns.DUNGEON_QUESTS
+-- (CMaNGOS Type 81/62). Forever's own quests get a mark once someone has had them in the log.
+local TAG_KIND = { [1] = "elite", [81] = "dungeon", [85] = "dungeon", [62] = "raid", [88] = "raid", [89] = "raid" }
+local TAG_ID = { elite = 1, dungeon = 81, raid = 62 }
+local function GameTagID(questID)
+  local fn = C_QuestLog and C_QuestLog.GetQuestTagInfo
+  if type(fn) == "function" then
+    local ok, info = pcall(fn, questID)
+    if ok and type(info) == "table" then return ns.Num(info.tagID) or 0 end
+    if ok then return 0 end
+  end
+  fn = rawget(_G, "GetQuestTagInfo")
+  if type(fn) == "function" then
+    local ok, id = pcall(fn, questID)
+    if ok then return ns.Num(id) or 0 end
+  end
+  return nil -- the game cannot tell
+end
+local function LogTags()
+  local map = {}
+  for _, info in ipairs(ns.QuestLogEntries()) do
+    local id = ns.Num(info.questID)
+    if id and not info.isHeader and map[id] == nil then map[id] = GameTagID(id) or false end
+  end
+  return map
+end
+-- "elite", "dungeon", "raid" or nil
+function ns.QuestTag(questID)
+  questID = ns.Num(questID)
+  if not questID then return nil end
+  local game = ns.ScopeValue("logTags", LogTags)[questID]
+  if type(game) == "number" then -- in the log and the game told (0: no tag)
+    if ns.db then
+      ns.db.questTags = type(ns.db.questTags) == "table" and ns.db.questTags or {}
+      local keep = TAG_KIND[game] and TAG_ID[TAG_KIND[game]] or 0
+      if ns.db.questTags[questID] ~= keep then ns.db.questTags[questID] = keep end
+    end
+    return TAG_KIND[game]
+  end
+  local kept = ns.db and type(ns.db.questTags) == "table" and ns.Num(ns.db.questTags[questID])
+  if kept then return TAG_KIND[kept] end
+  if ns.GROUP_QUESTS and ns.GROUP_QUESTS[questID] then return "elite" end
+  return ns.DUNGEON_QUESTS and TAG_KIND[ns.Num(ns.DUNGEON_QUESTS[questID]) or 0] or nil
+end
+function ns.QuestTagText(questID) -- the keys written out, so tools/engine_locales.py finds them
+  local kind = ns.QuestTag(questID)
+  if kind == "elite" then return L["Elite"] elseif kind == "dungeon" then return L["Dungeon"] elseif kind == "raid" then return L["Raid"] end
+  return nil
+end
 function ns.GroupTag(questID)
-  if not (ns.GROUP_QUESTS and ns.GROUP_QUESTS[questID]) then return "" end
+  local text = ns.QuestTagText(questID)
+  if not text then return "" end
   local lv = ns.GameQuestLevel(questID) or ns.QuestLevel(questID)
-  return " " .. (lv and ns.LevelColor and ns.LevelColor(lv) or "|cffd0a050") .. "(" .. L["Group"] .. ")|r"
+  return " " .. (lv and ns.LevelColor and ns.LevelColor(lv) or "|cffd0a050") .. "(" .. text .. ")|r"
 end
 
 -- (1.22) "Level 12" or "Level unknown" for texts.
