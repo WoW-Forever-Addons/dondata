@@ -1,5 +1,9 @@
 # Changes
 
+## 1.5.3
+
+- **Explore quests point into the cave (The Jasperlode Mine, The Fargodeep Mine and nine more):** the objective is only the spot that counts, inside the mine, no longer spots outside; the Kobolds on the way are no longer marked as quest mobs.
+
 ## 1.5.2
 
 - **Data from more players (21 November):** quest starts, turn-ins, objective places, quest levels, drops and paths from the recordings of two more players.

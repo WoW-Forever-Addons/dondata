@@ -409,17 +409,14 @@ end
 -- (21.11.2026, Ruckler, Daniel: "monitor ... dass ich das im spiel testen kann") every protected call that takes
 -- SLOW_MS or more goes into the global ring DonSlowLog (60 entries, not saved): addon, context, the function's file and
 -- line, ms. DonMonitor's report lists it. Below the threshold it costs two debugprofilestop calls, no garbage.
-local SLOW_MS, SLOW_MAX = 15, 60
+local SLOW_MS, SLOW_MAX = 8, 200 -- (22.11.2026) 8 ms as DonMonitor's hitch threshold; the report sums them up
 local dps = type(debugprofilestop) == "function" and debugprofilestop or nil
 local function NoteSlow(context, fn, ms)
   local log = rawget(_G, "DonSlowLog")
   if type(log) ~= "table" then log = { n = 0 } DonSlowLog = log end
-  local where = "?"
-  local ok, info = pcall(debug.getinfo, fn, "S")
-  if ok and type(info) == "table" then
-    where = tostring(info.short_src or "?"):gsub("^.*AddOns.", ""):gsub("^%[string \"", ""):gsub("\"%]$", "")
-      .. ":" .. tostring(info.linedefined or "?")
-  end
+  -- (22.11.2026) the game has no debug.getinfo (the lookup threw, pcall swallowed it, nothing was ever noted): the
+  -- place is the listener's (ns.On) or stands in the context (tickers, timers while DonMonitor runs)
+  local where = (ns._listenerWhere and ns._listenerWhere[fn]) or "?"
   local okT, clock = pcall(date, "%H:%M:%S")
   log.n = (log.n or 0) + 1
   log[(log.n - 1) % SLOW_MAX + 1] = { n = log.n, t = okT and clock or "?", a = addonName, c = tostring(context), f = where,
@@ -523,7 +520,7 @@ function ns.QueueRefresh(a, b, c, d)
 end
 
 function ns.After(delay, fn)
-  if C_Timer and C_Timer.After then C_Timer.After(delay, ns.Guard(memProf and "timer " .. Where(3) or "timer", fn)) end
+  if C_Timer and C_Timer.After then C_Timer.After(delay, ns.Guard((memProf or rawget(_G, "DonMonitorDB")) and "timer " .. Where(3) or "timer", fn)) end
 end
 
 -- (16.10.) a ticker says where it was made (made rarely; /qd mem names it)
@@ -535,6 +532,7 @@ end
 local frame = CreateFrame("Frame")
 local listeners, initCallbacks = {}, {}
 local listenerWhere = {}
+ns._listenerWhere = listenerWhere -- (22.11.2026) NoteSlow names the listener's place
 
 function ns.On(event, fn)
   if not listeners[event] then
