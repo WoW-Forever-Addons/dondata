@@ -379,9 +379,9 @@ end
 -- "Arrow.lua:123" of the code that called the caller (for timers and event listeners)
 -- (review 7) the first place outside Core.lua: debugstack counts the pcall around it as a level too, so the fixed
 -- level landed on ns.After / ns.NewTicker / ns.On themselves and every part was named "Core.lua:..."
-local function Where(level)
+local function Where(level, lines, outsideOnly)
   if not debugstack then return "?" end
-  local ok, stack = pcall(debugstack, level, 6, 0)
+  local ok, stack = pcall(debugstack, level, lines or 6, 0)
   if not ok or type(stack) ~= "string" then return "?" end
   stack = stack:gsub("\\", "/")
   -- (23.10., Leveldon's /lvd mem) the game writes [Interface/AddOns/Questdon/Arrow.lua]:123: in function <...:100>:
@@ -392,6 +392,7 @@ local function Where(level)
     if file ~= "Core.lua" then return at end
     first = first or at
   end
+  if outsideOnly then return "?" end
   return first or "?"
 end
 ns.CodeWhere = Where
@@ -411,20 +412,35 @@ end
 -- line, ms. DonMonitor's report lists it. Below the threshold it costs two debugprofilestop calls, no garbage.
 local SLOW_MS, SLOW_MAX = 8, 200 -- (22.11.2026) 8 ms as DonMonitor's hitch threshold; the report sums them up
 local dps = type(debugprofilestop) == "function" and debugprofilestop or nil
+-- (24.11.2026, DonMonitor's report: "timer ?" 7x up to 76 ms, "map ?", "minimap ?") the place where a timer (ns.After)
+-- or a protected copy (ns.Guard) was made, noted only while DonMonitor or /qd mem runs: the game calls them later
+-- from C, where no stack leads back to the code. Weak keys: a timer's function goes with its timer.
+local placeOf = setmetatable({}, { __mode = "k" })
+local function Measuring() return memProf ~= nil or type(rawget(_G, "DonMonitorDB")) == "table" end
 local function NoteSlow(context, fn, ms)
   local log = rawget(_G, "DonSlowLog")
   if type(log) ~= "table" then log = { n = 0 } DonSlowLog = log end
   -- (22.11.2026) the game has no debug.getinfo (the lookup threw, pcall swallowed it, nothing was ever noted): the
-  -- place is the listener's (ns.On) or stands in the context (tickers, timers while DonMonitor runs)
-  local where = (ns._listenerWhere and ns._listenerWhere[fn]) or "?"
+  -- place is the listener's (ns.On, ns.OnInit), the timer's or guard's (placeOf), else the line that called
+  -- ns.SafeCall (a slow call is rare, its debugstack costs little); tickers carry it in the context
+  local where = (ns._listenerWhere and ns._listenerWhere[fn]) or placeOf[fn] or Where(2, 10, true)
   local okT, clock = pcall(date, "%H:%M:%S")
   log.n = (log.n or 0) + 1
-  log[(log.n - 1) % SLOW_MAX + 1] = { n = log.n, t = okT and clock or "?", a = addonName, c = tostring(context), f = where,
+  -- (22.11.2026) ns.slowDetail: the name of the most expensive step, set by the call itself (the quest list's pass)
+  local detail = ns.slowDetail
+  log[(log.n - 1) % SLOW_MAX + 1] = { n = log.n, t = okT and clock or "?", a = addonName,
+    c = tostring(context) .. (type(detail) == "string" and (" [" .. detail .. "]") or ""), f = where,
     ms = math.floor(ms * 10 + 0.5) / 10 }
 end
+-- (24.11.2026, laptop report after round 3: "refresh batch" listed besides its parts, which were listed already, and
+-- under the place of the first QueueRefresh caller) a call can ask not to be noted itself (skipSlowOf = its function):
+-- the batched refresh does when one of its parts was noted on its own (RunRefreshParts below)
+local skipSlowOf
 local function SlowDone(context, fn, t0, ...)
   local ms = dps() - t0
-  if ms >= SLOW_MS then pcall(NoteSlow, context, fn, ms) end
+  if skipSlowOf ~= nil and skipSlowOf == fn then skipSlowOf = nil
+  elseif ms >= SLOW_MS then pcall(NoteSlow, context, fn, ms) end
+  if ns.slowDetail ~= nil then ns.slowDetail = nil end
   return ...
 end
 function ns.SafeCall(context, fn, ...)
@@ -467,6 +483,7 @@ end
 
 -- A protected copy of fn for timers and script handlers.
 function ns.Guard(context, fn)
+  if placeOf[fn] == nil and Measuring() then placeOf[fn] = Where(3) end -- (24.11.2026) for the slow log
   return function(...) return ns.SafeCall(context, fn, ...) end
 end
 
@@ -481,25 +498,89 @@ end
 local REFRESH_DELAY = 0.5
 local parts, partOrder, partContext, pendingParts = {}, {}, {}, {}
 local flushQueued, runGuarded = false, nil
-local refreshStats = { flushes = 0, parts = 0 }
+local refreshStats = { flushes = 0, parts = 0, frames = 0 }
 function ns.RefreshStats() return refreshStats end
+-- (24.11.2026, Ruckler, laptop: refresh tracker 33 ms, refresh minimap 28 ms and more in one frame of 92 ms) the parts
+-- marked when a flush starts make its batch; it runs in their order (partOrder), one frame after another: a frame
+-- always runs the next part and goes on with the one after it only while the frame stays under FRAME_MS with that
+-- part's last time (partCost). Cheap parts still run together in one scope (the quest log read once), the costly
+-- ones get frames of their own. The order of the parts stays (learn before api). A part marked again before its turn
+-- runs once; one marked again after its turn waits for the next flush (REFRESH_DELAY, in a fight 1 s) as before.
+-- Without debugprofilestop or C_Timer (tests) the batch runs whole, as before.
+local FRAME_MS = 12
+local batch, partCost = {}, {}
 
 function ns.RegisterRefresh(name, fn)
   if not parts[name] then partOrder[#partOrder + 1] = name end
   parts[name], partContext[name] = fn, "refresh " .. name
 end
 
-local function RunParts()
-  flushQueued = false
-  refreshStats.flushes = refreshStats.flushes + 1
-  for _, name in ipairs(partOrder) do
-    if pendingParts[name] then
-      pendingParts[name] = nil
-      refreshStats.parts = refreshStats.parts + 1
-      ns.SafeCall(partContext[name], parts[name])
+local function AnyPending()
+  for i = 1, #partOrder do if pendingParts[partOrder[i]] then return true end end
+  return false
+end
+
+local function ScheduleFlush(delay)
+  flushQueued = true
+  if C_Timer and C_Timer.After then
+    if not runGuarded then
+      placeOf[ns.RunRefreshParts] = ns.RefreshBatchPlace -- (24.11.2026) its own place, not its first caller's
+      runGuarded = ns.Guard("refresh batch", ns.RunRefreshParts)
     end
+    -- (16.10., stutter report) in a fight (kills and loot update the log again and again) once a second at most
+    C_Timer.After(delay or ((InCombatLockdown and InCombatLockdown()) and 1 or REFRESH_DELAY), runGuarded)
+  else
+    ns.SafeCall("refresh batch", ns.RunRefreshParts)
   end
 end
+
+-- (24.11.2026, laptop report: "refresh batch" 8x besides "refresh tracker" and "refresh minimap", at Tracker.lua:2138)
+-- the slow log names the batch only when none of its parts reached the log's threshold itself (else the same time
+-- stood there twice), then with its costliest part in brackets ("refresh batch [minimap]"), and at a place of its own
+-- (Core.lua, not the code that marked the first part)
+local SlowBatchDone
+function ns.RunRefreshParts()
+  refreshStats.frames = refreshStats.frames + 1
+  skipSlowOf = nil
+  if next(batch) == nil then
+    refreshStats.flushes = refreshStats.flushes + 1
+    for i = 1, #partOrder do
+      local name = partOrder[i]
+      if pendingParts[name] then batch[name], pendingParts[name] = true, nil end
+    end
+  end
+  local spread = dps ~= nil and C_Timer ~= nil and C_Timer.After ~= nil
+  local t0 = dps and dps()
+  local ran = false
+  local top, topMs = nil, -1
+  for i = 1, #partOrder do
+    local name = partOrder[i]
+    if batch[name] then
+      if ran and spread and dps() - t0 + (partCost[name] or 0) > FRAME_MS then
+        ScheduleFlush(0) -- the rest of the batch in the next frame
+        return SlowBatchDone(top, topMs)
+      end
+      batch[name], pendingParts[name] = nil, nil
+      refreshStats.parts = refreshStats.parts + 1
+      local t1 = dps and dps()
+      ns.SafeCall(partContext[name], parts[name])
+      if t1 then
+        local ms = dps() - t1
+        if spread then partCost[name] = ms end
+        if ms > topMs then top, topMs = name, ms end
+      end
+      ran = true
+    end
+  end
+  flushQueued = false
+  if AnyPending() then ScheduleFlush() end -- marked again while the batch ran
+  return SlowBatchDone(top, topMs)
+end
+function SlowBatchDone(top, topMs)
+  if not top then return end
+  if topMs >= SLOW_MS then skipSlowOf = ns.RunRefreshParts else ns.slowDetail = top end
+end
+ns.RefreshBatchPlace = "Core.lua:batch" -- (tests) the slow log's place of the batch
 
 -- Marks parts ("map", "minimap", ...) for the next batched refresh.
 function ns.QueueRefresh(a, b, c, d)
@@ -507,20 +588,22 @@ function ns.QueueRefresh(a, b, c, d)
   if b then pendingParts[b] = true end
   if c then pendingParts[c] = true end
   if d then pendingParts[d] = true end
-  if not flushQueued then
-    flushQueued = true
-    if C_Timer and C_Timer.After then
-      runGuarded = runGuarded or ns.Guard("timer", RunParts)
-      -- (16.10., stutter report) in a fight (kills and loot update the log again and again) once a second at most
-      C_Timer.After((InCombatLockdown and InCombatLockdown()) and 1 or REFRESH_DELAY, runGuarded)
-    else
-      ns.SafeCall("timer", RunParts)
-    end
-  end
+  if not flushQueued then ScheduleFlush() end
 end
 
+-- (24.11.2026) while DonMonitor runs the place goes to placeOf (the slow log's file:line), the context stays "timer":
+-- no string built; /qd mem keeps the place in the context as before. Not measuring: one closure, as before.
 function ns.After(delay, fn)
-  if C_Timer and C_Timer.After then C_Timer.After(delay, ns.Guard((memProf or rawget(_G, "DonMonitorDB")) and "timer " .. Where(3) or "timer", fn)) end
+  if not (C_Timer and C_Timer.After) then return end
+  local context = "timer"
+  if memProf then
+    local at = Where(3)
+    context = "timer " .. at
+    placeOf[fn] = placeOf[fn] or at
+  elseif placeOf[fn] == nil and type(rawget(_G, "DonMonitorDB")) == "table" then
+    placeOf[fn] = Where(3)
+  end
+  C_Timer.After(delay, ns.Guard(context, fn))
 end
 
 -- (16.10.) a ticker says where it was made (made rarely; /qd mem names it)
@@ -573,7 +656,10 @@ function ns.OnPlayerUnit(event, fn)
   return true
 end
 
-function ns.OnInit(fn) table.insert(initCallbacks, fn) end
+function ns.OnInit(fn)
+  table.insert(initCallbacks, fn)
+  listenerWhere[fn] = listenerWhere[fn] or Where(3) -- (24.11.2026) the slow log names "init" by its file and line
+end
 
 -- (25.10.2026) call the listeners of an event the client does not send (Era: SUPER_TRACKING_CHANGED)
 function ns.Fire(event, ...)

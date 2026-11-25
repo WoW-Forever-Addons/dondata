@@ -99,7 +99,16 @@ function ns.OfferConfirmed(questID, level)
   return at ~= nil and level ~= nil and level >= at
 end
 
+-- (23.11.2026, Daniel: "das gleiche gilt für questdon, da wird z.b. jetzt der jahrmarkt questgeber in if angezeigt")
+-- An offer is kept for good (per character and, by level, account wide). For a quest of a world event that is wrong
+-- once the event is over: the giver is gone, the kept offer still said "confirmed". offeredNow holds the offers of this
+-- session only; an event quest counts as available only through them or through the game's own list (QuestData.lua).
+local offeredNow = {}
+function ns.OfferedNow(questID) return offeredNow[questID] == true end
+function ns.SetOfferedNow(questID, on) offeredNow[questID] = on and true or nil end -- (tests)
+
 local function Confirm(questID, level)
+  offeredNow[questID] = true
   local c = Char()
   if not c.offered[questID] then stats.confirmed = stats.confirmed + 1 end
   c.offered[questID] = level or c.offered[questID] or 0

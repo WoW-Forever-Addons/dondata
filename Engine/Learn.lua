@@ -480,9 +480,11 @@ end
 ns.NoteItemCast = OnCast -- (tests)
 function ns.LastItemUse() return lastUse end -- (tests)
 -- only the player's own casts (a unit event: the casts of every mob and party member never reach Questdon)
+local StampTarget -- (24.11.) the target seen alive, NoteCredit below
 local castFrame = CreateFrame("Frame")
 if castFrame.RegisterUnitEvent and pcall(castFrame.RegisterUnitEvent, castFrame, "UNIT_SPELLCAST_SUCCEEDED", "player") then
-  castFrame:SetScript("OnEvent", ns.Guard("item use", function(_, _, unit, _, spellID)
+  castFrame:SetScript("OnEvent", ns.Guard("item use", function(_, event, unit, _, spellID)
+    if event == "UNIT_HEALTH" then if unit == "target" and StampTarget then StampTarget() end return end -- (24.11.) below
     OnCast(unit, spellID)
     if unit == "player" and ns.GatherCast then ns.GatherCast(spellID) end -- (27.10.) gathering finds (Gather.lua)
   end))
@@ -569,15 +571,35 @@ local function Bump(t, k)
   t[k] = math.min((t[k] or 0) + 1, 9999)
 end
 
+-- (24.11.2026, Daniel with From Seed to Sprout: the Venomweb Spitters marked for planting saplings) a dead target
+-- counts as the kill only when it was seen alive a moment ago: a spider killed minutes before and still targeted
+-- while planting gave the planting's credit. Seen alive: target changed or its health changed (one unit event for
+-- the target only, no events of other units).
+local KILL_SECS = 10
+local targetAlive -- { guid, t }
+function StampTarget()
+  local guid = UnitGUID and ns.Value(UnitGUID, "target")
+  if type(guid) == "string" and not ns.True(ns.Value(UnitIsDead, "target")) then
+    targetAlive = { guid, Clock() }
+  end
+end
+ns.On("PLAYER_TARGET_CHANGED", StampTarget)
+if castFrame.RegisterUnitEvent then pcall(castFrame.RegisterUnitEvent, castFrame, "UNIT_HEALTH", "target") end
+local function JustKilled()
+  if not ns.True(ns.Value(UnitIsDead, "target")) then return false end
+  local guid = UnitGUID and ns.Value(UnitGUID, "target")
+  return targetAlive ~= nil and targetAlive[1] == guid and Clock() - targetAlive[2] <= KILL_SECS
+end
+
 local function NoteCredit(questID, index, o)
   local db = ns.db
   db.learnedCredit = type(db.learnedCredit) == "table" and db.learnedCredit or {}
   local credit = {}
   local otype = type(o) == "table" and o.type ~= nil and ns.Usable(o.type) and o.type or nil
   if otype ~= "item" then
-    -- killed: the target is dead right now
+    -- killed: the target is dead right now and was alive a moment ago
     local kind, id = UnitKindID("target")
-    if kind == "c" and ns.True(ns.Value(UnitIsDead, "target")) then credit[#credit + 1] = { "c", id } end
+    if kind == "c" and JustKilled() then credit[#credit + 1] = { "c", id } end
   end
   if otype ~= "monster" and lastLoot and Clock() - lastLoot.t <= LOOT_SECS then
     for _, src in ipairs(lastLoot.sources) do credit[#credit + 1] = src end
@@ -618,6 +640,11 @@ end
 -- (23.10., Daniel: An Enticing Offer, the petals' marks on the boars) a creature the data names for another objective
 -- of the quest, and not for this one, does not count for this one: until 23.10. the game's order (vials first) was taken
 -- for the data's, and the boars and bears that dropped the vials were learned for the petals
+-- (24.11.2026) credit learned wrongly before the JustKilled() check, by many players: never counts. Same list in
+-- tools/open/build_spawns.py WRONG_CREDIT. [questID] = { [index] = { [creatureID] = true } }
+local WRONG_CREDIT = {
+  [94843] = { [1] = { [270664] = true } }, -- From Seed to Sprout: Venomweb Spitter (the saplings are planted)
+}
 local function OtherObjectiveCreature(questID, index, id)
   local objs = ns.ATT_OBJECTIVES and ns.ATT_OBJECTIVES[questID]
   if type(objs) ~= "table" then return false end
@@ -637,7 +664,8 @@ function ns.LearnedObjectiveCreatures(questID, index, dataHasCreatures)
   if type(c) ~= "table" then return nil end
   local list
   for id, n in pairs(c) do
-    if type(id) == "number" and (n >= 2 or not dataHasCreatures) and not OtherObjectiveCreature(questID, index, id) then
+    if type(id) == "number" and (n >= 2 or not dataHasCreatures) and not OtherObjectiveCreature(questID, index, id)
+        and not (WRONG_CREDIT[questID] and WRONG_CREDIT[questID][index] and WRONG_CREDIT[questID][index][id]) then
       list = list or {}
       list[#list + 1] = id
     end

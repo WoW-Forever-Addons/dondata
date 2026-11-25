@@ -1,5 +1,17 @@
 # Changes
 
+## 1.6.0
+
+- **New data:** the quest data was refreshed twice. About 5,100 quests now, with the new Tip the Scales and Kum'isha's Endeavors quests and a lot of newly learned facts. Two quests that no longer exist are gone.
+- **Riverglades services:** the inn and the flight masters of Rog'mar, Farholde Keep and Powderfuse Port show on the map with the right faction, and the symbols no longer land on the wrong continent map. Two flight points at Powderfuse Port that have no flight master in the game are gone.
+- **Only the quests you can really do:** the profession specialisation quests (blacksmith, engineer, leatherworker) show only with the profession and only while you have not learned a specialisation of it. The 37 "The Alliance/Horde Needs ..." war effort quests are gone, because that event is not active.
+- **Event quests only when they run:** an event quest shows only while the game lists it or the giver offered it this session, not because you saw it at the last event.
+- **No false kill credit:** a mob that died long ago is no longer marked as the source of a quest objective, for example the spiders of From Seed to Sprout, where you plant seedlings.
+- **Quest items used up later:** items a quest uses up are now linked to it, for example the three pieces of Lord Valthalak's Amulet to The Right Piece of Lord Valthalak's Amulet, so Questdon keeps them.
+- **Quest colours in tooltips:** the level tag in NPC tooltips, the quest book, the tracker and the pin titles uses the same colour as the quest list.
+- **Pictures and levels for pin cards:** the data now has level, model and rank of 1,850 mobs, so pin cards can show a small picture and the mob's level.
+- **Smoother play:** learning from the game's quest points works in small steps instead of one long one, and the refresh after quest changes gives costly parts their own frames. Spawn points are kept instead of being rebuilt each time.
+
 ## 1.5.3
 
 - **Explore quests point into the cave (The Jasperlode Mine, The Fargodeep Mine and nine more):** the objective is only the spot that counts, inside the mine, no longer spots outside; the Kobolds on the way are no longer marked as quest mobs.

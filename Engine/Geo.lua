@@ -30,9 +30,12 @@ end
 -- function (another addon) starts over.
 local transforms, transformFn = {}, nil
 local NONLINEAR = false
+-- (24.11.2026) goes up when the client's function was replaced and the maps' corners are asked anew: world positions
+-- kept with a point (QuestData.lua StaticTargets: _wg) are good while it is the same
+local worldGen = 0
 local function Transform(mapID)
   local fn = C_Map and C_Map.GetWorldPosFromMapPos
-  if fn ~= transformFn then transforms, transformFn = {}, fn end
+  if fn ~= transformFn then transforms, transformFn, worldGen = {}, fn, worldGen + 1 end
   local t = transforms[mapID]
   if t ~= nil then return t end
   local c0, n0, w0 = AskWorldPos(mapID, 0, 0)
@@ -42,6 +45,11 @@ local function Transform(mapID)
   t = { c = c0, n0 = n0, w0 = w0, nx = n1 - n0, wx = w1 - w0, ny = n2 - n0, wy = w2 - w0, checked = false }
   transforms[mapID] = t
   return t
+end
+function ns.WorldPosGen()
+  local fn = C_Map and C_Map.GetWorldPosFromMapPos
+  if fn ~= transformFn then transforms, transformFn, worldGen = {}, fn, worldGen + 1 end
+  return worldGen
 end
 function ns.WorldPos(mapID, x, y)
   mapID, x, y = ns.Num(mapID), ns.Num(x), ns.Num(y)

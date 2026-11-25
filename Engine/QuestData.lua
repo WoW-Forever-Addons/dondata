@@ -327,10 +327,34 @@ function ns.KnowsSkill(skill)
   if not skill or not SKILL_SPELLS[skill] then return true end
   return KnownSkills()[skill] == true
 end
+-- (22.11.2026, Daniel with three pictures in Ironforge: "ich bin kein schmied, wieso werden mir diese quests angezeigt",
+-- "ich bin bereits goblin ingi") The specialization quests: ATT gives the smiths' and leatherworkers' ones no skill, and
+-- once a specialization is learned none of its line's quests can be taken any more (one per profession).
+-- [questID] = { skill line, specialization spells of that line }
+local SMITH, ENGI, LEATHER = { 9787, 9788 }, { 20219, 20222 }, { 10656, 10658, 10660 } -- Weapon/Armorsmith; Gnomish/Goblin; Dragonscale/Elemental/Tribal
+local SPEC_QUESTS = {
+  [5283] = { 164, SMITH }, [5284] = { 164, SMITH }, [5301] = { 164, SMITH }, [5302] = { 164, SMITH },
+  [3526] = { 202, ENGI }, [3629] = { 202, ENGI }, [3630] = { 202, ENGI }, [3632] = { 202, ENGI }, [3633] = { 202, ENGI },
+  [3634] = { 202, ENGI }, [3635] = { 202, ENGI }, [3637] = { 202, ENGI }, [4181] = { 202, ENGI },
+  [5141] = { 165, LEATHER }, [5143] = { 165, LEATHER }, [5144] = { 165, LEATHER }, [5145] = { 165, LEATHER },
+  [5146] = { 165, LEATHER }, [5148] = { 165, LEATHER },
+}
+ns.SPEC_QUESTS = SPEC_QUESTS -- (tests)
+local function QuestSkill(questID)
+  local q = Q[questID]
+  local spec = SPEC_QUESTS[questID]
+  return (q and q[SKILL]) or (spec and spec[1])
+end
+-- true when the character already has a specialization of the quest's line
+function ns.SpecLearned(questID)
+  local spec = SPEC_QUESTS[questID]
+  if not spec then return false end
+  for _, id in ipairs(spec[2]) do if SpellKnown(id) then return true end end
+  return false
+end
 -- The profession a quest needs and the character lacks, else nil.
 function ns.MissingSkill(questID)
-  local q = Q[questID]
-  local skill = q and q[SKILL]
+  local skill = QuestSkill(questID)
   if skill and not ns.KnowsSkill(skill) then return skill end
   return nil
 end
@@ -378,7 +402,8 @@ function DataCanTake(questID, player, above)
   if ns.IsQuestDone(questID) or ns.InQuestLog(questID) then return false end
   if ns.QuestKnownMissing(questID) then return false end -- the server does not know it
   if not Reachable(questID, player) then return false end
-  if q[SKILL] and not ns.KnowsSkill(q[SKILL]) then return false end -- (1.3.4) profession quests once the profession is learned
+  if ns.MissingSkill(questID) then return false end -- (1.3.4) profession quests once the profession is learned
+  if ns.SpecLearned(questID) then return false end -- (22.11.2026) a specialization of that profession already learned
   if q[LEVEL] and player.level and q[LEVEL] > player.level + (tonumber(above) or 0) then return false end
   if not PrereqsDone(questID, q, player) then return false end
   -- (1.1) helper quests that only exist while another quest is in the log (Data/Extra_Quests.lua)
@@ -412,7 +437,9 @@ function ns.WhyQuest(questID)
   Line(not ns.InQuestLog(questID), "not in the quest log")
   Line(not ns.QuestKnownMissing(questID), "the server knows it")
   Line(Reachable(questID, player), ("faction, race, class (you: %s %s %s)"):format(tostring(player.faction), tostring(player.race), tostring(player.class)))
-  if q[SKILL] then Line(ns.KnowsSkill(q[SKILL]), "profession " .. tostring(q[SKILL]) .. " learned") end
+  local skill = QuestSkill(questID)
+  if skill then Line(ns.KnowsSkill(skill), "profession " .. tostring(skill) .. " learned") end
+  if SPEC_QUESTS[questID] then Line(not ns.SpecLearned(questID), "no specialization of that profession learned yet") end
   Line(not (q[LEVEL] and player.level and q[LEVEL] > player.level), ("level %s, you %s"):format(tostring(q[LEVEL] or "?"), tostring(player.level)))
   Line(PrereqsDone(questID, q, player), "quests before it done")
   local active = ns.EXTRA_ACTIVE and ns.EXTRA_ACTIVE[questID]
@@ -597,9 +624,15 @@ function ns.GameQuestLevel(questID)
 end
 
 -- (1.22) "[12] " in difficulty colour, "[?] " for an unknown level. (1.3.6) the game's level first.
+-- (23.11.2026, Daniel with pictures: "[38] Gaseous Gold" green in the quest list, grey in the NPC tooltip) the colour
+-- the game gives the quest (Questdon ns.QuestLevelColor, as the list and the pin cards), the level's only without it
+local function TagColor(questID, lv)
+  if ns.QuestLevelColor then return ns.QuestLevelColor(questID, lv) end
+  return ns.LevelColor and ns.LevelColor(lv) or ""
+end
 function ns.QuestLevelTag(questID)
   local lv = ns.GameQuestLevel(questID) or ns.QuestLevel(questID)
-  if lv then return (ns.LevelColor and ns.LevelColor(lv) or "") .. ("[%d]|r "):format(lv) end
+  if lv then return TagColor(questID, lv) .. ("[%d]|r "):format(lv) end
   return "|cff737880[?]|r "
 end
 
@@ -661,7 +694,7 @@ function ns.GroupTag(questID)
   local text = ns.QuestTagText(questID)
   if not text then return "" end
   local lv = ns.GameQuestLevel(questID) or ns.QuestLevel(questID)
-  return " " .. (lv and ns.LevelColor and ns.LevelColor(lv) or "|cffd0a050") .. "(" .. text .. ")|r"
+  return " " .. (lv and TagColor(questID, lv) or "|cffd0a050") .. "(" .. text .. ")|r"
 end
 
 -- (1.22) "Level 12" or "Level unknown" for texts.
@@ -1010,8 +1043,8 @@ local function AvailOptions()
   if not same then optDB, optKey = d, optKey + 1 end
   return optKey
 end
-local function KeptAvailable(mapID)
-  if QD_TEST_FRESH_LOG or not (ns.InScope and ns.InScope()) or not ns.QuestLogState then return AvailableOnMap(mapID) end
+local function KeptAvailable(mapID, pause)
+  if QD_TEST_FRESH_LOG or not (ns.InScope and ns.InScope()) or not ns.QuestLogState then return AvailableOnMap(mapID, pause) end
   local h, n = ns.QuestLogState()
   local now = ns.Num(ns.Value(GetTime)) or 0
   local level, opt = Player().level, AvailOptions()
@@ -1020,20 +1053,32 @@ local function KeptAvailable(mapID)
       and now >= k.at and now - k.at <= AVAIL_SECS then
     return k.list
   end
-  local list = AvailableOnMap(mapID)
-  availKeep[mapID] = { list = list, gen = availGen, h = h, n = n, level = level, opt = opt, at = now }
+  local gen = availGen -- (24.11.2026) as it was when the list was begun (in slices ns.ForgetAvailable may come meanwhile)
+  local list = AvailableOnMap(mapID, pause)
+  availKeep[mapID] = { list = list, gen = gen, h = h, n = n, level = level, opt = opt, at = now }
   return list
 end
-function ns.AvailableQuestsOnMap(mapID)
+-- pause (optional, 24.11.2026, Ruckler, laptop: the minimap's base pins 12 to 18 ms after ns.ForgetAvailable): called as
+-- pause("available") after every AVAIL_PAUSE quests of the map's data and between the parts of the list, never inside a
+-- pcall here; it may yield the coroutine it runs in (Questdon's minimap and map in slices). Not inside the walks over
+-- the saved tables (pairs), which may change meanwhile.
+local AVAIL_PAUSE = 20
+function ns.AvailableQuestsOnMap(mapID, pause)
+  if type(pause) ~= "function" then pause = nil end -- (an old second argument, the upcoming levels: true)
   -- (1.23) once per map and scope (panel, map, minimap share it); callers only read it
-  return ns.Memo("available", mapID, KeptAvailable)
+  return ns.Memo("available", mapID, KeptAvailable, pause)
 end
-function AvailableOnMap(mapID)
+function AvailableOnMap(mapID, pause)
   local list, seen = {}, {}
   if not mapID then return list end
   local player = Player()
   local client = ns.ClientQuestLines and ns.ClientQuestLines(mapID) -- asks the client once per map
   local function Listed(id) return client and client.available[id] and not ns.IsQuestDone(id) and not ns.InQuestLog(id) end
+  -- (23.11.2026) a quest of a world event is shown only while the game lists it or its giver offered it in this
+  -- session: an offer kept from the last Darkmoon Faire no longer shows its giver all year
+  local function EventHidden(id, listed)
+    return ns.db.hideEventQuests and ns.IsEventQuest(id) and not listed and not (ns.OfferedNow and ns.OfferedNow(id)) and true or false
+  end
   local function Add(id)
     if seen[id] then return end
     seen[id] = true
@@ -1045,7 +1090,7 @@ function AvailableOnMap(mapID)
       if not listed and ns.NoLevelHidden(id, player) then return end
       entry = { confirmed = (listed or ns.OfferConfirmed(id, player.level)) and true or nil }
       -- (1.0) event quests only once confirmed; "confirmedOnly" for every quest
-      if not entry.confirmed and (ns.db.confirmedOnly or (ns.db.hideEventQuests and ns.IsEventQuest(id))) then return end
+      if (not entry.confirmed and ns.db.confirmedOnly) or EventHidden(id, listed) then return end
     else
       return
     end
@@ -1063,7 +1108,12 @@ function AvailableOnMap(mapID)
       list[#list + 1] = entry
     end
   end
-  for _, id in ipairs(ByMap()[mapID] or {}) do Add(id) end
+  local byMap = ByMap()[mapID] or {}
+  for i = 1, #byMap do
+    Add(byMap[i])
+    if pause and i % AVAIL_PAUSE == 0 then pause("available") end
+  end
+  if pause then pause("available") end
   -- learned quests that ATT does not know (other characters found them)
   for id, e in pairs(ns.db.learned) do
     if e.start and not e.start.item and e.start.map == mapID and not seen[id] then
@@ -1073,7 +1123,7 @@ function AvailableOnMap(mapID)
         -- known to ATT (maybe with another start map): use its rules
         ok = not HiddenRepeatable(id) and (Listed(id) or ns.CanTakeQuest(id, player)) and (ns.db.showLowLevel or not ns.IsLowLevelQuest(id, player))
           and (Listed(id) or not ns.NoLevelHidden(id, player))
-          and (Listed(id) or ns.OfferConfirmed(id, player.level) or not (ns.db.confirmedOnly or (ns.db.hideEventQuests and ns.IsEventQuest(id))))
+          and (Listed(id) or ns.OfferConfirmed(id, player.level) or not ns.db.confirmedOnly) and not EventHidden(id, Listed(id))
       else
         local fac = e.faction == "Alliance" and "A" or e.faction == "Horde" and "H"
         ok = fac == player.faction and not ns.IsQuestDone(id) and not ns.InQuestLog(id)
@@ -1092,6 +1142,7 @@ function AvailableOnMap(mapID)
       end
     end
   end
+  if pause then pause("available") end
   -- (1.24) quests the client lists that neither the data nor Questdon know
   if client then
     for id, pos in pairs(client.pos) do
@@ -1306,8 +1357,82 @@ end
 -- onlyMap (1.23, optional): points of other maps are left out where that does
 -- not change the result (objectives without an item to use; the "u" split
 -- below looks at all points).
+-- (24.11.2026, Ruckler, laptop: the quest list's nearest point of one quest up to 97 ms) The data's points and the
+-- creatures' spawns of a kill or collect objective (all maps, often thousands) were new tables at every call: the
+-- arrow and the quest list ask again after each change of the quest's state (a new learned spot, a shared one, the
+-- game's point), and the world position of each was worked out again. They are kept per quest and objective now (the
+-- same tables while the objective's data and the learned mobs that count for it stay; the learned spots, few, are
+-- made at each call as before), each with its world position (_wc, _wn, _ww, made once; _wg = ns.WorldPosGen() at
+-- that time). Callers only read them; the fields they set (kind, index, area) are the same at every call.
+local staticCache, staticCacheSize = {}, 0
+local staticStats = { built = 0, reused = 0 }
+function ns.ObjectiveTargetCacheStats() return staticStats end
+function ns.ForgetObjectiveTargets() staticCache, staticCacheSize = {}, 0 end -- (tests)
+local NO_OBJ = {}
+local function SameList(a, b)
+  if a == b then return true end
+  if a == nil or b == nil or #a ~= #b then return false end
+  for i = 1, #a do if a[i] ~= b[i] then return false end end
+  return true
+end
+local function StaticTargets(questID, index, o)
+  local pts = o[3] or {}
+  local crs = o[1] or {}
+  local np, sp = #pts, 0
+  for i = 1, np do sp = sp + (tonumber(pts[i]) or 0) end
+  local learnedCr = ns.LearnedObjectiveCreatures and ns.LearnedObjectiveCreatures(questID, index, #crs > 0) or nil
+  local byQ = staticCache[questID]
+  local e = byQ and byQ[index]
+  if e and e.o == o and e.np == np and e.sp == sp and SameList(e.cr, crs) and SameList(e.lc, learnedCr) then
+    staticStats.reused = staticStats.reused + 1
+    return e.list
+  end
+  local list = {}
+  local WorldPos = ns.WorldPos
+  local gen = ns.WorldPosGen and ns.WorldPosGen()
+  local function Add(m, x, y, creature, spawn)
+    if m and x and y then
+      local p = { mapID = m, x = x / 100, y = y / 100, creature = creature, spawn = spawn }
+      if WorldPos then
+        local c, n, w = WorldPos(m, p.x, p.y)
+        if c then p._wc, p._wn, p._ww, p._wg = c, n, w, gen end
+      end
+      list[#list + 1] = p
+    end
+  end
+  -- 2. ATT objective coordinates (0-100)
+  local first = o[1] and o[1][1]
+  for i = 1, #pts, 3 do Add(pts[i], pts[i + 1], pts[i + 2], first) end
+  -- 3. (1.2) where the objective's creatures are: the spawns (all of
+  -- them), else the data's creature points (only when the objective has no
+  -- points of its own, as before)
+  local cr
+  local function AddSpawn(m, x, y) Add(m, x, y, cr, true) end -- may be thinned out on the map
+  for _, c in ipairs(crs) do
+    if Spawns(c) or #pts == 0 then cr = c EachSpawn(c, AddSpawn) end
+  end
+  -- (1.2) mobs learned to give credit (not in the data): their spawns, if known
+  local known = {}
+  for _, c in ipairs(crs) do known[c] = true end
+  for _, c in ipairs(learnedCr or {}) do
+    if not known[c] and Spawns(c) then cr = c EachSpawn(c, AddSpawn) end
+  end
+  if not byQ then
+    -- quests that left the log stay until the cache is full, then it starts over
+    if staticCacheSize >= 60 then staticCache, staticCacheSize = {}, 0 end
+    byQ = {}
+    staticCache[questID] = byQ
+    staticCacheSize = staticCacheSize + 1
+  end
+  local crCopy = {}
+  for i = 1, #crs do crCopy[i] = crs[i] end
+  byQ[index] = { o = o, np = np, sp = sp, cr = crCopy, lc = learnedCr, list = list }
+  staticStats.built = staticStats.built + 1
+  return list
+end
+
 function ns.ObjectiveTargets(questID, index, o, spots, onlyMap)
-  o = o or {}
+  o = o or NO_OBJ
   spots = spots or {}
   local out = {}
   local pts = o[3] or {}
@@ -1315,41 +1440,24 @@ function ns.ObjectiveTargets(questID, index, o, spots, onlyMap)
     if m and x and y then list[#list + 1] = { mapID = m, x = x / scale, y = y / scale, creature = creature } end
   end
   if o[USE] ~= "u" or #(o[2] or {}) == 0 then
-    if onlyMap then
-      local add = Add
-      Add = function(list, m, x, y, creature, scale) if m == onlyMap then add(list, m, x, y, creature, scale) end end
-    end
     -- 1. spots this account has seen the counter go up (0-1 coordinates)
     -- (12.11.2026, wider 13.11.2026: HideAtNPC) not a learned spot at the quest giver or turn-in when the data knows
     -- where the objective's mobs are or a place elsewhere is known (own old spots and ones shared by others: left out
     -- here, nothing is deleted)
     local hide, gm, gx, gy, tm, tx, ty = HideAtNPC(questID, index, o, spots)
+    local only = ns.OnlyObject(o)
     for i = 1, #spots, 3 do
-      if not (hide and spots[i + 1] and spots[i + 2] and AtPlaces(spots[i], spots[i + 1] * 100, spots[i + 2] * 100, gm, gx, gy, tm, tx, ty)) then
-        Add(out, spots[i], spots[i + 1], spots[i + 2], ns.OnlyObject(o), 1)
+      if not (hide and spots[i + 1] and spots[i + 2] and AtPlaces(spots[i], spots[i + 1] * 100, spots[i + 2] * 100, gm, gx, gy, tm, tx, ty))
+          and (not onlyMap or spots[i] == onlyMap) then
+        Add(out, spots[i], spots[i + 1], spots[i + 2], only, 1)
       end
     end
-    -- 2. ATT objective coordinates (0-100)
-    for i = 1, #pts, 3 do Add(out, pts[i], pts[i + 1], pts[i + 2], o[1] and o[1][1], 100) end
-    -- 3. (1.2) where the objective's creatures are: the spawns (all of
-    -- them), else the data's creature points (only when the objective has no
-    -- points of its own, as before)
-    for _, cr in ipairs(o[1] or {}) do
-      if Spawns(cr) or #pts == 0 then
-        local from = #out
-        EachSpawn(cr, function(m, x, y) Add(out, m, x, y, cr, 100) end)
-        for k = from + 1, #out do out[k].spawn = true end -- may be thinned out on the map
-      end
-    end
-    -- (1.2) mobs learned to give credit (not in the data): their spawns, if known
-    local known = {}
-    for _, cr in ipairs(o[1] or {}) do known[cr] = true end
-    for _, cr in ipairs(ns.LearnedObjectiveCreatures and ns.LearnedObjectiveCreatures(questID, index, #(o[1] or {}) > 0) or {}) do
-      if not known[cr] and Spawns(cr) then
-        local from = #out
-        EachSpawn(cr, function(m, x, y) Add(out, m, x, y, cr, 100) end)
-        for k = from + 1, #out do out[k].spawn = true end
-      end
+    -- 2. and 3.: the data's points and the spawns, kept (StaticTargets)
+    local static = StaticTargets(questID, index, o)
+    local n = #out
+    for i = 1, #static do
+      local p = static[i]
+      if not onlyMap or p.mapID == onlyMap then n = n + 1 out[n] = p end
     end
     return out
   end
@@ -2013,12 +2121,20 @@ local function ShareOut(parts, list)
     end
   end
 end
-function ns.ObjectivePointsOnMap(mapID)
+-- pause (optional, 24.11.2026): called as pause("map dots") after each objective of a quest in the log, never inside a
+-- pcall here; it may yield the coroutine it runs in (Questdon's map refresh in slices)
+function ns.ObjectivePointsOnMap(mapID, pause)
+  if type(pause) ~= "function" then pause = nil end
   TrimPinStore()
   local list = {}
   if not mapID then return list end
   local parts = {}
-  EachMapObjective(function(id, index, o, spots, text, dim)
+  local Each = EachMapObjective
+  if pause then
+    -- the objective's own work first, then the pause (its places are in parts already)
+    Each = function(fn) EachMapObjective(function(...) fn(...) pause("map dots") end) end
+  end
+  Each(function(id, index, o, spots, text, dim)
     local keep, spawns, nSpawns
     local use = IsUse(o)
     if use then
@@ -2098,10 +2214,63 @@ end
 -- pins anyway). The candidates live in reused tables: only the kept points become pins.
 -- Same fields as ns.ObjectivePointsOnMap.
 local MAX_NEAR_TOTAL = 200
-local pool, kept, part = {}, {}, {}
 local function ByDistance(a, b) return a.d2 < b.d2 end
-local metaPool = {}
-function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly)
+-- (24.11.2026, Ruckler, laptop: "refresh minimap" up to 26 ms) the candidates' tables: one set for the direct builds,
+-- one for a build in slices (pause), so a direct build while one in slices waits does not take its candidates; a newer
+-- build in slices makes the waiting one give up (pausedOwner)
+local mainPools = { pool = {}, kept = {}, part = {}, meta = {} }
+local pausedPools = { pool = {}, kept = {}, part = {}, meta = {} }
+local pausedOwner
+-- (24.11.2026, Ruckler) the nearest of many candidates by plain numbers: table.sort with a Lua comparator over
+-- thousands of candidates was most of the minimap's dots (a grid of the spawns gained nothing: the distance test is
+-- cheap, the sorting is not). key = the distance squared in 1/1024 yards squared * KEYS + position, so equal
+-- distances keep their order (exact as a number up to about 30000 yards).
+local KEYS = 8192
+local keys = {}
+local floor = math.floor
+-- the candidates list[from .. to] sorted by distance into out[1 .. min(count, limit)]
+local function NearestOf(list, from, to, limit, out)
+  local n = to - from + 1
+  if n >= KEYS then
+    local tmp = {}
+    for k = 1, n do tmp[k] = list[from + k - 1] end
+    table.sort(tmp, ByDistance)
+    for k = 1, math.min(n, limit) do out[k] = tmp[k] end
+    return math.min(n, limit)
+  end
+  for k = 1, n do keys[k] = floor(list[from + k - 1].d2 * 1024) * KEYS + k end
+  for k = n + 1, #keys do keys[k] = nil end
+  table.sort(keys)
+  local m = math.min(n, limit)
+  for k = 1, m do out[k] = list[from + keys[k] % KEYS - 1] end
+  return m
+end
+
+-- (24.11.2026) an entry's spawns on its map (CachedObjective) as flat arrays, made once per entry: x, y (0-1), cr, in
+-- the order of the sources (the same values as Thinned and the loop over the sources gave)
+local function Flat(e, mapID)
+  local f = e.flat
+  if f then return f end
+  local fx, fy, fcr, n = {}, {}, {}, 0
+  for _, src in ipairs(e.sources) do
+    local arr, cr = src.arr, src.cr
+    for i = src.first, #arr, 3 do
+      if arr[i] == mapID then
+        n = n + 1
+        fx[n], fy[n], fcr[n] = arr[i + 1] / 100, arr[i + 2] / 100, cr
+      end
+    end
+  end
+  f = { x = fx, y = fy, cr = fcr, n = n }
+  e.flat = f
+  return f
+end
+
+-- pause (optional, 24.11.2026): called as pause("near") after each objective of a quest in the log, never inside a
+-- pcall here; it may yield the coroutine it runs in (Questdon's minimap in slices). A newer call with pause while this
+-- one waits makes this one return an empty list.
+function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly, pause)
+  if type(pause) ~= "function" then pause = nil end
   TrimPinStore()
   local list = {}
   if not (mapID and pc and pn and pw and reach) then return list end
@@ -2112,9 +2281,14 @@ function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly)
   if not (c0 and c1 and c2) or c0 ~= pc or c1 ~= c0 or c2 ~= c0 then return list end
   local nx, wx, ny, wy = n1 - n0, w1 - w0, n2 - n0, w2 - w0
   local reach2 = reach * reach
+  local P = pause and pausedPools or mainPools
+  local token
+  if pause then token = {} pausedOwner = token end
+  local pool, kept, part, metaPool = P.pool, P.kept, P.part, P.meta
   local used, nk = 0, 0 -- pool entries in use, kept entries
   local meta, first
   local nm = 0 -- (17.10., /qd mem) the objectives' meta tables from a kept pool too (a new one per objective each build)
+  local gone = false -- a newer call in slices took over
   local function Cand(x, y, creature, needsItem, dimmed, useItem)
     local dn, dw = n0 + x * nx + y * ny - pn, w0 + x * wx + y * wy - pw
     local d2 = dn * dn + dw * dw
@@ -2125,6 +2299,7 @@ function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly)
     c.x, c.y, c.creature, c.needsItem, c.dimmed, c.d2, c.meta, c.useItem = x, y, creature, needsItem, dimmed, d2, meta, useItem
   end
   EachMapObjective(function(id, index, o, spots, text, dim)
+    if gone then return end
     nm = nm + 1
     meta = metaPool[nm]
     if not meta then meta = {} metaPool[nm] = meta end
@@ -2138,25 +2313,52 @@ function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly)
     else
       local e = CachedObjective(id, index, o, spots, mapID)
       for _, p in ipairs(e.keep) do Cand(p.x, p.y, p.creature) end
-      for _, src in ipairs(e.sources) do
-        local arr, cr = src.arr, src.cr
-        for i = src.first, #arr, 3 do
-          if arr[i] == mapID then Cand(arr[i + 1] / 100, arr[i + 2] / 100, cr) end
+      if e.total > 0 then
+        -- (24.11.2026) the spawns of this map only (a creature's array holds those of every map), the test inline
+        local f = Flat(e, mapID)
+        local fx, fy, fcr = f.x, f.y, f.cr
+        for i = 1, f.n do
+          local x, y = fx[i], fy[i]
+          local dn, dw = n0 + x * nx + y * ny - pn, w0 + x * wx + y * wy - pw
+          local d2 = dn * dn + dw * dw
+          if d2 <= reach2 then
+            used = used + 1
+            local c = pool[used]
+            if not c then c = {} pool[used] = c end
+            c.x, c.y, c.creature, c.needsItem, c.dimmed, c.d2, c.meta, c.useItem = x, y, fcr[i], nil, nil, d2, meta, nil
+          end
         end
       end
     end
     local nc = used - first + 1
-    if nc <= 0 then return end
-    meta.many = nc > MANY_POINTS or nil
-    -- the nearest MAX_NEAR of this objective
-    for k = first, used do part[k - first + 1] = pool[k] end
-    for k = nc + 1, #part do part[k] = nil end
-    if nc > MAX_NEAR then table.sort(part, ByDistance) end
-    for k = 1, math.min(nc, MAX_NEAR) do nk = nk + 1 kept[nk] = part[k] end
+    if nc > 0 then
+      meta.many = nc > MANY_POINTS or nil
+      -- the nearest MAX_NEAR of this objective (all of them in their order when there are no more)
+      if nc > MAX_NEAR then
+        local m = NearestOf(pool, first, used, MAX_NEAR, part)
+        for k = 1, m do nk = nk + 1 kept[nk] = part[k] end
+      else
+        for k = first, used do nk = nk + 1 kept[nk] = pool[k] end
+      end
+    end
+    if pause then
+      pause("near")
+      if pausedOwner ~= token then gone = true end
+    end
   end, trackedOnly)
   for k = nk + 1, #kept do kept[k] = nil end
-  if nk > MAX_NEAR_TOTAL then table.sort(kept, ByDistance) end
-  for k = 1, math.min(nk, MAX_NEAR_TOTAL) do
+  if gone then
+    for k = 1, nk do kept[k] = nil end
+    for k = 1, used do pool[k].meta = nil end
+    return list
+  end
+  local total = nk
+  if nk > MAX_NEAR_TOTAL then
+    total = NearestOf(kept, 1, nk, MAX_NEAR_TOTAL, part)
+    for k = 1, total do kept[k] = part[k] end
+  end
+  for k = 1, #part do part[k] = nil end
+  for k = 1, total do
     local p, m = kept[k], kept[k].meta
     -- (16.10., stutter report) the same point of the same objective is the same pin table as long as nothing on it
     -- changed: a minimap build made up to 200 new pins
@@ -2165,6 +2367,7 @@ function ns.ObjectivePointsNear(mapID, pc, pn, pw, reach, trackedOnly)
   for k = 1, nk do kept[k] = nil end
   for k = 1, used do pool[k].meta = nil end
   for k = 1, nm do metaPool[k].text = nil end
+  if pause and pausedOwner == token then pausedOwner = nil end
   return list
 end
 
@@ -2318,7 +2521,8 @@ end
 function ns.AllObjectivePoints(questID)
   local list = {}
   EachOpenObjective(questID, function(index, targets)
-    -- (16.10. evening, /qd mem) the targets are new tables of this call: marked in place, not copied
+    -- (16.10. evening, /qd mem) marked in place, not copied; (24.11.2026) the data's points and the spawns are kept
+    -- tables (ns.ObjectiveTargets): kind and index are the same at every call
     for _, p in ipairs(targets) do
       p.kind, p.index = "objective", index
       list[#list + 1] = p

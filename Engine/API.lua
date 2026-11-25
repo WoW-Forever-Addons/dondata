@@ -201,8 +201,8 @@ function BuildObjectivePoints(questID)
     list[1] = { mapID = m, x = x, y = y, source = source, index = openIndex }
   end
   lastBags = false
-  -- (23.10.) the points of AllObjectivePoints are new tables of this call: handed on as they are (they were copied
-  -- into a second set of tables)
+  -- (23.10.) the points of AllObjectivePoints are handed on as they are (they were copied into a second set of
+  -- tables); (24.11.2026) the data's points and the spawns among them are the engine's kept tables: callers only read
   for _, p in ipairs(ns.AllObjectivePoints(questID)) do
     if p.needsItem or p.useSpot then lastBags = true end
     list[#list + 1] = p

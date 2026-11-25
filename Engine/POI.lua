@@ -91,6 +91,7 @@ local function ReadMap(mapID)
 end
 
 local Learn
+local learnQueued = false
 
 local function Rebuild()
   dirty, lastBuild = false, Now()
@@ -187,8 +188,30 @@ local function Near(p, m, x, y)
 end
 
 local checkedPOI = {} -- [questID] = the point last looked at { m, x, y, index, sv, lv }
+-- (24.11.2026, Ruckler, laptop: "poi learn" 97.7 ms at login, every quest of the log looked at for the first time) a
+-- pass looks at new points for LEARN_MS at most, then goes on in the next frame (ns.After 0). The quests it has looked
+-- at are kept in checkedPOI, so the next frame passes over them at once and nothing is left out. Without
+-- debugprofilestop (tests) the pass runs whole, as before.
+local LEARN_MS = 6
+local LearnOn
+local function LearnLater()
+  learnQueued = false
+  if not (ns.db and ns.db.learnQuests) then return end
+  local before = lastBuild
+  Ensure() -- the maps are read anew when something changed; Rebuild then learns itself
+  if lastBuild == before then ns.SafeCall("poi learn", Learn) end
+end
 function Learn()
+  if LearnOn() and not learnQueued and ns.After then
+    learnQueued = true
+    ns.After(0, LearnLater)
+  end
+end
+function LearnOn()
   if not ns.AddObjectiveSpot then return end
+  local clock = rawget(_G, "debugprofilestop")
+  clock = type(clock) == "function" and clock or nil
+  local t0 = clock and clock()
   for _, info in ipairs(ns.QuestLogEntries()) do
     local id = info.questID
     -- (23.10.) not while the order of several objectives is not known for sure (QuestData.lua DataOrder)
@@ -218,6 +241,7 @@ function Learn()
         if not known and not (ns.AtGiverOrTurnIn and ns.AtGiverOrTurnIn(id, m, x, y)) and ns.AddObjectiveSpot(id, index, m, x, y) then
           stats.learned = stats.learned + 1
         end
+        if t0 and clock() - t0 >= LEARN_MS then return true end -- the rest in the next frame
       end
     end
   end
