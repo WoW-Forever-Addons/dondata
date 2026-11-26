@@ -1446,8 +1446,11 @@ function ns.ObjectiveTargets(questID, index, o, spots, onlyMap)
     -- here, nothing is deleted)
     local hide, gm, gx, gy, tm, tx, ty = HideAtNPC(questID, index, o, spots)
     local only = ns.OnlyObject(o)
+    -- (26.11.2026, A Taste of Home in Silverpine) nor a spot learned from the game's wrong point (POI.lua OffZone)
+    local wrong = ns.AtWrongGamePoint
     for i = 1, #spots, 3 do
       if not (hide and spots[i + 1] and spots[i + 2] and AtPlaces(spots[i], spots[i + 1] * 100, spots[i + 2] * 100, gm, gx, gy, tm, tx, ty))
+          and not (wrong and wrong(questID, spots[i], spots[i + 1], spots[i + 2]))
           and (not onlyMap or spots[i] == onlyMap) then
         Add(out, spots[i], spots[i + 1], spots[i + 2], only, 1)
       end

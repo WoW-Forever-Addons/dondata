@@ -1,5 +1,11 @@
 # Changes
 
+## 1.7.0
+
+- **Stat weights per spec for Geardon:** weights for every class and talent tree (levelling spec before the first talents), with hit, crit, spell hit, spell crit, spell power (also per school), healing, MP5, HP5, defense, dodge, parry, block, block value, weapon skill and spell penetration. Hit and crit count by what they add to your damage right now, and hit stops counting at the cap (8 % melee, 17 % spells from level 50), read like the game's character window, including school talents such as Shadow Focus.
+- **Secondary stats of items in every language:** taken from the items' equip effects (new file, restart the game once).
+- **Wrong quest point from the game:** when the game places a quest's objective in a zone where the quest has no giver, turn-in or objective at all, Questdon no longer uses that point for the arrow, the route or a map pin, and no longer learns it. Example: A Taste of Home, the game pointed to Silverpine Forest, the wine drops from the blood elves in Azshara. A spot learned there before is left out as well.
+
 ## 1.6.0
 
 - **New data:** the quest data was refreshed twice. About 5,100 quests now, with the new Tip the Scales and Kum'isha's Endeavors quests and a lot of newly learned facts. Two quests that no longer exist are gone.

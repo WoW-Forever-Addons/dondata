@@ -93,8 +93,10 @@ end
 local Learn
 local learnQueued = false
 
+local offZoneReset -- (26.11.2026) OffZone's answers, asked anew after each rebuild
 local function Rebuild()
   dirty, lastBuild = false, Now()
+  if offZoneReset then offZoneReset() end
   local playerMap = ns.Num(C_Map and ns.Value(C_Map.GetBestMapForUnit, "player"))
   lastPlayerMap = playerMap
   maps, onMap = {}, {}
@@ -164,6 +166,46 @@ local function AtUsePlaceWithoutItem(questID, m, x, y)
   return #refs > 0 and ns.AtPlace(m, x, y, refs)
 end
 
+-- (26.11.2026, a player via Daniel: A Taste of Home 96609, the game's point in Silverpine Forest, the wine drops from
+-- the blood elves in Azshara, the giver stands in Alterac) The game's objective point of an open quest lies on a zone
+-- map where the data knows none of its objectives' places, nor its giver or turn-in, while it knows places elsewhere:
+-- the point is wrong. Questdon neither uses it (arrow, route, map pin) nor learns it as a spot. When the data knows no
+-- place at all, the game's point stays (it may be all there is). Per quest and map, asked anew after each rebuild.
+local NO_SPOTS = {}
+local offZone = {} -- [questID] = { m =, v = }
+local function OffZone(questID, m)
+  local c = offZone[questID]
+  if c and c.m == m then return c.v end
+  local v = false
+  local objs = ns.ATT_OBJECTIVES and ns.ATT_OBJECTIVES[questID]
+  if type(objs) == "table" and ns.ObjectiveTargets then
+    local any, here = false, false
+    local function Look(list)
+      for _, p in ipairs(list or NO_SPOTS) do
+        if p.mapID == m then here = true return end
+        any = true
+      end
+    end
+    for index, o in pairs(objs) do
+      if type(o) == "table" then
+        local out, _, use = ns.ObjectiveTargets(questID, index, o, NO_SPOTS)
+        Look(out)
+        if not here then Look(use) end
+      end
+      if here then break end
+    end
+    if any and not here then
+      local gm = ns.QuestStart and ns.QuestStart(questID)
+      local tm = ns.TurnInPoint and ns.TurnInPoint(questID, false)
+      v = gm ~= m and tm ~= m
+    end
+  end
+  offZone[questID] = { m = m, v = v }
+  return v
+end
+ns.GamePointOffZone = OffZone
+offZoneReset = function() offZone = {} end
+
 -- Blizzard's point as Questdon uses it: mapID, x, y (0-1), kind ("objective" or
 -- "turnin"), "blizzard", level. nil when there is none, the quest failed, or
 -- the point is the place of use of an item still missing.
@@ -177,7 +219,18 @@ function ns.QuestPOI(questID)
     stats.skippedUse = stats.skippedUse + 1
     return nil
   end
+  if level == "zone" and OffZone(questID, m) then return nil end
   return m, x, y, "objective", "blizzard", level
+end
+
+-- (26.11.2026) a learned spot (own or shared) right at the game's wrong point of an open quest (OffZone): it was
+-- learned from that point, it is left out (nothing is deleted)
+function ns.AtWrongGamePoint(questID, m, x, y)
+  if not (m and x and y) or ns.IsQuestComplete(questID) then return false end
+  local bm, bx, by, level = ns.BlizzardQuestPoint(questID)
+  if bm ~= m or level ~= "zone" then return false end
+  if ((bx - x) * 100) ^ 2 + ((by - y) * 100) ^ 2 >= DIFF * DIFF then return false end
+  return OffZone(questID, m)
 end
 
 -- Learn from Blizzard: a POI on a zone map for a quest with exactly one open
@@ -238,7 +291,9 @@ function LearnOn()
           if Near(p, m, x, y) then known = true break end
         end
         -- (12.11.2026) the game's point at the quest giver or turn-in is where the quest ends, not where its loot is
-        if not known and not (ns.AtGiverOrTurnIn and ns.AtGiverOrTurnIn(id, m, x, y)) and ns.AddObjectiveSpot(id, index, m, x, y) then
+        -- (26.11.2026) nor a point on a zone where the data knows none of the quest's places (OffZone)
+        if not known and not (ns.AtGiverOrTurnIn and ns.AtGiverOrTurnIn(id, m, x, y)) and not OffZone(id, m)
+            and ns.AddObjectiveSpot(id, index, m, x, y) then
           stats.learned = stats.learned + 1
         end
         if t0 and clock() - t0 >= LEARN_MS then return true end -- the rest in the next frame

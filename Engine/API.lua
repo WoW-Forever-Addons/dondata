@@ -15,10 +15,12 @@ local _, ns = ...
 --      class and talent tree (stats, armor, weapon DPS, item level last), shared by Geardon and Questdon
 --   4: (31.10.2026, Leistungsrunde 6) RegisterCallback, UnregisterCallback, GearVersion: DonData says when its answers
 --      may have changed, so a caller can keep its own results until then (Geardon's judgement per item)
+--   5: (26.11.2026, Daniel: stat weights in the options "ähnlich wie bei pawn") GearShownWeights, SetGearOverrides:
+--      the weights of your spec in points as an options page shows them, and your own numbers for them (Geardon)
 -- The dungeon list (Dungeons, DungeonsForLevel: entrances are Questdon's) and everything about the arrow, the
 -- compass and Questdon's windows stay QuestdonAPI's. The arrow without Questdon: DonMapAPI.
 ---------------------------------------------------------------------------
-local VERSION = 4
+local VERSION = 5
 
 ---------------------------------------------------------------------------
 -- (moved from Questdon's Arrow.lua with the API) the state a quest's places depend on
@@ -450,11 +452,40 @@ function API.GearCompare(a, b)
   return sign, gain
 end
 -- (3) The stat weights for the player (strength, agility, stamina, intellect, spirit; a copy) and the class ID
+-- (26.11.2026) with the secondary weights of the talent tree as named fields (Engine/Gear.lua SPEC_WEIGHTS)
 function API.GearWeights()
   local w, class = ns.GearWeights()
   if not w then return nil end
-  return { w[1], w[2], w[3], w[4], w[5] }, class
+  local copy = {}
+  for k, v in pairs(w) do copy[k] = v end
+  return copy, class
 end
+
+-- (5) The weights of the player's spec in points (str agi sta int spi, hit crit shit scrit per 1 %, dps per 1 weapon DPS,
+-- ap rap sd sd_<school> heal mp5 hp5 def dodge parry block bv wskill pen), then class ID and talent tree (0 = none).
+-- own true: with your own numbers (SetGearOverrides), else the spec's defaults (hit and crit: their worth now).
+function API.GearShownWeights(own)
+  local w, class, tree = ns.GearShownWeights(own and true or false)
+  if not w then return nil end
+  local copy = {}
+  for k, v in pairs(w) do copy[k] = v end
+  return copy, class, tree
+end
+-- (5) Your own numbers for the spec of class/tree (same keys as GearShownWeights; nil or {} clears them). They count
+-- only while you play that class and tree. Not kept by DonData: the caller sets them again after each login.
+function API.SetGearOverrides(class, tree, values)
+  local copy
+  if type(values) == "table" then
+    copy = {}
+    for k, v in pairs(values) do if type(k) == "string" and tonumber(v) then copy[k] = tonumber(v) end end
+  end
+  ns.GearSetOverrides(class, tree, copy)
+  Notify("gear")
+  return true
+end
+
+-- (5) Lines for a diagnostics report (spec, damage, hit as the game counts it, caps, worth of hit and crit now)
+function API.GearDiag() return ns.GearDiagLines() end
 
 -- every API function in a scope of its own (Core.lua ns.ScopeCall)
 for k, f in pairs(API) do
