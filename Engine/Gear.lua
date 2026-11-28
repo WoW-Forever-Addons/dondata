@@ -126,8 +126,7 @@ local STAT_KEYS = { "ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_AGILITY_SHORT", "ITEM_M
 -- effects. The game names them as item stats instead (Blizzard's own comparison shows "+16 Spell Healing, +6 Spell
 -- Damage"): these keys of GetItemStats fill what the table does not have, per key the larger of both (the same bonus,
 -- whichever names it). Key names checked against the client's GlobalStrings (wago.tools, same build). Only stats in
--- plain points and hit and crit (a rating, LIVE_PER_PERCENT below); defense, dodge, parry and block wait until their
--- unit is checked in the game.
+-- plain points, and as ratings hit, crit, defense, dodge, parry and block (LIVE_PER_PERCENT below).
 local LIVE_KEYS = {
   heal = { "ITEM_MOD_SPELL_HEALING_DONE_SHORT", "ITEM_MOD_SPELL_POWER_SHORT" },
   sd = { "ITEM_MOD_SPELL_DAMAGE_DONE_SHORT", "ITEM_MOD_SPELL_POWER_SHORT" },
@@ -141,14 +140,22 @@ local LIVE_KEYS = {
   shit = { "ITEM_MOD_HIT_RATING_SHORT", "ITEM_MOD_HIT_SPELL_RATING_SHORT" },
   crit = { "ITEM_MOD_CRIT_RATING_SHORT", "ITEM_MOD_CRIT_MELEE_RATING_SHORT", "ITEM_MOD_CRIT_RANGED_RATING_SHORT" },
   scrit = { "ITEM_MOD_CRIT_RATING_SHORT", "ITEM_MOD_CRIT_SPELL_RATING_SHORT" },
+  def = { "ITEM_MOD_DEFENSE_SKILL_RATING_SHORT" }, dodge = { "ITEM_MOD_DODGE_RATING_SHORT" },
+  parry = { "ITEM_MOD_PARRY_RATING_SHORT" }, block = { "ITEM_MOD_BLOCK_RATING_SHORT" },
 }
 -- (28.11.2026, Daniel with the rewards of "A Bit of Wet Work": Naga Scale Spaulders and Theramore Defender's Gauntlets
 -- 279825 shown as worse, their hit and crit did not count) Hit and crit of the new items come as a rating; the table
 -- and the weights count percent. Daniel's dump of GetItemStats: ITEM_MOD_HIT_RATING_SHORT 8 on "Improves your chance to
 -- hit by 0.8%", ITEM_MOD_CRIT_RATING_SHORT 7 on "... critical strike by 0.5%": 10 rating per 1 % hit, 14 per 1 % crit.
 -- The plain rating counts for melee, ranged and spells (Forever joins them, docs/STATS_FOREVER.md); the keys for one
--- kind only are taken at the same rate (not seen on an item yet). Defense, dodge, parry, block: unit still unchecked.
-local LIVE_PER_PERCENT = { hit = 10, shit = 10, crit = 14, scrit = 14 }
+-- kind only are taken at the same rate (not seen on an item yet).
+-- (28.11.2026 later, Daniel: "prüf das doch") The rates are the client's own game table gametables/combatratings.txt
+-- (file 1391669 of build 1.60.1.71139, via wago.tools): rating per 1 %, the same on every level from 1 to 60 (no
+-- scaling by level; combatratingsmultbyilvl.txt is 1 for every item level up to 120): hit 10 (melee, ranged, spell),
+-- crit 14 (all three), dodge 12, parry 15, block 5; defense 1 rating = 1 point of defense skill, which is what the
+-- table and the weights count already. The dump confirms hit and crit; that the game names defense, dodge, parry and
+-- block of a new item under these keys is not seen in a dump yet (key names from GlobalStrings).
+local LIVE_PER_PERCENT = { hit = 10, shit = 10, crit = 14, scrit = 14, dodge = 12, parry = 15, block = 5 }
 local WEAPON, WAND = 2, 19
 local RANGED_SUB = { [2] = true, [3] = true, [16] = true, [18] = true } -- bow, gun, thrown, crossbow
 

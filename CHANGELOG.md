@@ -1,5 +1,9 @@
 # Changes
 
+## 1.7.2
+
+- **Tank stats of the new Forever items:** defense, dodge, parry and block of the items added with WoW Forever now count for Geardon's comparison and Questdon's reward glow, at the rates of the game's own rating table.
+
 ## 1.7.1
 
 - **New Forever items judged right (Geardon, Questdon's reward glow):** the items added with WoW Forever now count their hit, critical strike, spell damage, healing, MP5, HP5, block value and spell penetration. Before, only their primary stats and armor counted, so a reward with hit or crit could show as clearly worse than what you wear.
