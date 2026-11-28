@@ -571,6 +571,59 @@ function ns.IsItemStartQuest(questID)
   return q and not q[GIVERS] and q[FLAGS] and q[FLAGS]:find("i", 1, true) ~= nil or false
 end
 
+-- (27.11.2026, Daniel with the card of "Gleaming Crescent Necklace": "welches Item muss droppen und welche Mobs droppen
+-- das?") What starts an item quest (Data/Item_Starts.lua, qk-tools/item_starts.py) and who drops the item, with what this
+-- account saw itself (learnedItemStarts, learnedDrops) added. nil: not an item quest or nothing known.
+-- { kind = "i"|"o", id, name (enUS, the client's name for items comes first), drops = { {id, lo, hi, elite, name} },
+--   more = droppers not listed, world = { lo, hi }, objects = { names } }. lo/hi nil: level unknown, never guessed.
+local ITEM_START_SHOW = 3
+function ns.ItemStartInfo(questID)
+  if not ns.IsItemStartQuest(questID) then return nil end
+  local s = ns.ITEM_STARTS and ns.ITEM_STARTS[questID]
+  local kind, id, name
+  if type(s) == "table" then kind, id, name = s[1], ns.Num(s[2]), s[3] end
+  local learnedStarts = ns.db and type(ns.db.learnedItemStarts) == "table" and ns.db.learnedItemStarts or {}
+  if not id then
+    for itemID, q in pairs(learnedStarts) do
+      if ns.Num(q) == questID and ns.Num(itemID) then kind, id = "i", ns.Num(itemID) break end
+    end
+  end
+  if not id then return nil end
+  local info = { kind = kind, id = id, name = name ~= "" and name or nil, drops = {}, more = 0 }
+  if kind == "o" then return info end
+  local seen = {}
+  local function AddDrop(c, lo, hi, rank, enName)
+    c = ns.Num(c)
+    if not c or seen[c] then return end
+    seen[c] = true
+    if #info.drops >= ITEM_START_SHOW then info.more = info.more + 1 return end
+    local m = ns.SPAWN_MOBS and ns.SPAWN_MOBS[c]
+    if not (ns.Num(lo) and lo > 0) and m then lo, hi, rank = m[1], m[2], m[4] end
+    if not (ns.Num(lo) and lo > 0) then lo, hi = nil, nil end
+    info.drops[#info.drops + 1] = { id = c, lo = lo, hi = hi or lo, elite = (ns.Num(rank) or 0) >= 1,
+      name = enName ~= "" and enName or nil }
+  end
+  if type(s) == "table" then
+    if type(s.world) == "table" then info.world = { ns.Num(s.world[1]), ns.Num(s.world[2]) } end
+    for _, d in ipairs(type(s.drops) == "table" and s.drops or {}) do
+      if type(d) == "table" then AddDrop(d[1], d[2], d[3], d[5], d[6]) end
+    end
+    info.more = info.more + (ns.Num(s.more) or 0)
+    if type(s.objects) == "table" and #s.objects > 0 then info.objects = s.objects end
+  end
+  -- what this account looted it from (a world drop stays a world drop)
+  local learned = ns.db and type(ns.db.learnedDrops) == "table" and ns.db.learnedDrops[id]
+  if not info.world and type(learned) == "table" then
+    local keys = {}
+    for key in pairs(learned) do
+      if type(key) == "string" and key:match("^c%d+$") then keys[#keys + 1] = key end
+    end
+    table.sort(keys)
+    for _, key in ipairs(keys) do AddDrop(tonumber(key:sub(2))) end
+  end
+  return info
+end
+
 -- (1.22) Level of a quest as far as the data knows it: ATT's minimum level,
 -- else the level the client showed when Questdon learned the quest. nil when
 -- neither knows it (331 ATT quests have no level): never guessed.

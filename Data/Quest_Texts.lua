@@ -6228,7 +6228,7 @@ ns.QUEST_TEXTS.enUS = {
 [95322]={o="Find the Bloodsail Trunk outside of Booty Bay in Stranglethorn Vale.",s="Caravaneer Ruzzgot",e="Caravaneer Ruzzgot"},
 [95325]={o="Find the Venture Co. Ledger in the Venture Co. Camp near Lake Nezferiti in Stranglethorn.",s="Caravaneer Ruzzgot"},
 [95326]={o="Kill the Venture Co. Agent and take back Ruzzgot's Shipment for him in Booty Bay.",e="Caravaneer Ruzzgot"},
-[95327]={s="Caravaneer Ruzzgot",e="Friz Frazzlespark"},
+[95327]={o="Return to Friz Frazzlespark at Powderfuse Port in the Riverglades.",s="Caravaneer Ruzzgot",e="Friz Frazzlespark"},
 [95328]={o="Deliver Whispering Horror Residue to Father Lankester in the War Quarter of Undercity.",e="Father Lankester"},
 [95329]={o="Go to Terral's Watch to get a status report from Watcher Cornelius.",s="Demar Brant",e="Watcher Cornelius"},
 [95330]={o="Deliver Cassandra's surplus farm goods to Halligan Turner at Turner's Logging Camp.",s="Cassandra Wheeler",e="Halligan Turner"},

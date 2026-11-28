@@ -120,6 +120,35 @@ local HIT_CAP, SPELL_HIT_CAP, LOW_LEVEL, LOW_HIT_CAP, LOW_SPELL_HIT_CAP = 8, 17,
 
 local STAT_KEYS = { "ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_AGILITY_SHORT", "ITEM_MOD_STAMINA_SHORT",
   "ITEM_MOD_INTELLECT_SHORT", "ITEM_MOD_SPIRIT_SHORT" }
+-- (28.11.2026, Daniel with "Deep Ritual Girdle", item 274653: its +6 spell damage did not count) Forever's new items
+-- (about 6000 pieces of gear, IDs from 202254) are not in the client's static tables at all (ItemSparse, ItemXItemEffect
+-- of build 1.60.1.71139 do not list them; the server sends them), so Data/Gear_Equip.lua cannot know their equip
+-- effects. The game names them as item stats instead (Blizzard's own comparison shows "+16 Spell Healing, +6 Spell
+-- Damage"): these keys of GetItemStats fill what the table does not have, per key the larger of both (the same bonus,
+-- whichever names it). Key names checked against the client's GlobalStrings (wago.tools, same build). Only stats in
+-- plain points and hit and crit (a rating, LIVE_PER_PERCENT below); defense, dodge, parry and block wait until their
+-- unit is checked in the game.
+local LIVE_KEYS = {
+  heal = { "ITEM_MOD_SPELL_HEALING_DONE_SHORT", "ITEM_MOD_SPELL_POWER_SHORT" },
+  sd = { "ITEM_MOD_SPELL_DAMAGE_DONE_SHORT", "ITEM_MOD_SPELL_POWER_SHORT" },
+  sd_holy = { "ITEM_MOD_HOLY_DAMAGE_DONE_SHORT" }, sd_fire = { "ITEM_MOD_FIRE_DAMAGE_DONE_SHORT" },
+  sd_nature = { "ITEM_MOD_NATURE_DAMAGE_DONE_SHORT" }, sd_frost = { "ITEM_MOD_FROST_DAMAGE_DONE_SHORT" },
+  sd_shadow = { "ITEM_MOD_SHADOW_DAMAGE_DONE_SHORT" }, sd_arcane = { "ITEM_MOD_ARCANE_DAMAGE_DONE_SHORT" },
+  mp5 = { "ITEM_MOD_POWER_REGEN0_SHORT", "ITEM_MOD_MANA_REGENERATION_SHORT" },
+  hp5 = { "ITEM_MOD_HEALTH_REGEN_SHORT", "ITEM_MOD_HEALTH_REGENERATION_SHORT" },
+  bv = { "ITEM_MOD_BLOCK_VALUE_SHORT" }, pen = { "ITEM_MOD_SPELL_PENETRATION_SHORT" },
+  hit = { "ITEM_MOD_HIT_RATING_SHORT", "ITEM_MOD_HIT_MELEE_RATING_SHORT", "ITEM_MOD_HIT_RANGED_RATING_SHORT" },
+  shit = { "ITEM_MOD_HIT_RATING_SHORT", "ITEM_MOD_HIT_SPELL_RATING_SHORT" },
+  crit = { "ITEM_MOD_CRIT_RATING_SHORT", "ITEM_MOD_CRIT_MELEE_RATING_SHORT", "ITEM_MOD_CRIT_RANGED_RATING_SHORT" },
+  scrit = { "ITEM_MOD_CRIT_RATING_SHORT", "ITEM_MOD_CRIT_SPELL_RATING_SHORT" },
+}
+-- (28.11.2026, Daniel with the rewards of "A Bit of Wet Work": Naga Scale Spaulders and Theramore Defender's Gauntlets
+-- 279825 shown as worse, their hit and crit did not count) Hit and crit of the new items come as a rating; the table
+-- and the weights count percent. Daniel's dump of GetItemStats: ITEM_MOD_HIT_RATING_SHORT 8 on "Improves your chance to
+-- hit by 0.8%", ITEM_MOD_CRIT_RATING_SHORT 7 on "... critical strike by 0.5%": 10 rating per 1 % hit, 14 per 1 % crit.
+-- The plain rating counts for melee, ranged and spells (Forever joins them, docs/STATS_FOREVER.md); the keys for one
+-- kind only are taken at the same rate (not seen on an item yet). Defense, dodge, parry, block: unit still unchecked.
+local LIVE_PER_PERCENT = { hit = 10, shit = 10, crit = 14, scrit = 14 }
 local WEAPON, WAND = 2, 19
 local RANGED_SUB = { [2] = true, [3] = true, [16] = true, [18] = true } -- bow, gun, thrown, crossbow
 
@@ -269,6 +298,21 @@ local function Read(link)
   -- same bonus, whichever names it)
   local id = tonumber(link:match("item:(%d+)"))
   local eq = id and ns.GEAR_EQUIP and ns.GEAR_EQUIP[id] or NOEQ
+  -- (28.11.2026) what the game names as item stats and the table does not have (LIVE_KEYS); the table's row is copied
+  local live
+  for key, names in pairs(LIVE_KEYS) do
+    local v = 0
+    for _, n in ipairs(names) do v = math.max(v, ns.Num(st[n]) or 0) end
+    v = v / (LIVE_PER_PERCENT[key] or 1)
+    if v > (eq[key] or 0) then
+      if not live then
+        live = {}
+        for k, x in pairs(eq) do live[k] = x end
+      end
+      live[key] = v
+    end
+  end
+  eq = live or eq
   c.eq = eq
   c.ap = math.max(c.ap, eq.ap or 0)
   c.rap = math.max(c.rap, eq.rap or 0)

@@ -1,5 +1,10 @@
 # Changes
 
+## 1.7.1
+
+- **New Forever items judged right (Geardon, Questdon's reward glow):** the items added with WoW Forever now count their hit, critical strike, spell damage, healing, MP5, HP5, block value and spell penetration. Before, only their primary stats and armor counted, so a reward with hit or crit could show as clearly worse than what you wear.
+- **New data:** quest data refreshed from players' recordings (quests, spawns, paths, services), and the items that start a quest with where they drop (new file, restart the game once).
+
 ## 1.7.0
 
 - **Stat weights per spec for Geardon:** weights for every class and talent tree (levelling spec before the first talents), with hit, crit, spell hit, spell crit, spell power (also per school), healing, MP5, HP5, defense, dodge, parry, block, block value, weapon skill and spell penetration. Hit and crit count by what they add to your damage right now, and hit stops counting at the cap (8 % melee, 17 % spells from level 50), read like the game's character window, including school talents such as Shadow Focus.
